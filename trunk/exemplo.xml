@@ -1,0 +1,132 @@
+<!-- Os comentarios devem ter espacos no inicio e no fim, para -->
+<!-- separar dos hifens -->
+<!-- Nao devem ser usados caracteres especiais (p.ex. acentos) -->
+<!-- Todas as tags e atributos sao obrigatorios, excepto onde for -->
+<!-- referido o contrario -->
+
+<sgx>
+    <!-- tem de existir, pelo menos, uma luz, uma textura, um material -->
+    <!-- e um objecto -->
+    <globals maxlights="2" maxtextures="3" maxmaterials="5"
+             maxobjects="2" root="ss"/>
+
+
+    <view near="21.1" far="31.1" axisscale="10.2">
+        <translation x="1.1" y="2.2" z="3.3" />
+        <rotation axis="x" angle="90" />
+        <rotation axis="y" angle="45" />
+        <rotation axis="z" angle="60" />
+        <scale x="10" y="20" z="30" />
+    </view>
+
+
+    <illumination doublesided="tt" local="tt" >
+
+        <ambient r="ff" g="ff" b="ff" a="ff" />
+        <background r="ff" g="ff" b="ff" a="ff" />
+
+        <lights>
+            <!-- Deve existir um ou mais blocos "light" -->
+            <!-- (até ao máximo declarado em "globals") -->
+            <!-- Os identificadores "id" nao podem ser repetidos -->
+            <light id="ss" enabled="tt" >
+                <position x="ff" y="ff" z="ff" w="ff" />
+                <ambient r="ff" g="ff" b="ff" a="ff" />
+                <diffuse r="ff" g="ff" b="ff" a="ff" />
+                <specular r="ff" g="ff" b="ff" a="ff" />
+            </light>
+        </lights>
+    </illumination>
+
+  
+    <textures>
+        <!-- Deve existir um ou mais blocos "texture" -->
+        <!-- (até ao máximo declarado em "globals") -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <!-- s e t: factores de escala (ver notas finais) -->
+        <texture id="ss" file="ss" length_s="ff" length_t="ff" /> 
+    </textures>
+
+  
+    <materials>
+        <!-- Deve existir um ou mais blocos "material" -->
+        <!-- (até ao máximo declarado em "globals") -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <material id="ss">
+            <emission r="ff" g="ff" b="ff" a="ff" />
+            <ambient r="ff" g="ff" b="ff" a="ff" />
+            <diffuse r="ff" g="ff" b="ff" a="ff" />
+            <specular r="ff" g="ff" b="ff" a="ff" />
+            <shininess value="ff" />
+        </material>
+    </materials>
+
+  
+    <objects>
+        <!-- Deve existir um ou mais blocos "object" -->
+        <!-- (até ao máximo declarado em "globals") -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <!-- Os objectos, "simple" ou "compound", podem ser declarados -->
+        <!-- em qualquer ordem -->    
+        <!-- Apenas os blocos "object" de tipo "simple" incluem -->
+        <!-- uma tag "geometry" -->
+        <object id="ss" type="simple">
+            <!-- bloco "transformations" obrigatorio -->
+            <transformations>
+                <!-- instruções a usar (ou não) sem limite nem ordem -->
+                <!-- ex: bloco transformations pode ficar sem conteudo -->
+                <translation x="ff" y="ff" z="ff" />
+                <rotation axis="cc" angle="ff" />
+                <scale x="ff" y="ff" z="ff" />
+            </transformations>
+          
+            <!-- declaração obrigatoria de material -->
+            <!-- o material declarado sobrepoe o material recebido -->
+            <!-- do objecto "pai" -->
+            <!-- id="null" mantem (herda) o material do objecto "pai" -->
+            <material id="ss" />
+                                
+            <!-- declaração obrigatoria de texture -->
+            <!-- id="null" mantem (herda) a textura do objecto "pai" -->
+            <!-- id="clear" remove a textura recebida para este -->
+            <!-- objecto e "filhos" -->
+            <!-- a textura declarada sobrepoe a textura recebida do -->
+            <!-- objecto "pai" -->
+            <texture id="ss" />
+          
+            <!-- bloco "geometry" obrigatorio num objecto "simple" -->
+            <!-- comandos a serem interpretados como em OpenGL -->
+            <!-- apenas pode existir UMA das seguintes tags: -->
+            <geometry type="rectangle" x1="ff" y1="ff" x2="ff" y2="ff" />
+            <geometry type="triangle" x1="ff" y1="ff" z1="ff"
+                                      x2="ff" y2="ff" z2="ff"
+                                      x3="ff" y3="ff" z3="ff" />
+            <geometry type="cylinder" base="ff" top="ff" height="ff"
+                            slices="ii" stacks="ii" />
+            <geometry type="sphere" radius="ff" slices="ii" stacks="ii" />
+            <geometry type="disk" inner="ff" outer="ff" slices="ii" loops="ii" />
+        </object>
+      
+        <!-- apenas os blocos "object" de tipo "compound" incluem -->
+        <!-- uma tag "children" -->
+        <!-- transformacoes, materiais e texturas, tratam-se como -->
+        <!-- em objectos "simple" -->
+        <object id="ss" type="compound">
+            <transformations>
+                <translation x="ff" y="ff" z="ff" />
+                <rotation axis="cc" angle="ff" />
+                <scale x="ff" y="ff" z="ff" />
+            </transformations>
+            <material id="ss" />
+            <texture id="ss" />
+
+            <!-- bloco "children" obrigatorio num objecto "compound" -->
+            <children>
+                <!-- deve existir uma ou mais tags "objectref", -->
+                <!-- identificando um objecto existente no ficheiro  -->
+                <objectref id="ss" />
+            </children>
+        </object>
+
+    </objects>
+</sgx> 
