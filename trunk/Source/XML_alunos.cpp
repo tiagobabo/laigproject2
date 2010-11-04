@@ -368,14 +368,14 @@ void inicializacao()
 int main(int argc, char* argv[])
 {
 	
-	loadScene();
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize (DIMX, DIMY);
 	glutInitWindowPosition (INITIALPOS_X, INITIALPOS_Y);
 	main_window = glutCreateWindow (argv[0]);
  
+	loadScene();
+
    glutDisplayFunc(display);
    GLUI_Master.set_glutReshapeFunc(reshape);
    GLUI_Master.set_glutKeyboardFunc (keyboard);

@@ -117,10 +117,14 @@ void processView_translation(TiXmlElement* translateElement)
 	// translate: exemplo para um nó com um parâmetro que aglutina vários floats
 		if (translateElement)
 		{
-			if(translateElement->QueryFloatAttribute("x",&scene->valX)==TIXML_SUCCESS &&
-				translateElement->QueryFloatAttribute("y",&scene->valY)==TIXML_SUCCESS &&
-				translateElement->QueryFloatAttribute("z",&scene->valZ)==TIXML_SUCCESS)
-					cout << "ValX: " << scene->valX  << " |ValY: " << scene->valY << " |ValZ: " << scene->valZ << endl;
+			float x,y,z;
+			if(translateElement->QueryFloatAttribute("x",&x)==TIXML_SUCCESS &&
+				translateElement->QueryFloatAttribute("y",&y)==TIXML_SUCCESS &&
+				translateElement->QueryFloatAttribute("z",&z)==TIXML_SUCCESS)
+			{
+					glTranslatef(x,y,z);
+					cout << "ValX: " << x  << " |ValY: " << y << " |ValZ: " << z << endl;
+			}
 			else
 				cout << "Error parsing translation" << endl;
 		}
@@ -133,12 +137,35 @@ void processView_rotation(TiXmlElement* rotateElement)
 	// translate: exemplo para um nó com um parâmetro que aglutina vários floats
 		if (rotateElement)
 		{
-			scene->axis = rotateElement->Attribute("axis");
-			if(rotateElement->QueryFloatAttribute("angle",&scene->angle)==TIXML_SUCCESS &&
-				scene->axis!=NULL)
-					cout << "RotAxis: " << scene->axis  << " |Ang: " << scene->angle << endl;
+			const char* axisl = rotateElement->Attribute("axis");
+			if(axisl != NULL)
+			{
+				string axis;
+				axis.append(axisl);
+				if(axis.compare("x")==0 || axis.compare("y")==0 || axis.compare("z")==0)
+				{
+
+					float angle;
+					if(rotateElement->QueryFloatAttribute("angle",&angle)==TIXML_SUCCESS)
+					{
+						//3 casos de rotacao
+						if(axis.compare("x") == 0)
+							glRotatef(angle, 1.0, 0.0,0.0);
+						else if(axis.compare("y") == 0)
+							glRotatef(angle, 0.0, 1.0,0.0);
+						else
+							glRotatef(angle, 0.0, 0.0,1.0);
+						
+						cout << "RotAxis: " << axis  << " |Ang: " << angle << endl;
+					}
+					else
+						cout << "Error parsing rotation" << endl;
+				}
+				else
+					cout << "Error parsing rotation axis" << endl;
+			}
 			else
-				cout << "Error parsing rotation" << endl;
+				cout << "Error parsing rotation axis" << endl;
 		}
 		else
 			printf("rotation not found\n");	
@@ -148,10 +175,14 @@ void processView_scale(TiXmlElement* scaleElement)
 {
 	if (scaleElement)
 		{
-			if(scaleElement->QueryFloatAttribute("x",&scene->scaleX)==TIXML_SUCCESS &&
-				scaleElement->QueryFloatAttribute("y",&scene->scaleY)==TIXML_SUCCESS &&
-				scaleElement->QueryFloatAttribute("z",&scene->scaleZ)==TIXML_SUCCESS)
-					cout << "ScaleX: " << scene->scaleX  << " |ScaleY: " << scene->scaleY << " |ScaleZ: " << scene->scaleZ << endl;
+			float x,y,z;
+			if(scaleElement->QueryFloatAttribute("x",&x)==TIXML_SUCCESS &&
+				scaleElement->QueryFloatAttribute("y",&y)==TIXML_SUCCESS &&
+				scaleElement->QueryFloatAttribute("z",&z)==TIXML_SUCCESS)
+			{
+				glScalef(x,y,z);
+				cout << "ScaleX: " << x  << " |ScaleY: " << y << " |ScaleZ: " << z << endl;
+			}
 			else
 				cout << "Error parsing scale" << endl;
 		}
@@ -177,26 +208,191 @@ void processView(void)
 			printf("view not found\n");
 		TiXmlElement* child = viewElement->FirstChildElement();
 
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
 		while(child)
 		{
 			if(strcmp(child->Value(), "translation")==0)
-			{
 				processView_translation(child);
-			}
 			else if(strcmp(child->Value(), "rotation")==0)
-			{
 				processView_rotation(child);
-			}
 			else if(strcmp(child->Value(), "scale")==0)
-			{
 				processView_scale(child);
-			}
+			else
+				cout << "Error parsing view: invalid child" << endl;
 			child=child->NextSiblingElement();
 		}
 
-			
+		glGetFloatv(GL_MODELVIEW_MATRIX, &scene->m[0][0]);
+}
 
-		// repetir para cada uma das variáveis
+void processIllumination_ambient(TiXmlElement* ambient)
+{
+	float r,g,b,a;
+	if(ambient->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
+				ambient->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
+				ambient->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
+				ambient->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
+	{
+		scene->ambient[0] = r;
+		scene->ambient[1] = g;
+		scene->ambient[2] = b;
+		scene->ambient[3] = a;
+
+		cout << "ambient: " << r << " " << g << " " << b << " " << a << endl;
+	}
+	else
+		cout << "Error parsing illumination: ambient not found or invalid" << endl;
+}
+
+void processIllumination_background(TiXmlElement* background)
+{
+	float r,g,b,a;
+	if(background->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
+				background->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
+				background->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
+				background->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
+	{
+		scene->background[0] = r;
+		scene->background[1] = g;
+		scene->background[2] = b;
+		scene->background[3] = a;
+		cout << "background: " << r << " " << g << " " << b << " " << a << endl;
+	}
+	else
+		cout << "Error parsing illumination: ambient not found or invalid" << endl;
+}
+
+void processLight_ambient(TiXmlElement* ambient)
+{
+	float r,g,b,a;
+	if(	ambient->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
+		ambient->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
+		ambient->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
+		ambient->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
+	{
+		scene->lights.back().ambient[0] = r;
+		scene->lights.back().ambient[1] = g;
+		scene->lights.back().ambient[2] = b;
+		scene->lights.back().ambient[3] = a;
+		cout << "ambient: " << r << " " << g << " " << b << " " << a << endl;
+	}
+	else
+		cout << "Error parsing illumination: ambient not found or invalid" << endl;
+}
+
+void processLights_light(TiXmlElement* light)
+{
+	const char* id = light->Attribute("id");
+	const char* enabled = light->Attribute("enabled");
+
+	if(id != NULL && enabled != NULL && (strcmp(enabled, "1") == 0 || strcmp(enabled, "0")))
+	{
+		string id2 = light->Attribute("id");
+		vector<Light>::iterator it;
+		for(it=scene->lights.begin() ; it < scene->lights.end(); it++)
+		{
+			if(it->id.compare(id2) == 0)
+			{
+				cout << "Error parsing light: id light already exists" << endl;
+				return;
+			}
+		}
+		cout << "Parsing light id = " << id << endl;
+
+
+		if(strcmp(enabled, "1") == 0)
+		{
+			Light l(id2, true);
+			scene->lights.push_back(l);
+		}
+		else
+		{
+			Light l(id2, false);
+			scene->lights.push_back(l);
+		}
+
+		TiXmlElement* child = light->FirstChildElement();
+		 
+		while(child)
+		{
+			if(strcmp(child->Value(), "ambient")==0)
+				processLight_ambient(child);
+			/*else if(strcmp(child->Value(), "ambient")==0)
+				processIllumination_background(child);
+			else if(strcmp(child->Value(), "diffuse")==0)
+				processIllumination_background(child);
+			else if(strcmp(child->Value(), "specular")==0)
+				processIllumination_background(child);*/
+			else
+				cout << "Error parsing light: invalid child" << endl;
+			child = child->NextSiblingElement();
+		}
+
+	}
+	else
+		cout << "Error parsing light: id or enabled not found or invalid" << endl;
+}
+
+void processIllumination_lights(TiXmlElement* lights)
+{
+	TiXmlElement* child = lights->FirstChildElement();
+
+	while(child)
+	{
+		if(strcmp(child->Value(), "light")==0)
+		{
+			processLights_light(child);
+		}
+		else
+			cout << "Error parsing lights: invalid child";
+		child = child->NextSiblingElement();
+	}
+}
+
+void processIllumination(void)
+{
+	TiXmlElement* illuminationElement=scene->sgxElement->FirstChildElement("illumination");
+	if (illuminationElement)
+		{
+			const char* doublesided = illuminationElement->Attribute("doublesided");
+			const char* local = illuminationElement->Attribute("local");
+			if(doublesided != NULL && local != NULL && (strcmp(doublesided, "1") == 0 || strcmp(doublesided, "0") == 0) && (strcmp(local, "1") == 0 || strcmp(local, "0") == 0))
+			{
+				if(strcmp(doublesided, "1") == 0) 
+					scene->doublesided = true;
+				else
+					scene->doublesided = false;
+
+				if(strcmp(local, "1") == 0) 
+					scene->local = true;
+				else
+					scene->local = false;
+
+				cout << "illumination atributes: " << scene->doublesided << " " << scene->local << endl; 
+
+				TiXmlElement* child = illuminationElement->FirstChildElement();
+
+				while(child)
+				{
+					if(strcmp(child->Value(), "ambient")==0)
+						processIllumination_ambient(child);
+					else if(strcmp(child->Value(), "background")==0)
+						processIllumination_background(child);
+					else if(strcmp(child->Value(), "lights")==0)
+						processIllumination_lights(child);
+					else
+						cout << "Error parsing illumination: invalid child" << endl;
+					child=child->NextSiblingElement();
+				}
+
+			}
+			else
+				cout << "Error parsing illumination: doublesided or local not found or invalid" << endl;
+		}
+		else
+			cout << "illumination not found\n" << endl;
 }
 
 void loadScene(void)
@@ -231,7 +427,7 @@ void loadScene(void)
 		// frustum: exemplo para nó com parâmetros individuais
 		processGlobals();
 		processView();
-
+		processIllumination();
 		
 
 	// Validação dos outros grupos seria feita aqui
