@@ -11,30 +11,38 @@
              maxobjects="2" root="ss"/>
 
 
-    <view near="21.1" far="31.1" axisscale="10.2">
+    <view near="0.0" far="100.0" axisscale="10.2">
         <translation x="1.1" y="2.2" z="3.3" />
         <rotation axis="x" angle="90" />
         <rotation axis="y" angle="45" />
         <rotation axis="z" angle="60" />
+        <rotation axis="z" angle="60"/>
         <scale x="10" y="20" z="30" />
     </view>
 
 
-    <illumination doublesided="tt" local="tt" >
+    <illumination doublesided="1" local="0" >
 
-        <ambient r="ff" g="ff" b="ff" a="ff" />
-        <background r="ff" g="ff" b="ff" a="ff" />
+        <ambient r="1.0" g="1.0" b="0.6" a="0.6" />
+        <background r="0.6" g="0.6" b="0.6" a="0.6" />
 
         <lights>
             <!-- Deve existir um ou mais blocos "light" -->
             <!-- (até ao máximo declarado em "globals") -->
             <!-- Os identificadores "id" nao podem ser repetidos -->
-            <light id="ss" enabled="tt" >
-                <position x="ff" y="ff" z="ff" w="ff" />
-                <ambient r="ff" g="ff" b="ff" a="ff" />
-                <diffuse r="ff" g="ff" b="ff" a="ff" />
-                <specular r="ff" g="ff" b="ff" a="ff" />
+            <light id="Principal" enabled="1" >
+                <position x="5" y="5" z="5" w="5" />
+                <ambient r="0.6" g="0.6" b="0.6" a="0.6" />
+                <diffuse r="0.6" g="0.6" b="0.6" a="0.6" />
+                <specular r="0.6" g="0.6" b="0.6" a="0.6" />
             </light>
+            <light id="Principal2" enabled="1" >
+                <position x="5" y="5" z="5" w="5" />
+                <ambient r="0.1" g="0.6" b="0.6" a="0.6" />
+                <diffuse r="0.6" g="0.6" b="0.6" a="0.6" />
+                <specular r="0.6" g="0.6" b="0.6" a="0.6" />
+            </light>
+          
         </lights>
     </illumination>
 

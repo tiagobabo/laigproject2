@@ -1,10 +1,36 @@
 #include "..\tinyxml.h"
 
 #include <cstdlib>
+#include <GL\glui.h>
 #include <string>
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
+class Light
+{
+public:
+	string id;
+	bool enabled;
+	float position[4];
+	float ambient[4];
+	float specular[4];
+	float diffuse[4];
+
+	Light(string id, bool enabled)
+	{
+		this->id = id;
+		this->enabled = enabled;
+		for(int i = 0; i < 4; i++)
+		{
+			this->position[i] = 0;
+			this->ambient[i] = 0;
+			this->specular[i] = 0;
+			this->diffuse[i] = 0;
+		}
+	}
+};
 
 class Scene
 {
@@ -14,6 +40,7 @@ public:
 	TiXmlElement* materialsElement;
 	TiXmlElement* lightsElement;
 	TiXmlElement* objectsElement;
+	TiXmlElement* illuminationElement;
 
 	//globals
 	int maxlights;
@@ -26,15 +53,16 @@ public:
 	float near;
 	float far;
 	float axisscale;
-	float valX;
-	float valY;
-	float valZ;
-	const char* axis;
-	float angle;
-	float scaleX;
-	float scaleY;
-	float scaleZ;
 
+	//matriix de transformacao inicial
+	float m[4][4];
+
+	//lights
+	bool doublesided, local;
+	float ambient[4];
+	float background[4];
+
+	vector<Light> lights;
 
 	Scene(){
 		sgxElement=NULL; 
@@ -42,6 +70,7 @@ public:
 		materialsElement=NULL;
 		lightsElement=NULL;
 		objectsElement=NULL;
+		illuminationElement=NULL;
 	}
 
 
