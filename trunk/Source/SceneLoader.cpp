@@ -862,7 +862,8 @@ void processObject_children(TiXmlElement* object)
 void processObjects_object(TiXmlElement* object)
 {
 	const char* id = object->Attribute("id");
-	if(id != NULL)
+	const char* type = object->Attribute("type");
+	if(id != NULL && ((strcmp(type, "compound") == 0) || (strcmp(type, "simple") == 0)))
 	{
 		string id2 = object->Attribute("id");
 		/*vector<Object>::iterator it;
@@ -875,6 +876,7 @@ void processObjects_object(TiXmlElement* object)
 			}
 		}*/
 		cout << "Parsing Object id = " << id << endl;
+		cout << "Parsing Object type = " << type << endl;
 		//Object m(id);
 		//scene->objects.push_back(m);
 
@@ -889,8 +891,12 @@ void processObjects_object(TiXmlElement* object)
 				processObject_type(child,1);
 			else if(strcmp(child->Value(), "geometry")==0)
 				processObject_geometry(child);
-			else if(strcmp(child->Value(), "children")==0)
-				processObject_children(child);
+			else if(strcmp(child->Value(), "children")==0){
+				if(strcmp(type, "compound") == 0)
+					processObject_children(child);
+				else
+					cout << "Invalid type/argument: Simple Object has children."<< endl;
+			}
 			else
 				cout << "Error parsing Object: invalid child" << endl;
 			child=child->NextSiblingElement();
