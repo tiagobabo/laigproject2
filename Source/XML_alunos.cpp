@@ -1,8 +1,6 @@
 // G1_Ilum.cpp : Defines the entry point for the console application.
 //
-
 #include "SceneLoader.h"
-
 
 #include <GL\glui.h>
 #include <math.h>
@@ -402,7 +400,7 @@ int main(int argc, char* argv[])
 	GLUI_Master.set_glutIdleFunc( myGlutIdle );
    
 	inicializacao();
-   
+
 	glutMainLoop();
 
 	return 0;
