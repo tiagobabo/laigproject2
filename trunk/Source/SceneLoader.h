@@ -1,11 +1,12 @@
-#include "..\tinyxml.h"
-
 #include <cstdlib>
 #include <GL\glui.h>
 #include <string>
 #include <iostream>
 #include <vector>
 #include <string>
+
+#include "..\tinyxml.h"
+
 using namespace std;
 
 class Light
@@ -119,3 +120,33 @@ public:
 };
 
 void loadScene(void);
+
+class Node
+{
+private:
+	string id, type;
+public:
+	Node(string id, string type);
+	//Node virtual hasChild();
+};
+
+class Object : public Node
+{
+private:
+	
+public:
+	string teste;
+	Object(string id, string type, string teste);
+	//void virtual Draw();
+	//Node hasChild();
+};
+ 
+class CompoundObject : public Node
+{
+private:
+	vector<Node> nodes;
+	int bla;
+public:
+	CompoundObject(string id, string type, int bla);
+	//Node hasChild();
+};
