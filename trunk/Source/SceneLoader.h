@@ -32,6 +32,22 @@ public:
 	}
 };
 
+class Texture
+{
+public:
+	string id;
+	string file;
+	float length_s;
+	float length_t;
+	Texture(string id, string file, float length_s, float length_t)
+	{
+		this->id = id;
+		this->file = file;
+		this->length_s = length_s;
+		this->length_t = length_t;
+	}
+};
+
 class Scene
 {
 public:
@@ -63,6 +79,7 @@ public:
 	float background[4];
 
 	vector<Light> lights;
+	vector<Texture> textures;
 
 	Scene(){
 		sgxElement=NULL; 

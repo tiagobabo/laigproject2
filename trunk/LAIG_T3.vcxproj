@@ -100,7 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="demograph.xml" />
-    <None Include="exemplo.xml" />
+    <None Include="exemplo.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
