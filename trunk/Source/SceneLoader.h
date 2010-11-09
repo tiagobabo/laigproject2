@@ -124,8 +124,8 @@ class Node
 {
 private:
 	string id, type;
-	char transformations[4][4];
-	Material* m;
+	float transformations[4][4];
+	Material* material;
 	Texture* texture;
 public:
 	Node(string id, string type);
@@ -133,23 +133,65 @@ public:
 	virtual void draw() = 0;
 	string getID() {return id;};
 	string getType() {return type;};
+	void setTexture(Texture* t);
+	void setMaterial(Material* m);
+	void setTransformations(float trans[4][4]);
+	Texture* getTexture();
+	Material* getMaterial();
+	//float** getTransformations();
 };
 
 class Object : public Node
 {
 private:
 public:
-	string teste;
-	Object(string id, string type, string teste);
+	Object(string id, string type);
 	virtual void draw() = 0;
 	Node* hasChild();
 }; 
 
 class Triangle: public Object
 {
+private:
+	float x1,x2,x3,y1,y2,y3,z1,z2,z3;
 public:
-	Triangle(string id, string type, string teste):
-	Object(id, type, teste){};
+	Triangle(string id, string type, float x1, float x2, float x3, float y1, float y2, float y3, float z1, float z2, float z3);
+	void draw();
+};
+
+class Rectangle: public Object
+{
+private:
+	float x1,y1,x2,y2;
+public:
+	Rectangle(string id, string type, float x1, float y1, float x2, float y2);
+	void draw();
+};
+
+class Cylinder: public Object
+{
+private:
+	float base, top, height, slices, stacks;
+public:
+	Cylinder(string id, string type, float base, float top, float height, float slices, float stacks);
+	void draw();
+};
+
+class Sphere: public Object
+{
+private:
+	float radius, slices, stacks;
+public:
+	Sphere(string id, string type, float radius, float slices, float stacks);
+	void draw();
+};
+
+class Disk: public Object
+{
+private:
+	float inner, outer, slices, loops;
+public:
+	Disk(string id, string type, float inner, float outer, float slices, float loops);
 	void draw();
 };
 
@@ -157,9 +199,8 @@ class CompoundObject : public Node
 {
 private:
 	vector<Node*> nodes;
-	int bla;
 public:
-	CompoundObject(string id, string type, int bla);
+	CompoundObject(string id, string type);
 	void addNode(Node* node);
 	void draw(){};
 	Node* hasChild();
