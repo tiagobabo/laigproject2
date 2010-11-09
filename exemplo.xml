@@ -7,8 +7,8 @@
 <sgx>
     <!-- tem de existir, pelo menos, uma luz, uma textura, um material -->
     <!-- e um objecto -->
-    <globals maxlights="2" maxtextures="3" maxmaterials="5"
-             maxobjects="2" root="ss"/>
+    <globals maxlights="2" maxtextures="2" maxmaterials="5"
+             maxobjects="2" root="Cena"/>
 
 
     <view near="0.0" far="100.0" axisscale="10.2">
@@ -86,21 +86,21 @@
         <!-- em qualquer ordem -->    
         <!-- Apenas os blocos "object" de tipo "simple" incluem -->
         <!-- uma tag "geometry" -->
-        <object id="ss" type="simple">
+        <object id="Object1" type="simple">
             <!-- bloco "transformations" obrigatorio -->
             <transformations>
                 <!-- instruções a usar (ou não) sem limite nem ordem -->
                 <!-- ex: bloco transformations pode ficar sem conteudo -->
-                <translation x="ff" y="ff" z="ff" />
-                <rotation axis="cc" angle="ff" />
-                <scale x="ff" y="ff" z="ff" />
+                <translation x="5" y="5" z="5" />
+                <rotation axis="y" angle="180" />
+                <scale x="2" y="2" z="2" />
             </transformations>
           
             <!-- declaração obrigatoria de material -->
             <!-- o material declarado sobrepoe o material recebido -->
             <!-- do objecto "pai" -->
             <!-- id="null" mantem (herda) o material do objecto "pai" -->
-            <material id="ss" />
+            <material id="Azuleijo" />
                                 
             <!-- declaração obrigatoria de texture -->
             <!-- id="null" mantem (herda) a textura do objecto "pai" -->
@@ -108,39 +108,45 @@
             <!-- objecto e "filhos" -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="ss" />
+            <texture id="Arvore" />
           
             <!-- bloco "geometry" obrigatorio num objecto "simple" -->
             <!-- comandos a serem interpretados como em OpenGL -->
             <!-- apenas pode existir UMA das seguintes tags: -->
-            <geometry type="rectangle" x1="ff" y1="ff" x2="ff" y2="ff" />
-            <geometry type="triangle" x1="ff" y1="ff" z1="ff"
-                                      x2="ff" y2="ff" z2="ff"
-                                      x3="ff" y3="ff" z3="ff" />
-            <geometry type="cylinder" base="ff" top="ff" height="ff"
-                            slices="ii" stacks="ii" />
-            <geometry type="sphere" radius="ff" slices="ii" stacks="ii" />
-            <geometry type="disk" inner="ff" outer="ff" slices="ii" loops="ii" />
+            <geometry type="rectangle" x1="0" y1="0" x2="6" y2="4" />
+            <geometry type="triangle" x1="0" y1="0" z1="0"
+                                      x2="2" y2="0" z2="0"
+                                      x3="1" y3="2" z3="0" />
+            <geometry type="cylinder" base="10" top="10" height="15"
+                            slices="20" stacks="20" />
+            <geometry type="sphere" radius="15" slices="20" stacks="20" />
+            <geometry type="disk" inner="0" outer="12" slices="20" loops="20" />
+            <children>
+              <!-- deve existir uma ou mais tags "objectref", -->
+              <!-- identificando um objecto existente no ficheiro  -->
+              <objectref id="ref0" />
+            </children>
         </object>
       
         <!-- apenas os blocos "object" de tipo "compound" incluem -->
         <!-- uma tag "children" -->
         <!-- transformacoes, materiais e texturas, tratam-se como -->
         <!-- em objectos "simple" -->
-        <object id="ss" type="compound">
+        <object id="Object2" type="compound">
             <transformations>
-                <translation x="ff" y="ff" z="ff" />
-                <rotation axis="cc" angle="ff" />
-                <scale x="ff" y="ff" z="ff" />
+                <translation x="1" y="1" z="1" />
+                <rotation axis="x" angle="90" />
+                <scale x="2" y="2" z="1" />
             </transformations>
-            <material id="ss" />
-            <texture id="ss" />
+            <material id="Pedra" />
+            <texture id="Casa" />
 
             <!-- bloco "children" obrigatorio num objecto "compound" -->
             <children>
                 <!-- deve existir uma ou mais tags "objectref", -->
                 <!-- identificando um objecto existente no ficheiro  -->
-                <objectref id="ss" />
+                <objectref id="ref1" />
+                <objectref id="ref2" />
             </children>
         </object>
 
