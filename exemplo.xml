@@ -52,7 +52,8 @@
         <!-- (até ao máximo declarado em "globals") -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <!-- s e t: factores de escala (ver notas finais) -->
-        <texture id="ss" file="ss" length_s="ff" length_t="ff" /> 
+        <texture id="Casa" file="casa.jpeg" length_s="2.5" length_t="4.5" />
+        <texture id="Arvore" file="arvore.bmp" length_s="1.5" length_t="2.5" />
     </textures>
 
   
