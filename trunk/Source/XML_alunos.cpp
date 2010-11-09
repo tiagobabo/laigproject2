@@ -361,7 +361,31 @@ void inicializacao()
 	
 }
 
+void leNode(Node* n, int i)
+{
+	if(n->getID() == "Objecto Composto")
+	{
+		int w;
+		for(w = 0; w < i; w++)
+			cout << " ";
+		cout << n->getID() << " " << n->getType() << endl;
+		Node* temp = n->hasChild();
+		++w;
+		while(temp)
+		{
+			leNode(temp,w);
+			temp = n->hasChild();
+		}
+	}
+	else
+	{
+		for(int w = 0; w < i; w++)
+				cout << " ";
+		cout << n->getID() << endl;
+		n->draw();
+	}
 
+}
 
 int main(int argc, char* argv[])
 {
@@ -400,6 +424,21 @@ int main(int argc, char* argv[])
 	GLUI_Master.set_glutIdleFunc( myGlutIdle );
    
 	inicializacao();
+   	
+	//crias os diferentes objectos
+	Triangle obj1("Objecto Simples 1","ola2","ola3");
+	Triangle obj2("Objecto Simples 2","ola2","ola3");
+	CompoundObject cobj1("Objecto Composto","1", 1);
+	CompoundObject cobj2("Objecto Composto","2", 2);
+	CompoundObject cobj3("Objecto Composto","3", 3);
+
+	//adiciona os diferentes objectos
+	cobj2.addNode(&cobj1);
+	cobj2.addNode(&obj1);
+	cobj1.addNode(&cobj3);
+	cobj3.addNode(&obj2);
+
+	leNode(&cobj2,0);
 
 	glutMainLoop();
 
