@@ -48,6 +48,30 @@ public:
 	}
 };
 
+class Material
+{
+public:
+	string id;
+	float emission[4];
+	float ambient[4];
+	float diffuse[4];
+	float specular[4];
+	float shininess;
+
+	Material(string id)
+	{
+		this->id = id;
+		shininess = 0;
+		for(int i = 0; i < 4; i++)
+		{
+			this->emission[i] = 0;
+			this->ambient[i] = 0;
+			this->specular[i] = 0;
+			this->diffuse[i] = 0;
+		}
+	}
+};
+
 class Scene
 {
 public:
@@ -80,6 +104,7 @@ public:
 
 	vector<Light> lights;
 	vector<Texture> textures;
+	vector<Material> materials;
 
 	Scene(){
 		sgxElement=NULL; 

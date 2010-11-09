@@ -61,12 +61,19 @@
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- (até ao máximo declarado em "globals") -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss">
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
-            <shininess value="ff" />
+        <material id="Azuleijo">
+            <emission r="3.0" g="5.0" b="2.0" a="1.0" />
+            <ambient r="5.0" g="3.0" b="2.0" a="1.0" />
+            <diffuse r="2.0" g="1.5" b="2.3" a="1.0" />
+            <specular r="1.6" g="4.9" b="3.4" a="1.0" />
+            <shininess value="2.2" />
+        </material>
+        <material id="Pedra">
+          <emission r="3.2" g="3.1" b="3.0" a="1.0" />
+          <ambient r="5.1" g="5.2" b="5.3" a="1.0" />
+          <diffuse r="3.2" g="4.5" b="2.3" a="1.0" />
+          <specular r="1.6" g="1.9" b="1.4" a="1.0" />
+          <shininess value="1.2" />
         </material>
     </materials>
 

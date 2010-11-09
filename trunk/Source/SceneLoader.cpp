@@ -264,24 +264,6 @@ void processIllumination_background(TiXmlElement* background)
 		cout << "Error parsing illumination: background not found or invalid" << endl;
 }
 
-void processLight_ambient(TiXmlElement* ambient)
-{
-	float r,g,b,a;
-	if(	ambient->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
-		ambient->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
-		ambient->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
-		ambient->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
-	{
-		scene->lights.back().ambient[0] = r;
-		scene->lights.back().ambient[1] = g;
-		scene->lights.back().ambient[2] = b;
-		scene->lights.back().ambient[3] = a;
-		cout << "ambient: " << r << " " << g << " " << b << " " << a << endl;
-	}
-	else
-		cout << "Error parsing Light: ambient not found or invalid" << endl;
-}
-
 void processLight_position(TiXmlElement* position)
 {
 	float x,y,z,w;
@@ -300,40 +282,48 @@ void processLight_position(TiXmlElement* position)
 		cout << "Error parsing Light: position not found or invalid" << endl;
 }
 
-void processLight_diffuse(TiXmlElement* diffuse)
+void processLight_type(TiXmlElement* type, int ntype)
 {
 	float r,g,b,a;
-	if(	diffuse->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
-		diffuse->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
-		diffuse->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
-		diffuse->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
+	if(	type->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
 	{
-		scene->lights.back().diffuse[0] = r;
-		scene->lights.back().diffuse[1] = g;
-		scene->lights.back().diffuse[2] = b;
-		scene->lights.back().diffuse[3] = a;
-		cout << "diffuse: " << r << " " << g << " " << b << " " << a << endl;
+		switch(ntype){
+		case 0:
+			{
+				scene->lights.back().ambient[0] = r;
+				scene->lights.back().ambient[1] = g;
+				scene->lights.back().ambient[2] = b;
+				scene->lights.back().ambient[3] = a;
+				cout << "Light_Ambient: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		case 1:
+			{
+				scene->lights.back().diffuse[0] = r;
+				scene->lights.back().diffuse[1] = g;
+				scene->lights.back().diffuse[2] = b;
+				scene->lights.back().diffuse[3] = a;
+				cout << "Light_diffuse: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		case 2:
+			{
+				scene->lights.back().specular[0] = r;
+				scene->lights.back().specular[1] = g;
+				scene->lights.back().specular[2] = b;
+				scene->lights.back().specular[3] = a;
+				cout << "Light_specular: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	else
-		cout << "Error parsing Light: diffuse not found or invalid" << endl;
-}
-
-void processLight_specular(TiXmlElement* specular)
-{
-	float r,g,b,a;
-	if(	specular->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
-		specular->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
-		specular->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
-		specular->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
-	{
-		scene->lights.back().specular[0] = r;
-		scene->lights.back().specular[1] = g;
-		scene->lights.back().specular[2] = b;
-		scene->lights.back().specular[3] = a;
-		cout << "specular: " << r << " " << g << " " << b << " " << a << endl;
-	}
-	else
-		cout << "Error parsing Light: specular not found or invalid" << endl;
+		cout << "Error parsing Light: argument not found or invalid" << endl;
 }
 
 void processLights_light(TiXmlElement* light)
@@ -349,7 +339,7 @@ void processLights_light(TiXmlElement* light)
 		{
 			if(it->id.compare(id2) == 0)
 			{
-				cout << "Error parsing light: id light already exists" << endl;
+				cout << "Error parsing lights: id "<< id2 <<" already exists" << endl;
 				return;
 			}
 		}
@@ -371,14 +361,14 @@ void processLights_light(TiXmlElement* light)
 		 
 		while(child)
 		{
-			if(strcmp(child->Value(), "ambient")==0)
-				processLight_ambient(child);
-			else if(strcmp(child->Value(), "position")==0)
+			if(strcmp(child->Value(), "position")==0)
 				processLight_position(child);
+			else if(strcmp(child->Value(), "ambient")==0)
+				processLight_type(child,0);
 			else if(strcmp(child->Value(), "diffuse")==0)
-				processLight_diffuse(child);
+				processLight_type(child,1);
 			else if(strcmp(child->Value(), "specular")==0)
-				processLight_specular(child);
+				processLight_type(child,2);
 			else
 				cout << "Error parsing light: invalid child" << endl;
 			child = child->NextSiblingElement();
@@ -458,6 +448,16 @@ void processTextures_texture(TiXmlElement* texture)
 	if(	texture->QueryFloatAttribute("length_s",&s)==TIXML_SUCCESS &&
 		texture->QueryFloatAttribute("length_t",&t)==TIXML_SUCCESS && id != NULL && file != NULL)
 	{
+		string id2 = texture->Attribute("id");
+		vector<Texture>::iterator it;
+		for(it=scene->textures.begin() ; it < scene->textures.end(); it++)
+		{
+			if(it->id.compare(id2) == 0)
+			{
+				cout << "Error parsing textures: id "<< id2 <<" already exists" << endl;
+				return;
+			}
+		}
 		Texture t1(id,file, s,t);
 		scene->textures.push_back(t1);
 		cout << "Texture id: "<< scene->textures.back().id << " | file: " << scene->textures.back().file << " | length_s: " << scene->textures.back().length_s << " | length_t: " << scene->textures.back().length_t << endl;
@@ -483,12 +483,132 @@ void processTexture(void)
 			cout << "textures not found\n" << endl;
 }
 
+void processMaterial_type(TiXmlElement* type, int ntype)
+{
+	float r,g,b,a;
+	if(	type->QueryFloatAttribute("r",&r)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("g",&g)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
+		type->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
+	{
+		switch(ntype){
+		case 0:
+			{
+				scene->materials.back().emission[0] = r;
+				scene->materials.back().emission[1] = g;
+				scene->materials.back().emission[2] = b;
+				scene->materials.back().emission[3] = a;
+				cout << "Material_emission: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		case 1: 
+			{
+				scene->materials.back().ambient[0] = r;
+				scene->materials.back().ambient[1] = g;
+				scene->materials.back().ambient[2] = b;
+				scene->materials.back().ambient[3] = a;
+				cout << "Material_ambient: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		case 2:
+			{
+				scene->materials.back().diffuse[0] = r;
+				scene->materials.back().diffuse[1] = g;
+				scene->materials.back().diffuse[2] = b;
+				scene->materials.back().diffuse[3] = a;
+				cout << "Material_diffuse: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		case 3:
+			{
+				scene->materials.back().specular[0] = r;
+				scene->materials.back().specular[1] = g;
+				scene->materials.back().specular[2] = b;
+				scene->materials.back().specular[3] = a;
+				cout << "Material_specular: " << r << " " << g << " " << b << " " << a << endl;
+			}
+			break;
+		}
+	}
+	else
+		cout << "Error parsing Material: argument not found or invalid" << endl;
+}
+
+void processMaterial_shininess(TiXmlElement* texture)
+{
+	float s;
+	if(	texture->QueryFloatAttribute("value",&s)==TIXML_SUCCESS)
+	{
+		scene->materials.back().shininess = s;
+		cout << "Material shininess: "<< scene->materials.back().shininess << endl;
+	}
+	else
+		cout << "Error parsing Material: shininess not found or invalid" << endl;
+}
+
+void processMaterials_material(TiXmlElement* material)
+{
+	const char* id = material->Attribute("id");
+	if(id != NULL)
+	{
+		string id2 = material->Attribute("id");
+		vector<Material>::iterator it;
+		for(it=scene->materials.begin() ; it < scene->materials.end(); it++)
+		{
+			if(it->id.compare(id2) == 0)
+			{
+				cout << "Error parsing materials: id "<< id2 <<" already exists" << endl;
+				return;
+			}
+		}
+		cout << "Parsing Material id = " << id << endl;
+		Material m(id);
+		scene->materials.push_back(m);
+
+		TiXmlElement* child = material->FirstChildElement();
+		while(child)
+		{
+			if(strcmp(child->Value(), "emission")==0)
+				processMaterial_type(child, 0);
+			else if(strcmp(child->Value(), "ambient")==0)
+				processMaterial_type(child,1);
+			else if(strcmp(child->Value(), "diffuse")==0)
+				processMaterial_type(child,2);
+			else if(strcmp(child->Value(), "specular")==0)
+				processMaterial_type(child,3);
+			else if(strcmp(child->Value(), "shininess")==0)
+				processMaterial_shininess(child);
+			else
+				cout << "Error parsing Material: invalid child" << endl;
+			child=child->NextSiblingElement();
+		}
+	}
+	else
+		cout << "Error parsing Material: id not found or invalid" << endl;
+}
+
+void processMaterial(void)
+{
+	TiXmlElement* materialsElement=scene->sgxElement->FirstChildElement("materials");
+	if (materialsElement)
+		{
+				TiXmlElement* child = materialsElement->FirstChildElement();
+				while(child)
+				{	
+					processMaterials_material(child);
+					child=child->NextSiblingElement();
+				}
+		}
+		else
+			cout << "Materials not found\n" << endl;
+}
+
 void loadScene(void)
 {
 
 	// Read string from file
 
-	TiXmlDocument doc( "exemplo.xml" );
+	TiXmlDocument doc( "cena.xml" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
@@ -501,7 +621,6 @@ void loadScene(void)
 	scene->texturesElement = doc.FirstChildElement("textures");
 	scene->materialsElement = doc.FirstChildElement("materials");
 	scene->lightsElement = doc.FirstChildElement("lights");
-	
 	scene->objectsElement = doc.FirstChildElement("objects");
 
 	// Inicialização
@@ -517,6 +636,7 @@ void loadScene(void)
 		processView();
 		processIllumination();
 		processTexture();
+		processMaterial();
 		
 
 	// Validação dos outros grupos seria feita aqui
