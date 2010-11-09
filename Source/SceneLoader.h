@@ -116,7 +116,6 @@ public:
 		illuminationElement=NULL;
 	}
 
-
 };
 
 void loadScene(void);
@@ -125,28 +124,43 @@ class Node
 {
 private:
 	string id, type;
+	char transformations[4][4];
+	Material* m;
+	Texture* texture;
 public:
 	Node(string id, string type);
-	//Node virtual hasChild();
+	virtual Node* hasChild() = 0;
+	virtual void draw() = 0;
+	string getID() {return id;};
+	string getType() {return type;};
 };
 
 class Object : public Node
 {
 private:
-	
 public:
 	string teste;
 	Object(string id, string type, string teste);
-	//void virtual Draw();
-	//Node hasChild();
+	virtual void draw() = 0;
+	Node* hasChild();
+}; 
+
+class Triangle: public Object
+{
+public:
+	Triangle(string id, string type, string teste):
+	Object(id, type, teste){};
+	void draw();
 };
- 
+
 class CompoundObject : public Node
 {
 private:
-	vector<Node> nodes;
+	vector<Node*> nodes;
 	int bla;
 public:
 	CompoundObject(string id, string type, int bla);
-	//Node hasChild();
+	void addNode(Node* node);
+	void draw(){};
+	Node* hasChild();
 };
