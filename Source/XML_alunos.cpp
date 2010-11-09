@@ -426,16 +426,18 @@ int main(int argc, char* argv[])
 	inicializacao();
    	
 	//crias os diferentes objectos
-	Triangle obj1("Objecto Simples 1","ola2","ola3");
-	Triangle obj2("Objecto Simples 2","ola2","ola3");
-	CompoundObject cobj1("Objecto Composto","1", 1);
-	CompoundObject cobj2("Objecto Composto","2", 2);
-	CompoundObject cobj3("Objecto Composto","3", 3);
+	Rectangle obj1("rec1","rectangulo",0,0,1,1);
+	Rectangle obj2("rec2","rectangulo",1,1,2,2);
+	Disk obj3("disc1", "disco", 1, 20, 20, 20);
+	CompoundObject cobj1("Objecto Composto","1");
+	CompoundObject cobj2("Objecto Composto","2");
+	CompoundObject cobj3("Objecto Composto","3");
 
 	//adiciona os diferentes objectos
 	cobj2.addNode(&cobj1);
 	cobj2.addNode(&obj1);
 	cobj1.addNode(&cobj3);
+	cobj1.addNode(&obj3);
 	cobj3.addNode(&obj2);
 
 	leNode(&cobj2,0);
