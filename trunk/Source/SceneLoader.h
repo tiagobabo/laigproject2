@@ -217,4 +217,4 @@ public:
 
 };
 
-void loadScene(Node* raiz);
+Node* loadScene();

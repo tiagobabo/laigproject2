@@ -7,6 +7,7 @@
 //-------------------------------------------------------
 
 Scene* scene = new Scene();
+Node* root;
 vector<Object*> objects;
 vector<CompoundObject*> compoundobjects;
 
@@ -890,6 +891,10 @@ void processObjects_object(TiXmlElement* object)
 		if(strcmp(type, "compound")==0)
 		{
 			CompoundObject* c = new CompoundObject(id, type);
+			string aux;
+			aux.append(id);
+			if(id == scene->root)
+				root = c;
 			compoundobjects.push_back(c);
 			while(child)
 			{
@@ -930,45 +935,36 @@ void processObjects(void)
 
 void createTree(Node* node)
 {
+	cout << "entrei" << node->nodes.size() << endl;
 	vector<Node*>::iterator it;
 	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
 	{
 		if((*it)->getType() == "compound")
-			return createTree((*it));
+		{
+			cout << (*it)->getID() << endl;
+			createTree((*it));
+		}
+		else
+			cout << "  " << (*it)->getID() << endl;
 	}
 }
 
-void mapTexture(Node* parent, Node* child)
+void mapTextures(Node* node)
 {
-	if(child->getTextureId() != "null" && child->getTextureId() != "clear")
+	vector<Node*>::iterator it;
+	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
 	{
-		vector<Texture*>::iterator itT;
-		for(itT = scene->textures.begin(); itT < scene->textures.end(); itT++)
+		if((*it)->getTextureId() != "null")
 		{
-			if((*itT)->id == child->getTextureId())
-				child->texture = *itT;
+			vector<Texture*>::iterator itM;
+			for(itM = scene->textures.begin(); itM < scene->textures.end(); itM++)
+				if((*itM)->id == (*it)->getTextureId())
+					(*it)->texture = *itM;
 		}
-	}
-	else if(child->getTextureId() == "null")
-	{
-		child->texture = parent->texture;
-	}
-}
+		else
+			(*it)->texture = node->texture;
 
-void mapMaterial(Node* parent, Node* child)
-{
-	if(child->getMaterialId() != "null")
-	{
-		vector<Material*>::iterator it;
-		for(it = scene->materials.begin(); it < scene->materials.end(); it++)
-		{
-			if((*it)->id == child->getMaterialId())
-				child->material = *it;
-		}
-	}
-	else
-	{
-		child->texture = parent->texture;
+		if((*it)->getType() == "compound") mapTextures(*it);
 	}
 }
 
@@ -976,9 +972,30 @@ void mapTransformations(Node* parent, Node* child)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glMultMatrixf(&child->transformations[0][0]);
 	glMultMatrixf(&parent->transformations[0][0]);
+	glMultMatrixf(&child->transformations[0][0]);
 	glGetFloatv(GL_MODELVIEW_MATRIX, &child->transformations[0][0]);
+}
+
+void mapMaterials(Node* node)
+{
+	vector<Node*>::iterator it;
+	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
+	{
+		if((*it)->getMaterialId() != "null")
+		{
+			vector<Material*>::iterator itM;
+			for(itM = scene->materials.begin(); itM < scene->materials.end(); itM++)
+			{
+				if((*itM)->id == (*it)->getMaterialId())
+					(*it)->material = *itM;
+			}
+		}
+		else
+			(*it)->material = node->material;
+
+		if((*it)->getType() == "compound") mapMaterials(*it);
+	}
 }
 
 void mapCompoundObjects()
@@ -990,33 +1007,28 @@ void mapCompoundObjects()
 		while(!s.empty())
 		{
 			string id = s.back();
+			vector<CompoundObject*>::iterator it2;
+			for(it2=compoundobjects.begin() ; it2 < compoundobjects.end(); it2++)
+				if((*it2)->getID() == id)
+				{
+					mapTransformations((*it3), (*it2));
+					(*it3)->nodes.push_back((*it2));
+				}
+
 			vector<Object*>::iterator it;
 			for(it=objects.begin() ; it < objects.end(); it++)
-			{
 				if((*it)->getID() == id)
 				{
 					Node* temp = (*it)->clone();
-					mapTexture((*it3), temp);
-					mapMaterial((*it3), temp);
 					mapTransformations((*it3), temp);
-					(*it3)->addNode(temp);
+					(*it3)->nodes.push_back(temp);
 				}
-			}
-			vector<CompoundObject*>::iterator it2;
-			for(it2=compoundobjects.begin() ; it2 < compoundobjects.end(); it2++)
-			{
-				if((*it2)->getID() == id)
-				{
-					Node* temp = (*it2)->clone();
-					(*it3)->addNode(temp);
-				}
-			}
 			s.pop_back();
 		}
 	}
 }
 
-void loadScene(Node* raiz)
+Node* loadScene()
 {
 
 	// Read string from file
@@ -1051,23 +1063,12 @@ void loadScene(Node* raiz)
 		processTexture();
 		processMaterial();
 		processObjects();
-		//createTree();
 
-	// Validação dos outros grupos seria feita aqui
-
-	mapCompoundObjects();
-
-	while(!compoundobjects.empty())
-	{
-		CompoundObject* o = compoundobjects.back();
-		raiz->nodes.push_back(o);
-		compoundobjects.pop_back();
+		mapCompoundObjects();
+		createTree(root);
+		mapMaterials(root);
+		mapTextures(root);
 	}
-	
-	createTree(raiz);
 
-	// render graph
-	// iteração recursiva
-	//processGraphNode(graphElement,0);
-	}
+	return root;
 }
