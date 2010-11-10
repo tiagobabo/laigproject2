@@ -17,6 +17,7 @@ using namespace std;
 
 float xy_aspect;
 Node* raiz;
+Scene cena;
 
 // matriz de transf. geometrica utilizada pelo botao esferico
 float view_rotate[16] =	{ 1,0,0,0,
@@ -105,28 +106,16 @@ void display(void)
 	// inicializacoes da matriz de visualizacao
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	glFrustum( -xy_aspect*.04, xy_aspect*.04, -.04, .04, .1, 500.0 );
+	glFrustum( -xy_aspect*cena.axisscale, xy_aspect*cena.axisscale, -cena.axisscale, cena.axisscale, cena.near, cena.far);
 
 	//inicializacoes da matriz de transformacoes geometricas
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
-	
-	// afasta a cena de 25 unidades mais a distância...
-	glTranslated(0.0,0.0,-25.0);
+	glMultMatrixf(&cena.m[0][0]);
 	// ...decorrente da utilizacao do botao de afastamento
-    glTranslatef( obj_pos[0], obj_pos[1], -obj_pos[2] );    
-
-	// roda a cena para ficar em perspectiva
-	glRotated(20.0, 1.0,0.0,0.0 );		// 20 graus em torno de X
-	glRotated(-45.0, 0.0,1.0,0.0 );		//-45 graus em torno de Y
-
+	glTranslatef( obj_pos[0], obj_pos[1], -obj_pos[2] );    
 	// aplica efeito do botao de rotacao
 	glMultMatrixf( view_rotate );
-
-	// permissao de atribuicao directa de cores
-	// para objectos ue nao tem material atribuido
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
 
 	// Actualizacao da posicao da fonte de luz
 	light0_position[0] = light0x;	// por razoes de eficiencia, os restantes 
@@ -370,7 +359,7 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition (INITIALPOS_X, INITIALPOS_Y);
 	main_window = glutCreateWindow (argv[0]);
 	
-	raiz = loadScene();
+	raiz = loadScene(&cena);
 
    glutDisplayFunc(display);
    GLUI_Master.set_glutReshapeFunc(reshape);
@@ -391,7 +380,7 @@ int main(int argc, char* argv[])
 
 	GLUI_Translation *trans_z = 
 	glui2->add_translation( "Zoom", GLUI_TRANSLATION_Z, &obj_pos[2] );
-	trans_z->set_speed( .02 );
+	trans_z->set_speed( 2 );
 
 
 	/* We register the idle callback with GLUI, not with GLUT */

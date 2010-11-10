@@ -6,7 +6,7 @@
 
 //-------------------------------------------------------
 
-Scene* scene = new Scene();
+Scene scene;
 Node* root;
 vector<Object*> objects;
 vector<CompoundObject*> compoundobjects;
@@ -96,17 +96,17 @@ void processGraphNode(TiXmlElement *parent, int nivel)
 
 void processGlobals(void)
 {
-	TiXmlElement* globalsElement=scene->sgxElement->FirstChildElement("globals");
+	TiXmlElement* globalsElement=scene.sgxElement->FirstChildElement("globals");
 		if (globalsElement)
 		{
 			cout <<  endl <<"::Processing globals::"<< endl<< endl;
-			scene->root = globalsElement->Attribute("root");
-			if (globalsElement->QueryIntAttribute("maxlights",&scene->maxlights)==TIXML_SUCCESS && 
-				globalsElement->QueryIntAttribute("maxmaterials",&scene->maxmaterials)==TIXML_SUCCESS &&
-				globalsElement->QueryIntAttribute("maxobjects",&scene->maxobjects)==TIXML_SUCCESS &&
-				globalsElement->QueryIntAttribute("maxtextures",&scene->maxtextures)==TIXML_SUCCESS &&
-				!scene->root.empty())
-				cout << "root: " << scene->root << endl <<"maxlights: "<< scene->maxlights << endl <<"maxmaterials: "<< scene->maxmaterials << endl <<"maxobjects: " << scene->maxobjects << endl <<"maxtextures: " << scene->maxtextures  <<endl;
+			scene.root = globalsElement->Attribute("root");
+			if (globalsElement->QueryIntAttribute("maxlights",&scene.maxlights)==TIXML_SUCCESS && 
+				globalsElement->QueryIntAttribute("maxmaterials",&scene.maxmaterials)==TIXML_SUCCESS &&
+				globalsElement->QueryIntAttribute("maxobjects",&scene.maxobjects)==TIXML_SUCCESS &&
+				globalsElement->QueryIntAttribute("maxtextures",&scene.maxtextures)==TIXML_SUCCESS &&
+				!scene.root.empty())
+				cout << "root: " << scene.root << endl <<"maxlights: "<< scene.maxlights << endl <<"maxmaterials: "<< scene.maxmaterials << endl <<"maxobjects: " << scene.maxobjects << endl <<"maxtextures: " << scene.maxtextures  <<endl;
 			else
 				printf("Error parsing globals\n");
 		}
@@ -194,14 +194,14 @@ void process_scale(TiXmlElement* scaleElement)
 
 void processView(void)
 {
-	TiXmlElement* viewElement=scene->sgxElement->FirstChildElement("view");
+	TiXmlElement* viewElement=scene.sgxElement->FirstChildElement("view");
 		if (viewElement)
 		{
 			cout <<  endl <<"::Processing view::"<< endl << endl;
-			if (viewElement->QueryFloatAttribute("near",&scene->near)==TIXML_SUCCESS && 
-				viewElement->QueryFloatAttribute("far",&scene->far)==TIXML_SUCCESS &&
-				viewElement->QueryFloatAttribute("axisscale",&scene->axisscale)==TIXML_SUCCESS)
-				cout << "view atributes: " << scene->axisscale << endl;
+			if (viewElement->QueryFloatAttribute("near",&scene.near)==TIXML_SUCCESS && 
+				viewElement->QueryFloatAttribute("far",&scene.far)==TIXML_SUCCESS &&
+				viewElement->QueryFloatAttribute("axisscale",&scene.axisscale)==TIXML_SUCCESS)
+				cout << "view atributes: " << scene.axisscale << endl;
 			else
 				printf("Error parsing view\n");
 		}
@@ -225,7 +225,8 @@ void processView(void)
 			child=child->NextSiblingElement();
 		}
 
-		glGetFloatv(GL_MODELVIEW_MATRIX, &scene->m[0][0]);
+		glGetFloatv(GL_MODELVIEW_MATRIX, &scene.m[0][0]);
+		cout << "ola";
 }
 
 void processIllumination_ambient(TiXmlElement* ambient)
@@ -236,10 +237,10 @@ void processIllumination_ambient(TiXmlElement* ambient)
 				ambient->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
 				ambient->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
 	{
-		scene->ambient[0] = r;
-		scene->ambient[1] = g;
-		scene->ambient[2] = b;
-		scene->ambient[3] = a;
+		scene.ambient[0] = r;
+		scene.ambient[1] = g;
+		scene.ambient[2] = b;
+		scene.ambient[3] = a;
 
 		cout << "ambient: " << r << " " << g << " " << b << " " << a << endl;
 	}
@@ -255,10 +256,10 @@ void processIllumination_background(TiXmlElement* background)
 				background->QueryFloatAttribute("b",&b)==TIXML_SUCCESS &&
 				background->QueryFloatAttribute("a",&a)==TIXML_SUCCESS)
 	{
-		scene->background[0] = r;
-		scene->background[1] = g;
-		scene->background[2] = b;
-		scene->background[3] = a;
+		scene.background[0] = r;
+		scene.background[1] = g;
+		scene.background[2] = b;
+		scene.background[3] = a;
 		cout << "background: " << r << " " << g << " " << b << " " << a << endl;
 	}
 	else
@@ -273,10 +274,10 @@ void processLight_position(TiXmlElement* position)
 		position->QueryFloatAttribute("z",&z)==TIXML_SUCCESS &&
 		position->QueryFloatAttribute("w",&w)==TIXML_SUCCESS)
 	{
-		scene->lights.back()->position[0] = x;
-		scene->lights.back()->position[1] = y;
-		scene->lights.back()->position[2] = z;
-		scene->lights.back()->position[3] = w;
+		scene.lights.back()->position[0] = x;
+		scene.lights.back()->position[1] = y;
+		scene.lights.back()->position[2] = z;
+		scene.lights.back()->position[3] = w;
 		cout << "position: " << x << " " << y << " " << z << " " << w << endl;
 	}
 	else
@@ -294,28 +295,28 @@ void processLight_type(TiXmlElement* type, int ntype)
 		switch(ntype){
 		case 0:
 			{
-				scene->lights.back()->ambient[0] = r;
-				scene->lights.back()->ambient[1] = g;
-				scene->lights.back()->ambient[2] = b;
-				scene->lights.back()->ambient[3] = a;
+				scene.lights.back()->ambient[0] = r;
+				scene.lights.back()->ambient[1] = g;
+				scene.lights.back()->ambient[2] = b;
+				scene.lights.back()->ambient[3] = a;
 				cout << "Light_Ambient: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 1:
 			{
-				scene->lights.back()->diffuse[0] = r;
-				scene->lights.back()->diffuse[1] = g;
-				scene->lights.back()->diffuse[2] = b;
-				scene->lights.back()->diffuse[3] = a;
+				scene.lights.back()->diffuse[0] = r;
+				scene.lights.back()->diffuse[1] = g;
+				scene.lights.back()->diffuse[2] = b;
+				scene.lights.back()->diffuse[3] = a;
 				cout << "Light_diffuse: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 2:
 			{
-				scene->lights.back()->specular[0] = r;
-				scene->lights.back()->specular[1] = g;
-				scene->lights.back()->specular[2] = b;
-				scene->lights.back()->specular[3] = a;
+				scene.lights.back()->specular[0] = r;
+				scene.lights.back()->specular[1] = g;
+				scene.lights.back()->specular[2] = b;
+				scene.lights.back()->specular[3] = a;
 				cout << "Light_specular: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
@@ -336,7 +337,7 @@ void processLights_light(TiXmlElement* light)
 	{
 		string id2 = light->Attribute("id");
 		vector<Light*>::iterator it;
-		for(it=scene->lights.begin() ; it < scene->lights.end(); it++)
+		for(it=scene.lights.begin() ; it < scene.lights.end(); it++)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
@@ -350,12 +351,12 @@ void processLights_light(TiXmlElement* light)
 		if(strcmp(enabled, "1") == 0)
 		{
 			Light* l = new Light(id2, true);
-			scene->lights.push_back(l);
+			scene.lights.push_back(l);
 		}
 		else
 		{
 			Light* l = new Light(id2, false);
-			scene->lights.push_back(l);
+			scene.lights.push_back(l);
 		}
 
 		TiXmlElement* child = light->FirstChildElement();
@@ -386,7 +387,7 @@ void processIllumination_lights(TiXmlElement* lights)
 	TiXmlElement* child = lights->FirstChildElement();
 	while(child)
 	{
-		if(nChilds == scene->maxlights){
+		if(nChilds == scene.maxlights){
 			cout << "Exceeded number of lights permitted." << endl;
 			break;
 		}
@@ -405,7 +406,7 @@ void processIllumination_lights(TiXmlElement* lights)
 
 void processIllumination(void)
 {
-	TiXmlElement* illuminationElement=scene->sgxElement->FirstChildElement("illumination");
+	TiXmlElement* illuminationElement=scene.sgxElement->FirstChildElement("illumination");
 	if (illuminationElement)
 		{
 			cout <<  endl <<"::Processing Illumination:: " << endl<<endl;
@@ -414,16 +415,16 @@ void processIllumination(void)
 			if(doublesided != NULL && local != NULL && (strcmp(doublesided, "1") == 0 || strcmp(doublesided, "0") == 0) && (strcmp(local, "1") == 0 || strcmp(local, "0") == 0))
 			{
 				if(strcmp(doublesided, "1") == 0) 
-					scene->doublesided = true;
+					scene.doublesided = true;
 				else
-					scene->doublesided = false;
+					scene.doublesided = false;
 
 				if(strcmp(local, "1") == 0) 
-					scene->local = true;
+					scene.local = true;
 				else
-					scene->local = false;
+					scene.local = false;
 
-				cout << "illumination atributes: " << scene->doublesided << " " << scene->local << endl; 
+				cout << "illumination atributes: " << scene.doublesided << " " << scene.local << endl; 
 
 				TiXmlElement* child = illuminationElement->FirstChildElement();
 
@@ -459,7 +460,7 @@ void processTextures_texture(TiXmlElement* texture)
 	{
 		string id2 = texture->Attribute("id");
 		vector<Texture*>::iterator it;
-		for(it=scene->textures.begin() ; it < scene->textures.end(); it++)
+		for(it=scene.textures.begin() ; it < scene.textures.end(); it++)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
@@ -468,8 +469,8 @@ void processTextures_texture(TiXmlElement* texture)
 			}
 		}
 		Texture* t1 = new Texture(id,file, s,t);
-		scene->textures.push_back(t1);
-		cout << "Texture id: "<< scene->textures.back()->id << " | file: " << scene->textures.back()->file << " | length_s: " << scene->textures.back()->length_s << " | length_t: " << scene->textures.back()->length_t << endl;
+		scene.textures.push_back(t1);
+		cout << "Texture id: "<< scene.textures.back()->id << " | file: " << scene.textures.back()->file << " | length_s: " << scene.textures.back()->length_s << " | length_t: " << scene.textures.back()->length_t << endl;
 	}
 	else
 		cout << "Error parsing texture: argument not found or invalid" << endl;
@@ -479,14 +480,14 @@ void processTextures_texture(TiXmlElement* texture)
 void processTexture(void)
 {
 	int nChilds = 0;
-	TiXmlElement* texturesElement=scene->sgxElement->FirstChildElement("textures");
+	TiXmlElement* texturesElement=scene.sgxElement->FirstChildElement("textures");
 	if (texturesElement)
 		{
 			cout << endl << "::Processing Texture:: " << endl<< endl;
 			TiXmlElement* child = texturesElement->FirstChildElement();
 			while(child)
 			{
-				if(nChilds == scene->maxtextures){
+				if(nChilds == scene.maxtextures){
 					cout << "Exceeded number of textures permitted." << endl;
 					break;
 				}
@@ -512,37 +513,37 @@ void processMaterial_type(TiXmlElement* type, int ntype)
 		switch(ntype){
 		case 0:
 			{
-				scene->materials.back()->emission[0] = r;
-				scene->materials.back()->emission[1] = g;
-				scene->materials.back()->emission[2] = b;
-				scene->materials.back()->emission[3] = a;
+				scene.materials.back()->emission[0] = r;
+				scene.materials.back()->emission[1] = g;
+				scene.materials.back()->emission[2] = b;
+				scene.materials.back()->emission[3] = a;
 				cout << "Material_emission: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 1: 
 			{
-				scene->materials.back()->ambient[0] = r;
-				scene->materials.back()->ambient[1] = g;
-				scene->materials.back()->ambient[2] = b;
-				scene->materials.back()->ambient[3] = a;
+				scene.materials.back()->ambient[0] = r;
+				scene.materials.back()->ambient[1] = g;
+				scene.materials.back()->ambient[2] = b;
+				scene.materials.back()->ambient[3] = a;
 				cout << "Material_ambient: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 2:
 			{
-				scene->materials.back()->diffuse[0] = r;
-				scene->materials.back()->diffuse[1] = g;
-				scene->materials.back()->diffuse[2] = b;
-				scene->materials.back()->diffuse[3] = a;
+				scene.materials.back()->diffuse[0] = r;
+				scene.materials.back()->diffuse[1] = g;
+				scene.materials.back()->diffuse[2] = b;
+				scene.materials.back()->diffuse[3] = a;
 				cout << "Material_diffuse: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 3:
 			{
-				scene->materials.back()->specular[0] = r;
-				scene->materials.back()->specular[1] = g;
-				scene->materials.back()->specular[2] = b;
-				scene->materials.back()->specular[3] = a;
+				scene.materials.back()->specular[0] = r;
+				scene.materials.back()->specular[1] = g;
+				scene.materials.back()->specular[2] = b;
+				scene.materials.back()->specular[3] = a;
 				cout << "Material_specular: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
@@ -557,8 +558,8 @@ void processMaterial_shininess(TiXmlElement* texture)
 	float s;
 	if(	texture->QueryFloatAttribute("value",&s)==TIXML_SUCCESS)
 	{
-		scene->materials.back()->shininess = s;
-		cout << "Material shininess: "<< scene->materials.back()->shininess << endl;
+		scene.materials.back()->shininess = s;
+		cout << "Material shininess: "<< scene.materials.back()->shininess << endl;
 	}
 	else
 		cout << "Error parsing Material: shininess not found or invalid" << endl;
@@ -571,7 +572,7 @@ void processMaterials_material(TiXmlElement* material)
 	{
 		string id2 = material->Attribute("id");
 		vector<Material*>::iterator it;
-		for(it=scene->materials.begin() ; it < scene->materials.end(); it++)
+		for(it=scene.materials.begin() ; it < scene.materials.end(); it++)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
@@ -581,7 +582,7 @@ void processMaterials_material(TiXmlElement* material)
 		}
 		cout << "Parsing Material id = " << id << endl;
 		Material* m = new Material(id);
-		scene->materials.push_back(m);
+		scene.materials.push_back(m);
 
 		TiXmlElement* child = material->FirstChildElement();
 		while(child)
@@ -608,14 +609,14 @@ void processMaterials_material(TiXmlElement* material)
 void processMaterial(void)
 {
 	int nChilds = 0;
-	TiXmlElement* materialsElement=scene->sgxElement->FirstChildElement("materials");
+	TiXmlElement* materialsElement=scene.sgxElement->FirstChildElement("materials");
 	if (materialsElement)
 		{
 			cout << endl <<"::Processing Material:: " << endl << endl;
 			TiXmlElement* child = materialsElement->FirstChildElement();
 			while(child)
 			{	
-				if(nChilds == scene->maxmaterials){
+				if(nChilds == scene.maxmaterials){
 					cout << "Exceeded number of materials permitted." << endl;
 					break;
 				}
@@ -845,7 +846,7 @@ void processObjects_object(TiXmlElement* object)
 	{
 		string id2 = object->Attribute("id");
 		/*vector<Object>::iterator it;
-		for(it=scene->objects.begin() ; it < scene->object.end(); it++)
+		for(it=scene.objects.begin() ; it < scene.object.end(); it++)
 		{
 			if(it->id.compare(id2) == 0)
 			{
@@ -856,7 +857,7 @@ void processObjects_object(TiXmlElement* object)
 		cout << "Parsing Object id = " << id << endl;
 		cout << "Parsing Object type = " << type << endl;
 		//Object m(id);
-		//scene->objects.push_back(m);
+		//scene.objects.push_back(m);
 
 		// Process simple object [first geometry, then rest]
 		TiXmlElement* child = object->FirstChildElement();
@@ -893,7 +894,7 @@ void processObjects_object(TiXmlElement* object)
 			CompoundObject* c = new CompoundObject(id, type);
 			string aux;
 			aux.append(id);
-			if(id == scene->root)
+			if(id == scene.root)
 				root = c;
 			compoundobjects.push_back(c);
 			while(child)
@@ -911,14 +912,14 @@ void processObjects(void)
 {
 
 	int nChilds = 0;
-	TiXmlElement* objectsElement=scene->sgxElement->FirstChildElement("objects");
+	TiXmlElement* objectsElement=scene.sgxElement->FirstChildElement("objects");
 	if (objectsElement)
 		{
 			cout << endl << "::Processing Objects:: " << endl<< endl;
 			TiXmlElement* child = objectsElement->FirstChildElement();
 			while(child)
 			{
-				if(nChilds == scene->maxobjects){
+				if(nChilds == scene.maxobjects){
 					cout << "Exceeded number of objects permitted." << endl;
 					break;
 				}
@@ -957,7 +958,7 @@ void mapTextures(Node* node)
 		if((*it)->getTextureId() != "null")
 		{
 			vector<Texture*>::iterator itM;
-			for(itM = scene->textures.begin(); itM < scene->textures.end(); itM++)
+			for(itM = scene.textures.begin(); itM < scene.textures.end(); itM++)
 				if((*itM)->id == (*it)->getTextureId())
 					(*it)->texture = *itM;
 		}
@@ -985,7 +986,7 @@ void mapMaterials(Node* node)
 		if((*it)->getMaterialId() != "null")
 		{
 			vector<Material*>::iterator itM;
-			for(itM = scene->materials.begin(); itM < scene->materials.end(); itM++)
+			for(itM = scene.materials.begin(); itM < scene.materials.end(); itM++)
 			{
 				if((*itM)->id == (*it)->getMaterialId())
 					(*it)->material = *itM;
@@ -1028,7 +1029,7 @@ void mapCompoundObjects()
 	}
 }
 
-Node* loadScene()
+Node* loadScene(Scene* s)
 {
 
 	// Read string from file
@@ -1042,16 +1043,16 @@ Node* loadScene()
 		exit( 1 );
 	}
 
-	scene->sgxElement = doc.FirstChildElement( "sgx" ); 
-	scene->texturesElement = doc.FirstChildElement("textures");
-	scene->materialsElement = doc.FirstChildElement("materials");
-	scene->lightsElement = doc.FirstChildElement("lights");
-	scene->objectsElement = doc.FirstChildElement("objects");
+	scene.sgxElement = doc.FirstChildElement( "sgx" ); 
+	scene.texturesElement = doc.FirstChildElement("textures");
+	scene.materialsElement = doc.FirstChildElement("materials");
+	scene.lightsElement = doc.FirstChildElement("lights");
+	scene.objectsElement = doc.FirstChildElement("objects");
 
 	// Inicialização
 	// Um exemplo de um conjunto de nós bem conhecidos e obrigatórios
 
-	if (scene->sgxElement == NULL)
+	if (scene.sgxElement == NULL)
 		printf("Bloco sgx não encontrado\n");
 	else
 	{
@@ -1069,6 +1070,6 @@ Node* loadScene()
 		mapMaterials(root);
 		mapTextures(root);
 	}
-
+	*s = scene;
 	return root;
 }
