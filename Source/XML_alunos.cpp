@@ -16,7 +16,7 @@ using namespace std;
 
 
 float xy_aspect;
-Node* raiz = new CompoundObject("raiz", "compound");
+Node* raiz;
 
 // matriz de transf. geometrica utilizada pelo botao esferico
 float view_rotate[16] =	{ 1,0,0,0,
@@ -105,7 +105,7 @@ void display(void)
 	// inicializacoes da matriz de visualizacao
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	glFrustum( -xy_aspect*.04, xy_aspect*.04, -.04, .04, .1, 50.0 );
+	glFrustum( -xy_aspect*.04, xy_aspect*.04, -.04, .04, .1, 500.0 );
 
 	//inicializacoes da matriz de transformacoes geometricas
 	glMatrixMode( GL_MODELVIEW );
@@ -353,6 +353,7 @@ void inicializacao()
 	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
 	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
 	glShadeModel(GL_SMOOTH);				// GL_FLAT / GL_SMOOTH
 
@@ -369,7 +370,7 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition (INITIALPOS_X, INITIALPOS_Y);
 	main_window = glutCreateWindow (argv[0]);
 	
-	loadScene(raiz);
+	raiz = loadScene();
 
    glutDisplayFunc(display);
    GLUI_Master.set_glutReshapeFunc(reshape);

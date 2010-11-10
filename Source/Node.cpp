@@ -1,5 +1,15 @@
 #include "SceneLoader.h"
 
+void loadMaterial(Material* m)
+{
+	// define caracteristicas de cor do material do plano e da caixa
+	glEnable (GL_BLEND); glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glMaterialfv(GL_FRONT, GL_SHININESS, &m->shininess);
+	glMaterialfv(GL_FRONT, GL_SPECULAR,  m->specular);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,   m->diffuse);
+	glMaterialfv(GL_FRONT, GL_AMBIENT,   m->ambient);
+}
+
 //constructores das classes
 Node::Node(string id, string type)
 {
@@ -115,11 +125,19 @@ void CompoundObject::draw()
 
 void Triangle::draw()
 {
+	if(this->material != NULL)
+		loadMaterial(this->material);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMultMatrixf(&this->transformations[0][0]);
 	cout << "DESENHO TRIANGLE" << endl;
+	glPopMatrix();
 }
 
 void Rectangle::draw()
 {
+	if(this->material != NULL)
+		loadMaterial(this->material);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
@@ -134,20 +152,39 @@ void Rectangle::draw()
 }
 void Cylinder::draw()
 {
+	if(this->material != NULL)
+		loadMaterial(this->material);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMultMatrixf(&this->transformations[0][0]);
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
 	gluCylinder(glQ2, this->base, this->top, this->height, this->slices, this->stacks);
+	glPopMatrix();
 }
 
 void Disk::draw()
 {
+	if(this->material != NULL)
+		loadMaterial(this->material);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMultMatrixf(&this->transformations[0][0]);
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
 	gluDisk(glQ2, this->inner, this->outer, this->slices, this->loops);
+	glPopMatrix();
 }
 void Sphere::draw()
 {
+	if(this->material != NULL)
+		loadMaterial(this->material);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMultMatrixf(&this->transformations[0][0]);
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
 	gluSphere(glQ2, this->radius, this->slices, this->stacks);
+	glPopMatrix();
 }
+
