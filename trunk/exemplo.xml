@@ -140,8 +140,8 @@
             <children>
                 <!-- deve existir uma ou mais tags "objectref", -->
                 <!-- identificando um objecto existente no ficheiro  -->
-                <objectref id="ref1" />
-                <objectref id="ref2" />
+                <objectref id="Object1" />
+                <objectref id="Object1" />
             </children>
         </object>
 

@@ -975,7 +975,7 @@ void loadScene(Node* raiz)
 
 	// Read string from file
 
-	TiXmlDocument doc( "GhostTrain.sgx" );
+	TiXmlDocument doc( "exemplo.xml" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
