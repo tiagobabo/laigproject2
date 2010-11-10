@@ -859,6 +859,28 @@ void processObject_children(TiXmlElement* object)
 	}
 }
 
+void processObject_simple(TiXmlElement* object)
+{
+	if(strcmp(object->Value(), "transformations")==0)
+		processObject_transformations(object);
+	else if(strcmp(object->Value(), "material")==0)
+		processObject_type(object,0);
+	else if(strcmp(object->Value(), "texture")==0)
+		processObject_type(object,1);
+}
+
+void processObject_compound(TiXmlElement* object)
+{
+	if(strcmp(object->Value(), "transformations")==0)
+		processObject_transformations(object);
+	else if(strcmp(object->Value(), "material")==0)
+		processObject_type(object,0);
+	else if(strcmp(object->Value(), "texture")==0)
+		processObject_type(object,1);
+	else if(strcmp(object->Value(), "children")==0)
+		processObject_children(object);
+}
+
 void processObjects_object(TiXmlElement* object)
 {
 	const char* id = object->Attribute("id");
@@ -880,27 +902,32 @@ void processObjects_object(TiXmlElement* object)
 		//Object m(id);
 		//scene->objects.push_back(m);
 
+		// Process simple object [first geometry, then rest]
 		TiXmlElement* child = object->FirstChildElement();
-		while(child)
-		{
-			if(strcmp(child->Value(), "transformations")==0)
-				processObject_transformations(child);
-			else if(strcmp(child->Value(), "material")==0)
-				processObject_type(child,0);
-			else if(strcmp(child->Value(), "texture")==0)
-				processObject_type(child,1);
-			else if(strcmp(child->Value(), "geometry")==0)
+		if(strcmp(type, "simple")==0 && strcmp(child->Value(),"geometry") == 0)
+			while(child)
+			{
 				processObject_geometry(child);
-			else if(strcmp(child->Value(), "children")==0){
-				if(strcmp(type, "compound") == 0)
-					processObject_children(child);
-				else
-					cout << "Invalid type/argument: Simple Object has children."<< endl;
+				child=child->NextSiblingElement();
 			}
-			else
-				cout << "Error parsing Object: invalid child" << endl;
-			child=child->NextSiblingElement();
-		}
+		
+		child = object->FirstChildElement();
+		if(strcmp(type, "simple")==0)
+			while(child)
+			{
+				processObject_simple(child);
+				child=child->NextSiblingElement();
+			}
+
+
+		child = object->FirstChildElement();
+		if(strcmp(type, "compound")==0)
+			while(child)
+			{
+				processObject_compound(child);
+				child=child->NextSiblingElement();
+			}
+
 	}
 	else
 		cout << "Error parsing Object: id not found or invalid" << endl;
@@ -938,7 +965,7 @@ void loadScene(void)
 
 	// Read string from file
 
-	TiXmlDocument doc( "exemplo.xml" );
+	TiXmlDocument doc( "GhostTrain.sgx" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
