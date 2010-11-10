@@ -91,9 +91,7 @@
             <transformations>
                 <!-- instruções a usar (ou não) sem limite nem ordem -->
                 <!-- ex: bloco transformations pode ficar sem conteudo -->
-                <translation x="5" y="5" z="5" />
-                <rotation axis="y" angle="180" />
-                <scale x="2" y="2" z="2" />
+                <translation x="1" y="1" z="0" />
             </transformations>
           
             <!-- declaração obrigatoria de material -->
@@ -127,9 +125,6 @@
             <transformations>
                 <!-- instruções a usar (ou não) sem limite nem ordem -->
                 <!-- ex: bloco transformations pode ficar sem conteudo -->
-                <translation x="5" y="5" z="5" />
-                <rotation axis="y" angle="180" />
-                <scale x="2" y="2" z="2" />
             </transformations>
           
             <!-- declaração obrigatoria de material -->

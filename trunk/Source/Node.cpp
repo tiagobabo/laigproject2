@@ -5,8 +5,8 @@ Node::Node(string id, string type)
 {
 	this->id = id;
 	this->type = type;
-	this->texture;
-	this->material;
+	this->texture = NULL;
+	this->material = NULL;
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glGetFloatv(GL_MODELVIEW_MATRIX, &transformations[0][0]);
@@ -72,22 +72,22 @@ Sphere::Sphere(string id, string type, float radius, float slices, float stacks)
 
 void Node::setTexture(string t)
 {
-	this->texture = t;
+	this->textureid = t;
 }
 
 void Node::setMaterial(string m)
 {
-	this->material = m;
+	this->materialid = m;
 }
 
-string Node::getTexture()
+string Node::getTextureId()
 {
-	return this->texture;
+	return this->textureid;
 }
 
-string Node::getMaterial()
+string Node::getMaterialId()
 {
-	return this->material;
+	return this->materialid;
 }
 
 void Node::setId(string id)
@@ -120,6 +120,9 @@ void Triangle::draw()
 
 void Rectangle::draw()
 {
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMultMatrixf(&this->transformations[0][0]);
 	glBegin(GL_POLYGON);
 	glNormal3d(0.0,0.0,1.0);
 		glVertex3d(this->x1, this->y1, 0.0);
@@ -127,6 +130,7 @@ void Rectangle::draw()
 		glVertex3d(this->x2, this->y2, 0.0);
 		glVertex3d(this->x1, this->y2, 0.0);
 	glEnd();
+	glPopMatrix();
 }
 void Cylinder::draw()
 {

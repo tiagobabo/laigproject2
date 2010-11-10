@@ -272,10 +272,10 @@ void processLight_position(TiXmlElement* position)
 		position->QueryFloatAttribute("z",&z)==TIXML_SUCCESS &&
 		position->QueryFloatAttribute("w",&w)==TIXML_SUCCESS)
 	{
-		scene->lights.back().position[0] = x;
-		scene->lights.back().position[1] = y;
-		scene->lights.back().position[2] = z;
-		scene->lights.back().position[3] = w;
+		scene->lights.back()->position[0] = x;
+		scene->lights.back()->position[1] = y;
+		scene->lights.back()->position[2] = z;
+		scene->lights.back()->position[3] = w;
 		cout << "position: " << x << " " << y << " " << z << " " << w << endl;
 	}
 	else
@@ -293,28 +293,28 @@ void processLight_type(TiXmlElement* type, int ntype)
 		switch(ntype){
 		case 0:
 			{
-				scene->lights.back().ambient[0] = r;
-				scene->lights.back().ambient[1] = g;
-				scene->lights.back().ambient[2] = b;
-				scene->lights.back().ambient[3] = a;
+				scene->lights.back()->ambient[0] = r;
+				scene->lights.back()->ambient[1] = g;
+				scene->lights.back()->ambient[2] = b;
+				scene->lights.back()->ambient[3] = a;
 				cout << "Light_Ambient: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 1:
 			{
-				scene->lights.back().diffuse[0] = r;
-				scene->lights.back().diffuse[1] = g;
-				scene->lights.back().diffuse[2] = b;
-				scene->lights.back().diffuse[3] = a;
+				scene->lights.back()->diffuse[0] = r;
+				scene->lights.back()->diffuse[1] = g;
+				scene->lights.back()->diffuse[2] = b;
+				scene->lights.back()->diffuse[3] = a;
 				cout << "Light_diffuse: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 2:
 			{
-				scene->lights.back().specular[0] = r;
-				scene->lights.back().specular[1] = g;
-				scene->lights.back().specular[2] = b;
-				scene->lights.back().specular[3] = a;
+				scene->lights.back()->specular[0] = r;
+				scene->lights.back()->specular[1] = g;
+				scene->lights.back()->specular[2] = b;
+				scene->lights.back()->specular[3] = a;
 				cout << "Light_specular: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
@@ -334,10 +334,10 @@ void processLights_light(TiXmlElement* light)
 	if(id != NULL && enabled != NULL && (strcmp(enabled, "1") == 0 || strcmp(enabled, "0")))
 	{
 		string id2 = light->Attribute("id");
-		vector<Light>::iterator it;
+		vector<Light*>::iterator it;
 		for(it=scene->lights.begin() ; it < scene->lights.end(); it++)
 		{
-			if(it->id.compare(id2) == 0)
+			if((*it)->id.compare(id2) == 0)
 			{
 				cout << "Error parsing lights: id "<< id2 <<" already exists" << endl;
 				return;
@@ -348,12 +348,12 @@ void processLights_light(TiXmlElement* light)
 
 		if(strcmp(enabled, "1") == 0)
 		{
-			Light l(id2, true);
+			Light* l = new Light(id2, true);
 			scene->lights.push_back(l);
 		}
 		else
 		{
-			Light l(id2, false);
+			Light* l = new Light(id2, false);
 			scene->lights.push_back(l);
 		}
 
@@ -457,18 +457,18 @@ void processTextures_texture(TiXmlElement* texture)
 		texture->QueryFloatAttribute("length_t",&t)==TIXML_SUCCESS && id != NULL && file != NULL)
 	{
 		string id2 = texture->Attribute("id");
-		vector<Texture>::iterator it;
+		vector<Texture*>::iterator it;
 		for(it=scene->textures.begin() ; it < scene->textures.end(); it++)
 		{
-			if(it->id.compare(id2) == 0)
+			if((*it)->id.compare(id2) == 0)
 			{
 				cout << "Error parsing textures: id "<< id2 <<" already exists" << endl;
 				return;
 			}
 		}
-		Texture t1(id,file, s,t);
+		Texture* t1 = new Texture(id,file, s,t);
 		scene->textures.push_back(t1);
-		cout << "Texture id: "<< scene->textures.back().id << " | file: " << scene->textures.back().file << " | length_s: " << scene->textures.back().length_s << " | length_t: " << scene->textures.back().length_t << endl;
+		cout << "Texture id: "<< scene->textures.back()->id << " | file: " << scene->textures.back()->file << " | length_s: " << scene->textures.back()->length_s << " | length_t: " << scene->textures.back()->length_t << endl;
 	}
 	else
 		cout << "Error parsing texture: argument not found or invalid" << endl;
@@ -511,37 +511,37 @@ void processMaterial_type(TiXmlElement* type, int ntype)
 		switch(ntype){
 		case 0:
 			{
-				scene->materials.back().emission[0] = r;
-				scene->materials.back().emission[1] = g;
-				scene->materials.back().emission[2] = b;
-				scene->materials.back().emission[3] = a;
+				scene->materials.back()->emission[0] = r;
+				scene->materials.back()->emission[1] = g;
+				scene->materials.back()->emission[2] = b;
+				scene->materials.back()->emission[3] = a;
 				cout << "Material_emission: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 1: 
 			{
-				scene->materials.back().ambient[0] = r;
-				scene->materials.back().ambient[1] = g;
-				scene->materials.back().ambient[2] = b;
-				scene->materials.back().ambient[3] = a;
+				scene->materials.back()->ambient[0] = r;
+				scene->materials.back()->ambient[1] = g;
+				scene->materials.back()->ambient[2] = b;
+				scene->materials.back()->ambient[3] = a;
 				cout << "Material_ambient: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 2:
 			{
-				scene->materials.back().diffuse[0] = r;
-				scene->materials.back().diffuse[1] = g;
-				scene->materials.back().diffuse[2] = b;
-				scene->materials.back().diffuse[3] = a;
+				scene->materials.back()->diffuse[0] = r;
+				scene->materials.back()->diffuse[1] = g;
+				scene->materials.back()->diffuse[2] = b;
+				scene->materials.back()->diffuse[3] = a;
 				cout << "Material_diffuse: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
 		case 3:
 			{
-				scene->materials.back().specular[0] = r;
-				scene->materials.back().specular[1] = g;
-				scene->materials.back().specular[2] = b;
-				scene->materials.back().specular[3] = a;
+				scene->materials.back()->specular[0] = r;
+				scene->materials.back()->specular[1] = g;
+				scene->materials.back()->specular[2] = b;
+				scene->materials.back()->specular[3] = a;
 				cout << "Material_specular: " << r << " " << g << " " << b << " " << a << endl;
 			}
 			break;
@@ -556,8 +556,8 @@ void processMaterial_shininess(TiXmlElement* texture)
 	float s;
 	if(	texture->QueryFloatAttribute("value",&s)==TIXML_SUCCESS)
 	{
-		scene->materials.back().shininess = s;
-		cout << "Material shininess: "<< scene->materials.back().shininess << endl;
+		scene->materials.back()->shininess = s;
+		cout << "Material shininess: "<< scene->materials.back()->shininess << endl;
 	}
 	else
 		cout << "Error parsing Material: shininess not found or invalid" << endl;
@@ -569,17 +569,17 @@ void processMaterials_material(TiXmlElement* material)
 	if(id != NULL)
 	{
 		string id2 = material->Attribute("id");
-		vector<Material>::iterator it;
+		vector<Material*>::iterator it;
 		for(it=scene->materials.begin() ; it < scene->materials.end(); it++)
 		{
-			if(it->id.compare(id2) == 0)
+			if((*it)->id.compare(id2) == 0)
 			{
 				cout << "Error parsing materials: id "<< id2 <<" already exists" << endl;
 				return;
 			}
 		}
 		cout << "Parsing Material id = " << id << endl;
-		Material m(id);
+		Material* m = new Material(id);
 		scene->materials.push_back(m);
 
 		TiXmlElement* child = material->FirstChildElement();
@@ -938,6 +938,49 @@ void createTree(Node* node)
 	}
 }
 
+void mapTexture(Node* parent, Node* child)
+{
+	if(child->getTextureId() != "null" && child->getTextureId() != "clear")
+	{
+		vector<Texture*>::iterator itT;
+		for(itT = scene->textures.begin(); itT < scene->textures.end(); itT++)
+		{
+			if((*itT)->id == child->getTextureId())
+				child->texture = *itT;
+		}
+	}
+	else if(child->getTextureId() == "null")
+	{
+		child->texture = parent->texture;
+	}
+}
+
+void mapMaterial(Node* parent, Node* child)
+{
+	if(child->getMaterialId() != "null")
+	{
+		vector<Material*>::iterator it;
+		for(it = scene->materials.begin(); it < scene->materials.end(); it++)
+		{
+			if((*it)->id == child->getMaterialId())
+				child->material = *it;
+		}
+	}
+	else
+	{
+		child->texture = parent->texture;
+	}
+}
+
+void mapTransformations(Node* parent, Node* child)
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMultMatrixf(&child->transformations[0][0]);
+	glMultMatrixf(&parent->transformations[0][0]);
+	glGetFloatv(GL_MODELVIEW_MATRIX, &child->transformations[0][0]);
+}
+
 void mapCompoundObjects()
 {
 	vector<CompoundObject*>::iterator it3;
@@ -953,6 +996,9 @@ void mapCompoundObjects()
 				if((*it)->getID() == id)
 				{
 					Node* temp = (*it)->clone();
+					mapTexture((*it3), temp);
+					mapMaterial((*it3), temp);
+					mapTransformations((*it3), temp);
 					(*it3)->addNode(temp);
 				}
 			}
@@ -975,7 +1021,7 @@ void loadScene(Node* raiz)
 
 	// Read string from file
 
-	TiXmlDocument doc( "exemplo.xml" );
+	TiXmlDocument doc( "GhostTrain.sgx" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
