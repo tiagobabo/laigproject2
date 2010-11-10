@@ -352,13 +352,11 @@ void inicializacao()
 	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
 
 	glShadeModel(GL_SMOOTH);				// GL_FLAT / GL_SMOOTH
 
 	glPolygonMode(GL_FRONT, GL_FILL);	// preence a face da frente dos poligonos
 	//glPolygonMode(GL_FRONT, GL_LINE);	// desenha arestas dos poligonos
-	
 }
 
 void leNode(Node* n, int i)
@@ -427,7 +425,8 @@ int main(int argc, char* argv[])
    	
 	//crias os diferentes objectos
 	Rectangle obj1("rec1","rectangulo",0,0,1,1);
-	Rectangle obj2("rec2","rectangulo",1,1,2,2);
+	Rectangle obj2 = obj1;
+	obj2.setId("rec2");
 	Disk obj3("disc1", "disco", 1, 20, 20, 20);
 	CompoundObject cobj1("Objecto Composto","1");
 	CompoundObject cobj2("Objecto Composto","2");
@@ -440,7 +439,7 @@ int main(int argc, char* argv[])
 	cobj1.addNode(&obj3);
 	cobj3.addNode(&obj2);
 
-	leNode(&cobj2,0);
+	cobj2.draw();
 
 	glutMainLoop();
 

@@ -5,6 +5,8 @@ Node::Node(string id, string type)
 {
 	this->id = id;
 	this->type = type;
+	this->texture = NULL;
+	this->material = NULL;
 }
 
 Object::Object(string id, string type):Node(id,type) {}
@@ -94,18 +96,12 @@ Material* Node::getMaterial()
 
 /*float** Node::getTransformations()
 {
-	return this->transformations;
+	return this->transformations[0][0];
 }*/
 
-Node* CompoundObject::hasChild()
+void Node::setId(string id)
 {
-	if(!this->nodes.empty())
-	{
-		Node* obj = this->nodes.back();
-		nodes.pop_back();
-		return obj;
-	}
-	return NULL;
+	this->id = id;
 }
 
 void CompoundObject::addNode(Node* node)
@@ -113,12 +109,16 @@ void CompoundObject::addNode(Node* node)
 	this->nodes.push_back(node);
 }
 
-
-Node* Object::hasChild()
+void CompoundObject::draw()
 {
-	return NULL;
+	cout << this->getID() << " " << this->getType() << endl;
+	while(!this->nodes.empty())
+	{
+		Node* obj = this->nodes.back();
+		nodes.pop_back();
+		obj->draw();
+	}
 }
-
 
 void Triangle::draw()
 {

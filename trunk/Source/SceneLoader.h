@@ -129,16 +129,16 @@ private:
 	Texture* texture;
 public:
 	Node(string id, string type);
-	virtual Node* hasChild() = 0;
 	virtual void draw() = 0;
 	string getID() {return id;};
 	string getType() {return type;};
 	void setTexture(Texture* t);
 	void setMaterial(Material* m);
 	void setTransformations(float trans[4][4]);
+	void setId(string id);
 	Texture* getTexture();
 	Material* getMaterial();
-	//float** getTransformations();
+	float** getTransformations();
 };
 
 class Object : public Node
@@ -147,7 +147,6 @@ private:
 public:
 	Object(string id, string type);
 	virtual void draw() = 0;
-	Node* hasChild();
 }; 
 
 class Triangle: public Object
@@ -202,6 +201,5 @@ private:
 public:
 	CompoundObject(string id, string type);
 	void addNode(Node* node);
-	void draw(){};
-	Node* hasChild();
+	void draw();
 };
