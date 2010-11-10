@@ -7,6 +7,8 @@
 //-------------------------------------------------------
 
 Scene* scene = new Scene();
+vector<Object*> objects;
+vector<CompoundObject*> compoundobjects;
 
 TiXmlElement *findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val)
 // Função de pesquisa de um nó filho por comparação de um atributo (normalmente um id) com um valor de referência
@@ -111,7 +113,7 @@ void processGlobals(void)
 			printf("globals not found\n");
 }
 
-void processView_translation(TiXmlElement* translateElement)
+void process_translation(TiXmlElement* translateElement)
 {
 	// translate: exemplo para um nó com um parâmetro que aglutina vários floats
 		if (translateElement)
@@ -131,7 +133,7 @@ void processView_translation(TiXmlElement* translateElement)
 			cout << "translate not found" << endl;	
 }
 
-void processView_rotation(TiXmlElement* rotateElement)
+void process_rotation(TiXmlElement* rotateElement)
 {
 	// translate: exemplo para um nó com um parâmetro que aglutina vários floats
 		if (rotateElement)
@@ -170,7 +172,7 @@ void processView_rotation(TiXmlElement* rotateElement)
 			printf("rotation not found\n");	
 }
 
-void processView_scale(TiXmlElement* scaleElement)
+void process_scale(TiXmlElement* scaleElement)
 {
 	if (scaleElement)
 		{
@@ -212,11 +214,11 @@ void processView(void)
 		while(child)
 		{
 			if(strcmp(child->Value(), "translation")==0)
-				processView_translation(child);
+				process_translation(child);
 			else if(strcmp(child->Value(), "rotation")==0)
-				processView_rotation(child);
+				process_rotation(child);
 			else if(strcmp(child->Value(), "scale")==0)
-				processView_scale(child);
+				process_scale(child);
 			else
 				cout << "Error parsing view: invalid child" << endl;
 			child=child->NextSiblingElement();
@@ -628,98 +630,31 @@ void processMaterial(void)
 			cout << "Materials not found\n" << endl;
 }
 
-void processObject_translation(TiXmlElement* translateElement)
+void processObject_transformations(TiXmlElement* transformations, string type)
 {
-	if (translateElement)
-	{
-		float x,y,z;
-		if(	translateElement->QueryFloatAttribute("x",&x)==TIXML_SUCCESS &&
-			translateElement->QueryFloatAttribute("y",&y)==TIXML_SUCCESS &&
-			translateElement->QueryFloatAttribute("z",&z)==TIXML_SUCCESS)
-		{
-			cout << "Translation: " << "x: " << x << " y: " << y << " z: " << z << endl;
-		}
-	}
-	else
-		cout << "translate not found" << endl;
-}
-
-void processObject_rotation(TiXmlElement* rotateElement)
-{
-	if (rotateElement)
-		{
-			const char* axisl = rotateElement->Attribute("axis");
-			if(axisl != NULL)
-			{
-				string axis;
-				axis.append(axisl);
-				if(axis.compare("x")==0 || axis.compare("y")==0 || axis.compare("z")==0)
-				{
-
-					float angle;
-					if(rotateElement->QueryFloatAttribute("angle",&angle)==TIXML_SUCCESS)
-					{
-						//3 casos de rotacao
-						if(axis.compare("x") == 0)
-							glRotatef(angle, 1.0, 0.0,0.0);
-						else if(axis.compare("y") == 0)
-							glRotatef(angle, 0.0, 1.0,0.0);
-						else
-							glRotatef(angle, 0.0, 0.0,1.0);
-						
-						cout << "RotAxis: " << axis  << " |Ang: " << angle << endl;
-					}
-					else
-						cout << "Error parsing rotation" << endl;
-				}
-				else
-					cout << "Error parsing rotation axis" << endl;
-			}
-			else
-				cout << "Error parsing rotation axis" << endl;
-		}
-		else
-			printf("rotation not found\n");	
-}
-
-void processObject_scale(TiXmlElement* scaleElement)
-{
-	if (scaleElement)
-	{
-		float x,y,z;
-		if(scaleElement->QueryFloatAttribute("x",&x)==TIXML_SUCCESS &&
-			scaleElement->QueryFloatAttribute("y",&y)==TIXML_SUCCESS &&
-			scaleElement->QueryFloatAttribute("z",&z)==TIXML_SUCCESS)
-		{
-			glScalef(x,y,z);
-			cout << "ScaleX: " << x  << " |ScaleY: " << y << " |ScaleZ: " << z << endl;
-		}
-		else
-			cout << "Error parsing scale" << endl;
-	}
-	else
-		cout << "scale not found" << endl;
-}
-
-void processObject_transformations(TiXmlElement* transformations)
-{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	TiXmlElement* child = transformations->FirstChildElement();
 	while(child)
 	{
 		if(strcmp(child->Value(),"translation")==0)
-			processObject_translation(child);
+			process_translation(child);
 		else if(strcmp(child->Value(),"rotation")==0)
-			processObject_rotation(child);
+			process_rotation(child);
 		else if(strcmp(child->Value(),"scale")==0)
-			processObject_scale(child);
+			process_scale(child);
 		else
 			cout << "Error parsing Object Transformation: invalid child" << endl;
 
 		child=child->NextSiblingElement();
 	}
+	if(type == "compound")
+		glGetFloatv(GL_MODELVIEW_MATRIX, &compoundobjects.back()->transformations[0][0]);
+	else
+		glGetFloatv(GL_MODELVIEW_MATRIX, &objects.back()->transformations[0][0]);
 }
 
-void processObject_type(TiXmlElement* type, int ntype)
+void processObject_type(TiXmlElement* type, int ntype, string typeObject)
 {
 	const char* id = type->Attribute("id");
 	if(id != NULL)
@@ -727,9 +662,17 @@ void processObject_type(TiXmlElement* type, int ntype)
 
 		switch(ntype){
 		case 0:
+			if(typeObject == "compound")
+				compoundobjects.back()->setMaterial(id);
+			else
+				objects.back()->setMaterial(id);
 			cout<< "ID MATERIAL: " << id << endl;
 			break;
 		case 1:
+			if(typeObject == "compound")
+				compoundobjects.back()->setTexture(id);
+			else
+				objects.back()->setTexture(id);
 			cout<< "ID TEXTURE: " << id << endl;
 			break;
 		default:
@@ -740,7 +683,7 @@ void processObject_type(TiXmlElement* type, int ntype)
 		cout << "Error parsing id on argument of Object." << endl;
 }
 
-void processObject_rectangle(TiXmlElement* rectangle)
+void processObject_rectangle(TiXmlElement* rectangle, string typeObject, string id)
 {
 	float x1,x2,y1,y2;
 	if(	rectangle->QueryFloatAttribute("x1",&x1)==TIXML_SUCCESS &&
@@ -748,13 +691,15 @@ void processObject_rectangle(TiXmlElement* rectangle)
 		rectangle->QueryFloatAttribute("y1",&y1)==TIXML_SUCCESS &&
 		rectangle->QueryFloatAttribute("y2",&y2)==TIXML_SUCCESS)
 	{
-		cout << "Rectangle:"<< endl << "x1: "<< x1 << " x2: "<< x2 << " y1: " << y1 << " y2: "<< y2<< endl;
+		Rectangle* r = new Rectangle(id, typeObject, x1, y1, x2, y2);
+		objects.push_back(r);
+		cout << "Rectangle:"  << endl << "x1: "<< x1 << " x2: "<< x2 << " y1: " << y1 << " y2: "<< y2<< endl;
 	}
 	else
 		cout << "Error parsing Object Rectangle: argument not found or invalid" << endl;
 }
 
-void processObject_triangle(TiXmlElement* triangle)
+void processObject_triangle(TiXmlElement* triangle, string typeObject, string id)
 {
 	float x1,x2, x3,y1,y2, y3, z1,z2,z3;
 	if(	triangle->QueryFloatAttribute("x1",&x1)==TIXML_SUCCESS &&
@@ -767,13 +712,15 @@ void processObject_triangle(TiXmlElement* triangle)
 		triangle->QueryFloatAttribute("y3",&y3)==TIXML_SUCCESS &&
 		triangle->QueryFloatAttribute("z3",&z3)==TIXML_SUCCESS)
 	{
+		Triangle* t = new Triangle(id, typeObject, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+		objects.push_back(t);
 		cout << "Triangle: " << endl <<"x1: "<< x1 << " y1: "<< y1 << " z1: " << z1<< endl << "x2: "<< x2<< " y2: "<< y2 << " z2: " << z2<< endl << "x3: "<< x3<< " y3: "<< y3 << " z3: " << z3<< endl;
 	}
 	else
 		cout << "Error parsing Object Triangle: argument not found or invalid" << endl;
 }
 
-void processObject_cylinder(TiXmlElement* cylinder)
+void processObject_cylinder(TiXmlElement* cylinder, string typeObject, string id)
 {
 	float base,top,height;
 	int slices, stacks;
@@ -783,13 +730,15 @@ void processObject_cylinder(TiXmlElement* cylinder)
 		cylinder->QueryIntAttribute("slices",&slices)==TIXML_SUCCESS &&
 		cylinder->QueryIntAttribute("stacks",&stacks)==TIXML_SUCCESS)
 	{
+		Cylinder* c = new Cylinder(id, typeObject, base, top, height, slices, stacks);
+		objects.push_back(c);
 		cout << "Cylinder: " << endl <<"base: "<< base << " top: "<< top << " height: " << height<< endl << "slices: "<< slices<< " stacks: "<< stacks << endl;
 	}
 	else
 		cout << "Error parsing Object Cylinder: argument not found or invalid" << endl;
 }
 
-void processObject_sphere(TiXmlElement* sphere)
+void processObject_sphere(TiXmlElement* sphere, string typeObject, string id)
 {
 	float radius;
 	int slices, stacks;
@@ -797,13 +746,15 @@ void processObject_sphere(TiXmlElement* sphere)
 		sphere->QueryIntAttribute("slices",&slices)==TIXML_SUCCESS &&
 		sphere->QueryIntAttribute("stacks",&stacks)==TIXML_SUCCESS)
 	{
+		Sphere* s = new Sphere(id, typeObject, radius, slices, stacks);
+		objects.push_back(s);
 		cout << "Sphere: " << endl <<"radius: "<< radius << " slices: "<< slices<< " stacks: "<< stacks << endl;
 	}
 	else
 		cout << "Error parsing Object Sphere: argument not found or invalid" << endl;
 }
 
-void processObject_disk(TiXmlElement* disk)
+void processObject_disk(TiXmlElement* disk, string typeObject, string id)
 {
 	float inner, outer;
 	int slices, loops;
@@ -812,27 +763,29 @@ void processObject_disk(TiXmlElement* disk)
 		disk->QueryIntAttribute("slices",&slices)==TIXML_SUCCESS &&
 		disk->QueryIntAttribute("loops",&loops)==TIXML_SUCCESS)
 	{
+		Disk* d = new Disk(id, typeObject, inner, outer, slices, loops);
+		objects.push_back(d);
 		cout << "Disk: " << endl <<"inner: "<< inner << " outer: "<< outer<< " slices: "<< slices << " loops: "<< loops << endl;
 	}
 	else
 		cout << "Error parsing Object Disk: argument not found or invalid" << endl;
 }
 
-void processObject_geometry(TiXmlElement* object)
+void processObject_geometry(TiXmlElement* object, string typeObject, string id)
 {
 	const char* type = object->Attribute("type");
 	if(type != NULL)
 	{
 		if(strcmp(type,"rectangle")==0)
-			processObject_rectangle(object);
+			processObject_rectangle(object, typeObject, id);
 		else if(strcmp(type,"triangle")==0)
-			processObject_triangle(object);
+			processObject_triangle(object, typeObject, id);
 		else if(strcmp(type,"cylinder")==0)
-			processObject_cylinder(object);
+			processObject_cylinder(object, typeObject, id);
 		else if(strcmp(type,"sphere")==0)
-			processObject_sphere(object);
+			processObject_sphere(object, typeObject, id);
 		else if(strcmp(type,"disk")==0)
-			processObject_disk(object);
+			processObject_disk(object, typeObject, id);
 		else
 			cout << "Error parsing Object: invalid type" << endl;
 	}
@@ -843,7 +796,9 @@ void processObject_geometry(TiXmlElement* object)
 void processChildren_objRef(TiXmlElement* children)
 {
 	const char* id = children->Attribute("id");
-
+	string id2;
+	id2.append(id);
+	compoundobjects.back()->addId(id2);
 	cout << "Objectref: " << id << endl;
 }
 
@@ -859,24 +814,24 @@ void processObject_children(TiXmlElement* object)
 	}
 }
 
-void processObject_simple(TiXmlElement* object)
+void processObject_simple(TiXmlElement* object, string type)
 {
 	if(strcmp(object->Value(), "transformations")==0)
-		processObject_transformations(object);
+		processObject_transformations(object, type);
 	else if(strcmp(object->Value(), "material")==0)
-		processObject_type(object,0);
+		processObject_type(object,0, type);
 	else if(strcmp(object->Value(), "texture")==0)
-		processObject_type(object,1);
+		processObject_type(object,1, type);
 }
 
-void processObject_compound(TiXmlElement* object)
+void processObject_compound(TiXmlElement* object, string type)
 {
 	if(strcmp(object->Value(), "transformations")==0)
-		processObject_transformations(object);
+		processObject_transformations(object, type);
 	else if(strcmp(object->Value(), "material")==0)
-		processObject_type(object,0);
+		processObject_type(object,0, type);
 	else if(strcmp(object->Value(), "texture")==0)
-		processObject_type(object,1);
+		processObject_type(object,1, type);
 	else if(strcmp(object->Value(), "children")==0)
 		processObject_children(object);
 }
@@ -904,30 +859,44 @@ void processObjects_object(TiXmlElement* object)
 
 		// Process simple object [first geometry, then rest]
 		TiXmlElement* child = object->FirstChildElement();
-		if(strcmp(type, "simple")==0 && strcmp(child->Value(),"geometry") == 0)
+		int geo = 0;
+		if(strcmp(type, "simple") == 0)
+		{
 			while(child)
 			{
-				processObject_geometry(child);
+				if(strcmp(child->Value(),"geometry") == 0 && !geo)
+				{
+					processObject_geometry(child, type, id);
+					geo = 1;
+				}
+				else if(strcmp(child->Value(),"geometry") == 0 && geo)
+				{
+					cout << "Error parsing object: object has more than one geometry" << endl;
+					return;
+				}
 				child=child->NextSiblingElement();
 			}
-		
-		child = object->FirstChildElement();
-		if(strcmp(type, "simple")==0)
+			
+			child = object->FirstChildElement();
 			while(child)
 			{
-				processObject_simple(child);
+				processObject_simple(child, type);
 				child=child->NextSiblingElement();
 			}
 
+		}
 
 		child = object->FirstChildElement();
 		if(strcmp(type, "compound")==0)
+		{
+			CompoundObject* c = new CompoundObject(id, type);
+			compoundobjects.push_back(c);
 			while(child)
 			{
-				processObject_compound(child);
+				processObject_compound(child, type);
 				child=child->NextSiblingElement();
 			}
-
+		}
 	}
 	else
 		cout << "Error parsing Object: id not found or invalid" << endl;
@@ -959,8 +928,49 @@ void processObjects(void)
 			cout << "objects not found\n" << endl;
 }
 
+void createTree(Node* node)
+{
+	vector<Node*>::iterator it;
+	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
+	{
+		if((*it)->getType() == "compound")
+			return createTree((*it));
+	}
+}
 
-void loadScene(void)
+void mapCompoundObjects()
+{
+	vector<CompoundObject*>::iterator it3;
+	for(it3=compoundobjects.begin() ; it3 < compoundobjects.end(); it3++)
+	{
+		vector<string> s = (*it3)->ids;
+		while(!s.empty())
+		{
+			string id = s.back();
+			vector<Object*>::iterator it;
+			for(it=objects.begin() ; it < objects.end(); it++)
+			{
+				if((*it)->getID() == id)
+				{
+					Node* temp = (*it)->clone();
+					(*it3)->addNode(temp);
+				}
+			}
+			vector<CompoundObject*>::iterator it2;
+			for(it2=compoundobjects.begin() ; it2 < compoundobjects.end(); it2++)
+			{
+				if((*it2)->getID() == id)
+				{
+					Node* temp = (*it2)->clone();
+					(*it3)->addNode(temp);
+				}
+			}
+			s.pop_back();
+		}
+	}
+}
+
+void loadScene(Node* raiz)
 {
 
 	// Read string from file
@@ -995,10 +1005,20 @@ void loadScene(void)
 		processTexture();
 		processMaterial();
 		processObjects();
-		
+		//createTree();
 
 	// Validação dos outros grupos seria feita aqui
 
+	mapCompoundObjects();
+
+	while(!compoundobjects.empty())
+	{
+		CompoundObject* o = compoundobjects.back();
+		raiz->nodes.push_back(o);
+		compoundobjects.pop_back();
+	}
+	
+	createTree(raiz);
 
 	// render graph
 	// iteração recursiva

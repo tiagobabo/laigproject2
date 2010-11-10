@@ -73,6 +73,103 @@ public:
 	}
 };
 
+
+class Node
+{
+private:
+	string id, type;
+	string material;
+	string texture;
+public:
+	vector<Node*> nodes;
+	float transformations[4][4];
+	Node(string id, string type);
+	virtual void draw() = 0;
+	virtual Node* clone() = 0;
+	string getID() {return id;};
+	string getType() {return type;};
+	void setTexture(string t);
+	void setMaterial(string m);
+	void setTransformations(float trans[4][4]);
+	void setId(string id);
+	string getTexture();
+	string getMaterial();
+	float** getTransformations();
+};
+
+class Object : public Node
+{
+private:
+public:
+	Object(string id, string type);
+	virtual void draw() = 0;
+	virtual Node* clone() = 0;
+}; 
+
+class Triangle: public Object
+{
+private:
+	float x1,x2,x3,y1,y2,y3,z1,z2,z3;
+public:
+	Triangle(string id, string type, float x1, float x2, float x3, float y1, float y2, float y3, float z1, float z2, float z3);
+	Node* clone() { return new Triangle(*this); }
+	void draw();
+};
+
+class Rectangle: public Object
+{
+private:
+	float x1,y1,x2,y2;
+public:
+	Rectangle(string id, string type, float x1, float y1, float x2, float y2);
+	Node* clone() { return new Rectangle(*this); }
+	void draw();
+};
+
+class Cylinder: public Object
+{
+private:
+	float base, top, height, slices, stacks;
+public:
+	Cylinder(string id, string type, float base, float top, float height, float slices, float stacks);
+	Node* clone() { return new Cylinder(*this); }
+	void draw();
+};
+
+class Sphere: public Object
+{
+private:
+	float radius, slices, stacks;
+public:
+	Sphere(string id, string type, float radius, float slices, float stacks);
+	Node* clone() { return new Sphere(*this); }
+	void draw();
+};
+
+class Disk: public Object
+{
+private:
+	float inner, outer, slices, loops;
+public:
+	Disk(string id, string type, float inner, float outer, float slices, float loops);
+	Node* clone() { return new Disk(*this); }
+	void draw();
+};
+
+class CompoundObject : public Node
+{
+private:
+	
+public:
+	vector<string> ids;
+	CompoundObject(string id, string type);
+	void addId(string id);
+	void addNode(Node* node);
+	void draw();
+	Node* clone() { return new CompoundObject(*this); }
+
+};
+
 class Scene
 {
 public:
@@ -118,88 +215,4 @@ public:
 
 };
 
-void loadScene(void);
-
-class Node
-{
-private:
-	string id, type;
-	float transformations[4][4];
-	Material* material;
-	Texture* texture;
-public:
-	Node(string id, string type);
-	virtual void draw() = 0;
-	string getID() {return id;};
-	string getType() {return type;};
-	void setTexture(Texture* t);
-	void setMaterial(Material* m);
-	void setTransformations(float trans[4][4]);
-	void setId(string id);
-	Texture* getTexture();
-	Material* getMaterial();
-	float** getTransformations();
-};
-
-class Object : public Node
-{
-private:
-public:
-	Object(string id, string type);
-	virtual void draw() = 0;
-}; 
-
-class Triangle: public Object
-{
-private:
-	float x1,x2,x3,y1,y2,y3,z1,z2,z3;
-public:
-	Triangle(string id, string type, float x1, float x2, float x3, float y1, float y2, float y3, float z1, float z2, float z3);
-	void draw();
-};
-
-class Rectangle: public Object
-{
-private:
-	float x1,y1,x2,y2;
-public:
-	Rectangle(string id, string type, float x1, float y1, float x2, float y2);
-	void draw();
-};
-
-class Cylinder: public Object
-{
-private:
-	float base, top, height, slices, stacks;
-public:
-	Cylinder(string id, string type, float base, float top, float height, float slices, float stacks);
-	void draw();
-};
-
-class Sphere: public Object
-{
-private:
-	float radius, slices, stacks;
-public:
-	Sphere(string id, string type, float radius, float slices, float stacks);
-	void draw();
-};
-
-class Disk: public Object
-{
-private:
-	float inner, outer, slices, loops;
-public:
-	Disk(string id, string type, float inner, float outer, float slices, float loops);
-	void draw();
-};
-
-class CompoundObject : public Node
-{
-private:
-	vector<Node*> nodes;
-public:
-	CompoundObject(string id, string type);
-	void addNode(Node* node);
-	void draw();
-};
+void loadScene(Node* raiz);

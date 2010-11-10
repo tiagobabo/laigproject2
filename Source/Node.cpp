@@ -5,8 +5,11 @@ Node::Node(string id, string type)
 {
 	this->id = id;
 	this->type = type;
-	this->texture = NULL;
-	this->material = NULL;
+	this->texture;
+	this->material;
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glGetFloatv(GL_MODELVIEW_MATRIX, &transformations[0][0]);
 }
 
 Object::Object(string id, string type):Node(id,type) {}
@@ -67,37 +70,25 @@ Sphere::Sphere(string id, string type, float radius, float slices, float stacks)
 
 //Funções partilhadas da classe Node
 
-void Node::setTexture(Texture* t)
+void Node::setTexture(string t)
 {
 	this->texture = t;
 }
 
-void Node::setMaterial(Material* m)
+void Node::setMaterial(string m)
 {
 	this->material = m;
 }
 
-void Node::setTransformations(float t[4][4])
-{
-	for(int i = 0; i < 4; i++)
-		for(int j = 0; j < 4; j++)
-			this->transformations[i][j] = t[i][j];
-}
-
-Texture* Node::getTexture()
+string Node::getTexture()
 {
 	return this->texture;
 }
 
-Material* Node::getMaterial()
+string Node::getMaterial()
 {
 	return this->material;
 }
-
-/*float** Node::getTransformations()
-{
-	return this->transformations[0][0];
-}*/
 
 void Node::setId(string id)
 {
@@ -109,15 +100,17 @@ void CompoundObject::addNode(Node* node)
 	this->nodes.push_back(node);
 }
 
+void CompoundObject::addId(string node)
+{
+	this->ids.push_back(node);
+}
+
+
 void CompoundObject::draw()
 {
-	cout << this->getID() << " " << this->getType() << endl;
-	while(!this->nodes.empty())
-	{
-		Node* obj = this->nodes.back();
-		nodes.pop_back();
-		obj->draw();
-	}
+	vector<Node*>::iterator it;
+	for(it=nodes.begin() ; it < nodes.end(); it++)
+		(*it)->draw();
 }
 
 void Triangle::draw()
@@ -127,7 +120,13 @@ void Triangle::draw()
 
 void Rectangle::draw()
 {
-	cout << "DESENHA RECTANGULO" << endl;
+	glBegin(GL_POLYGON);
+	glNormal3d(0.0,0.0,1.0);
+		glVertex3d(this->x1, this->y1, 0.0);
+		glVertex3d(this->x2, this->y1, 0.0);
+		glVertex3d(this->x2, this->y2, 0.0);
+		glVertex3d(this->x1, this->y2, 0.0);
+	glEnd();
 }
 void Cylinder::draw()
 {
@@ -140,5 +139,5 @@ void Disk::draw()
 }
 void Sphere::draw()
 {
-	cout << "DESENHO ESFERA" << endl;
+	cout << "DESENHO ESFERA" << this << endl;
 }

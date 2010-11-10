@@ -16,6 +16,7 @@ using namespace std;
 
 
 float xy_aspect;
+Node* raiz = new CompoundObject("raiz", "compound");
 
 // matriz de transf. geometrica utilizada pelo botao esferico
 float view_rotate[16] =	{ 1,0,0,0,
@@ -190,7 +191,7 @@ void display(void)
 	glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat1_diffuse);
 	glMaterialfv(GL_FRONT, GL_AMBIENT,   mat1_ambient);
 
-	
+	raiz->draw();
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
    
@@ -359,32 +360,6 @@ void inicializacao()
 	//glPolygonMode(GL_FRONT, GL_LINE);	// desenha arestas dos poligonos
 }
 
-void leNode(Node* n, int i)
-{
-	if(n->getID() == "Objecto Composto")
-	{
-		int w;
-		for(w = 0; w < i; w++)
-			cout << " ";
-		cout << n->getID() << " " << n->getType() << endl;
-		Node* temp = n->hasChild();
-		++w;
-		while(temp)
-		{
-			leNode(temp,w);
-			temp = n->hasChild();
-		}
-	}
-	else
-	{
-		for(int w = 0; w < i; w++)
-				cout << " ";
-		cout << n->getID() << endl;
-		n->draw();
-	}
-
-}
-
 int main(int argc, char* argv[])
 {
 	
@@ -393,8 +368,8 @@ int main(int argc, char* argv[])
 	glutInitWindowSize (DIMX, DIMY);
 	glutInitWindowPosition (INITIALPOS_X, INITIALPOS_Y);
 	main_window = glutCreateWindow (argv[0]);
- 
-	loadScene();
+	
+	loadScene(raiz);
 
    glutDisplayFunc(display);
    GLUI_Master.set_glutReshapeFunc(reshape);
@@ -422,24 +397,6 @@ int main(int argc, char* argv[])
 	GLUI_Master.set_glutIdleFunc( myGlutIdle );
    
 	inicializacao();
-   	
-	//crias os diferentes objectos
-	Rectangle obj1("rec1","rectangulo",0,0,1,1);
-	Rectangle obj2 = obj1;
-	obj2.setId("rec2");
-	Disk obj3("disc1", "disco", 1, 20, 20, 20);
-	CompoundObject cobj1("Objecto Composto","1");
-	CompoundObject cobj2("Objecto Composto","2");
-	CompoundObject cobj3("Objecto Composto","3");
-
-	//adiciona os diferentes objectos
-	cobj2.addNode(&cobj1);
-	cobj2.addNode(&obj1);
-	cobj1.addNode(&cobj3);
-	cobj1.addNode(&obj3);
-	cobj3.addNode(&obj2);
-
-	cobj2.draw();
 
 	glutMainLoop();
 
