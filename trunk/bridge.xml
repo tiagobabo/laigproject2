@@ -1,0 +1,321 @@
+<sgx>
+	<globals maxlights="3" maxobjects="54" maxtextures="12" maxmaterials="6" root="cena"/>
+
+	<view near="0.1" far="500.0" axisscale="0.04">
+		<translation x="0.0" z="-52.5" y="-20.0"/>
+		<rotation axis="x" angle="30" />
+	</view>
+
+	<illumination doublesided="1" local="1" >
+		<ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+		<background r="0.0" g="0.0" b="0.0" a="1.0" />
+		<lights>
+			<light id="luzprincipal" enabled="1" >
+				<position x="0.0" y="100.0" z="100.0" w="1.0" />
+				<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+				<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+				<specular r="20.0" g="20.0" b="20.0" a="1.0" />
+			</light>
+		</lights>
+	</illumination>
+	<textures>
+	<!-- ainda nao foi implementada as texturas no desenho dos objectos -->	
+	</textures>
+	<materials>
+		<material id="rio">
+			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<ambient  r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<diffuse r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<specular r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<shininess value="128" />
+		</material> 
+		<material id="metal">
+			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<ambient  r="0.5" g="0.5" b="0.5" a="1.0"/>
+			<diffuse r="0.5" g="0.5" b="0.5" a="1.0"/>
+			<specular r="1.0" g="1.0" b="1.0" a="1.0"/>
+			<shininess value="128" />
+		</material> 
+		<material id="white">
+			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<ambient  r="1.0" g="1.0" b="1.0" a="1.0"/>
+			<diffuse r="1.0" g="1.0" b="1.0" a="1.0"/>
+			<specular r="1.0" g="1.0" b="1.0" a="1.0"/>
+			<shininess value="128" />
+		</material> 
+		<material id="green">
+			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<ambient r="0.1" g="0.8" b="0.1" a="1.0"/>
+			<diffuse r="0.1" g="0.8" b="0.1" a="1.0"/>
+			<specular r="0.1" g="0.1" b="0.1" a="1.0"/>
+			<shininess value="128" />
+		</material> 
+	</materials>
+
+<!-- SCENE -->	
+	<objects>
+		<object id="cena" type="compound">
+			<transformations>
+			</transformations>
+			<material id="preto"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="rio"/>
+				<objectref id="ponte"/>
+			</children>
+		</object>
+<!-- SCENE -->	
+		<object id="ponte" type="compound">
+			<transformations>
+			</transformations>
+			<material id="null"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="plataforma1"/>
+				<objectref id="plataforma2"/>
+				<objectref id="plataforma3"/>
+				<objectref id="plataforma4"/>
+				<objectref id="torre1"/>
+				<objectref id="torre2"/>
+				<objectref id="torre3"/>
+				<objectref id="torre4"/>
+			</children>
+		</object>
+		
+		<object id="torre1" type="compound">
+			<transformations>
+			<translation x="-20.0" z="-15.0" y="0.0"/>
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="torre_parede1"/>
+				<objectref id="torre_parede2"/>
+				<objectref id="torre_parede3"/>
+				<objectref id="torre_parede4"/>
+				<objectref id="torre_parede5"/>
+				<objectref id="cabo"/>
+			</children>
+		</object>
+		
+		<object id="torre2" type="compound">
+			<transformations>
+			<translation x="20.0" z="-15.0" y="0.0"/>
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="torre_parede1"/>
+				<objectref id="torre_parede2"/>
+				<objectref id="torre_parede3"/>
+				<objectref id="torre_parede4"/>
+				<objectref id="torre_parede5"/>
+				<objectref id="cabo2"/>
+			</children>
+		</object>
+		<object id="torre3" type="compound">
+			<transformations>
+			<translation x="20.0" z="-28.0" y="0.0"/>
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="torre_parede1"/>
+				<objectref id="torre_parede2"/>
+				<objectref id="torre_parede3"/>
+				<objectref id="torre_parede4"/>
+				<objectref id="torre_parede5"/>
+				<objectref id="cabo3"/>
+			</children>
+		</object>
+		<object id="torre4" type="compound">
+			<transformations>
+			<translation x="-20.0" z="-28.0" y="0.0"/>
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="torre_parede1"/>
+				<objectref id="torre_parede2"/>
+				<objectref id="torre_parede3"/>
+				<objectref id="torre_parede4"/>
+				<objectref id="torre_parede5"/>
+				<objectref id="cabo4"/>
+			</children>
+		</object>
+		
+		<object id="cabo" type="compound">
+			<transformations>
+			<translation x="15.0" z="-1.0" y="11.0"/>
+			<rotation axis="z" angle="45" />
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="cabelagem"/>
+				<objectref id="suporteCentral"/>
+				<objectref id="disco1"/>
+				<objectref id="disco2"/>
+			</children>
+		</object>
+		
+		<object id="cabo2" type="compound">
+			<transformations>
+			<translation x="-15.0" z="-1.0" y="11.0"/>
+			<rotation axis="y" angle="-180" />
+			<rotation axis="z" angle="45" />
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="cabelagem"/>
+				<objectref id="suporteCentral"/>
+				<objectref id="disco1"/>
+				<objectref id="disco2"/>
+			</children>
+		</object>	
+
+		<object id="cabo3" type="compound">
+			<transformations>
+			<translation x="-15.0" z="-1.0" y="11.0"/>
+			<rotation axis="y" angle="-180" />
+			<rotation axis="z" angle="45" />
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="cabelagem"/>
+				<objectref id="suporteCentral"/>
+				<objectref id="disco1"/>
+				<objectref id="disco2"/>
+			</children>
+		</object>		
+		<object id="cabo4" type="compound">
+			<transformations>
+			<translation x="15.0" z="-1.0" y="11.0"/>
+			<rotation axis="z" angle="45" />
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<material id="metal"/>
+			<texture id="clear"/>
+			<children>
+				<objectref id="cabelagem"/>
+				<objectref id="suporteCentral"/>
+				<objectref id="disco1"/>
+				<objectref id="disco2"/>
+			</children>
+		</object>		
+<!-- RIO -->	
+		<object id="rio" type="simple">
+			<material id="rio"/>	
+			<texture id="clear"/>
+			<transformations>
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<geometry type="rectangle" x1="-15" y1="0" x2="15" y2="100" />
+		</object>
+	
+<!-- plataforma1 -->	
+		<object id="plataforma1" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="-15.0" y="10.0"/>
+			</transformations>
+			<geometry type="rectangle" x1="-30" y1="0" x2="30" y2="2" />
+		</object>
+<!-- plataforma2 -->	
+		<object id="plataforma2" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="-30.0" y="12.0"/>
+			<rotation axis="x" angle="-180" />
+			</transformations>
+			<geometry type="rectangle" x1="-30" y1="0" x2="30" y2="2" />
+		</object>
+		
+<!-- plataforma3 -->	
+		<object id="plataforma3" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="-15.0" y="12.0"/>
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<geometry type="rectangle" x1="-30" y1="0" x2="30" y2="15" />
+		</object>
+		
+<!-- plataforma4 -->	
+		<object id="plataforma4" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="-30.0" y="10.0"/>
+			<rotation axis="x" angle="90" />
+			</transformations>
+			<geometry type="rectangle" x1="-30" y1="0" x2="30" y2="15" />
+		</object>		
+		
+<!-- torre_parede1 -->	
+		<object id="torre_parede1" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			</transformations>
+			<geometry type="rectangle" x1="-2.5" y1="0" x2="2.5" y2="30" />
+		</object>		
+<!-- torre_parede2 -->	
+		<object id="torre_parede2" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="-2.0" y="0.0"/>
+			<rotation axis="y" angle="180" />
+			</transformations>
+			<geometry type="rectangle" x1="-2.5" y1="0" x2="2.5" y2="30" />
+		</object>		
+<!-- torre_parede3 -->	
+		<object id="torre_parede3" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="2.5" z="0.0" y="0.0"/>
+			<rotation axis="y" angle="90" />
+			</transformations>
+			<geometry type="rectangle" x1="0.0" y1="0" x2="2.0" y2="30" />
+		</object>		
+<!-- torre_parede4 -->	
+		<object id="torre_parede4" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="-2.5" z="-2.0" y="0.0"/>
+			<rotation axis="y" angle="-90" />
+			</transformations>
+			<geometry type="rectangle" x1="0.0" y1="0" x2="2.0" y2="30" />
+		</object>			
+<!-- torre_parede5 -->	
+		<object id="torre_parede5" type="simple">
+			<material id="white"/>	
+			<texture id="clear"/>
+			<transformations>
+			<translation x="0.0" z="0.0" y="30.0"/>
+			<rotation axis="x" angle="-90" />
+			</transformations>
+			<geometry type="rectangle" x1="-2.5" y1="0" x2="2.5" y2="2.0" />
+		</object>	
+<!-- cabelagem -->
+	<object id="cabelagem" type="simple">
+			<material id="green"/>	
+			<texture id="clear"/>
+			<transformations>
+			</transformations>
+			 <geometry type="cylinder" base="0.3" top="0.3" height="20" slices="20" stacks="20" />
+		</object>			
+		
+	</objects>
+</sgx>
