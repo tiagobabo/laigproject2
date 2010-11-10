@@ -130,14 +130,20 @@ void Rectangle::draw()
 }
 void Cylinder::draw()
 {
-	cout << "DESENHO CILINDRO" << endl;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	gluCylinder(glQ2, this->base, this->top, this->height, this->slices, this->stacks);
 }
 
 void Disk::draw()
 {
-	cout << "DESENHA DISCO" << endl;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	gluDisk(glQ2, this->inner, this->outer, this->slices, this->loops);
 }
 void Sphere::draw()
 {
-	cout << "DESENHO ESFERA" << this << endl;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	gluSphere(glQ2, this->radius, this->slices, this->stacks);
 }
