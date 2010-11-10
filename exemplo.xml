@@ -8,7 +8,7 @@
     <!-- tem de existir, pelo menos, uma luz, uma textura, um material -->
     <!-- e um objecto -->
     <globals maxlights="2" maxtextures="2" maxmaterials="5"
-             maxobjects="2" root="Cena"/>
+             maxobjects="3" root="Cena"/>
 
 
     <view near="0.0" far="100.0" axisscale="10.2">
@@ -122,12 +122,46 @@
             <geometry type="sphere" radius="15" slices="20" stacks="20" />
             <geometry type="disk" inner="0" outer="12" slices="20" loops="20" />-->
         </object>
-      
+        <object id="Object2" type="simple">
+            <!-- bloco "transformations" obrigatorio -->
+            <transformations>
+                <!-- instruções a usar (ou não) sem limite nem ordem -->
+                <!-- ex: bloco transformations pode ficar sem conteudo -->
+                <translation x="5" y="5" z="5" />
+                <rotation axis="y" angle="180" />
+                <scale x="2" y="2" z="2" />
+            </transformations>
+          
+            <!-- declaração obrigatoria de material -->
+            <!-- o material declarado sobrepoe o material recebido -->
+            <!-- do objecto "pai" -->
+            <!-- id="null" mantem (herda) o material do objecto "pai" -->
+            <material id="Azuleijo" />
+                                
+            <!-- declaração obrigatoria de texture -->
+            <!-- id="null" mantem (herda) a textura do objecto "pai" -->
+            <!-- id="clear" remove a textura recebida para este -->
+            <!-- objecto e "filhos" -->
+            <!-- a textura declarada sobrepoe a textura recebida do -->
+            <!-- objecto "pai" -->
+            <texture id="Arvore" />
+          
+            <!-- bloco "geometry" obrigatorio num objecto "simple" -->
+            <!-- comandos a serem interpretados como em OpenGL -->
+            <!-- apenas pode existir UMA das seguintes tags: -->
+            <!-- <geometry type="triangle" x1="0" y1="0" z1="0"
+                                      x2="2" y2="0" z2="0"
+                                      x3="1" y3="2" z3="0" />-->
+            <geometry type="cylinder" base="2" top="2" height="10"
+                            slices="20" stacks="20" />
+            <!--<geometry type="sphere" radius="15" slices="20" stacks="20" />
+            <geometry type="disk" inner="0" outer="12" slices="20" loops="20" />-->
+        </object>
         <!-- apenas os blocos "object" de tipo "compound" incluem -->
         <!-- uma tag "children" -->
         <!-- transformacoes, materiais e texturas, tratam-se como -->
         <!-- em objectos "simple" -->
-        <object id="Object2" type="compound">
+        <object id="Object3" type="compound">
             <transformations>
                 <translation x="1" y="1" z="1" />
                 <rotation axis="x" angle="90" />
@@ -141,7 +175,7 @@
                 <!-- deve existir uma ou mais tags "objectref", -->
                 <!-- identificando um objecto existente no ficheiro  -->
                 <objectref id="Object1" />
-                <objectref id="Object1" />
+                <objectref id="Object2" />
             </children>
         </object>
 
