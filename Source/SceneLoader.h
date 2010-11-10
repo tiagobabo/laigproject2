@@ -78,10 +78,12 @@ class Node
 {
 private:
 	string id, type;
-	string material;
-	string texture;
+	string materialid;
+	string textureid;
 public:
 	vector<Node*> nodes;
+	Texture* texture;
+	Material* material;
 	float transformations[4][4];
 	Node(string id, string type);
 	virtual void draw() = 0;
@@ -92,8 +94,8 @@ public:
 	void setMaterial(string m);
 	void setTransformations(float trans[4][4]);
 	void setId(string id);
-	string getTexture();
-	string getMaterial();
+	string getTextureId();
+	string getMaterialId();
 	float** getTransformations();
 };
 
@@ -200,9 +202,9 @@ public:
 	float ambient[4];
 	float background[4];
 
-	vector<Light> lights;
-	vector<Texture> textures;
-	vector<Material> materials;
+	vector<Light*> lights;
+	vector<Texture*> textures;
+	vector<Material*> materials;
 
 	Scene(){
 		sgxElement=NULL; 
