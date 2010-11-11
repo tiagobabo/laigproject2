@@ -131,7 +131,9 @@ void display(void)
 	gluQuadricOrientation(glQ, GLU_OUTSIDE);
 
 	//desenha a cena
+	glEnable(GL_NORMALIZE);
 	raiz->draw();
+	glDisable(GL_NORMALIZE);
 
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
