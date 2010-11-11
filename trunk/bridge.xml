@@ -31,6 +31,7 @@
       <!-- Os identificadores "id" nao podem ser repetidos -->
       <!-- s e t: factores de escala (ver notas finais) -->
       <texture id="gravel" file="gravel.bmp" length_s="1.0" length_t="5.0" />
+	   <texture id="gravel2" file="gravel.bmp" length_s="60.0" length_t="1000.0" />
 	</textures>
 	<materials>
 		<material id="rio">
@@ -172,7 +173,7 @@
 <!-- RIO -->	
 		<object id="rio" type="simple">
 			<material id="rio"/>	
-			<texture id="gravel"/>
+			<texture id="gravel2"/>
 			<transformations>
 			<rotation axis="x" angle="-90" />
 			</transformations>
