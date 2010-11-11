@@ -1,7 +1,19 @@
 #include "SceneLoader.h"
 
 RGBpixmap pixmap;
+vector<Texture*> textures;
 
+int exists(char* file)
+{
+	for(int i = 0; i < textures.size(); i++)
+	{
+		if(textures.at(i)->file == file)
+			return i;
+	}
+	pixmap.readBMPFile(file);
+	pixmap.setTexture(textures.size());
+	return textures.size();
+}
 
 void ReduceToUnit(float vector[3])					// Reduces A Normal Vector (3 Coordinates)
 {									// To A Unit Normal Vector With A Length Of One.
@@ -174,10 +186,8 @@ void Triangle::draw()
 	float t=1;
 	if(this->texture !=  NULL){
 		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
-		pixmap.readBMPFile(FileExt);
-		pixmap.setTexture(1);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, exists(FileExt));
 		s=this->texture->length_s;
 		t=this->texture->length_t;
 	}
@@ -205,10 +215,8 @@ void Rectangle::draw()
 	float t=1;
 	if(this->texture !=  NULL){
 		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
-		pixmap.readBMPFile(FileExt);
-		pixmap.setTexture(1);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, exists(FileExt));
 		s=this->texture->length_s;
 		t=this->texture->length_t;
 	}
@@ -235,11 +243,9 @@ void Cylinder::draw()
 	glQ2 = gluNewQuadric();
 	if(this->texture !=  NULL){
 		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
-		pixmap.readBMPFile(FileExt);
-		pixmap.setTexture(1);
-		gluQuadricTexture(glQ2, GL_TRUE);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 1);
+		gluQuadricTexture(glQ2, GL_TRUE);
+		glBindTexture(GL_TEXTURE_2D, exists(FileExt));
 		s=this->texture->length_s;
 		t=this->texture->length_t;
 	}
@@ -262,12 +268,11 @@ void Disk::draw()
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
 	if(this->texture !=  NULL){
-		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
-		pixmap.readBMPFile(FileExt);
-		pixmap.setTexture(1);
 		gluQuadricTexture(glQ2, GL_TRUE);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 1);
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, exists(FileExt));
 		s=this->texture->length_s;
 		t=this->texture->length_t;
 	}
@@ -288,12 +293,11 @@ void Sphere::draw()
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
 	if(this->texture !=  NULL){
-		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
-		pixmap.readBMPFile(FileExt);
-		pixmap.setTexture(1);
 		gluQuadricTexture(glQ2, GL_TRUE);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 1);
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, exists(FileExt));
 		s=this->texture->length_s;
 		t=this->texture->length_t;
 	}
@@ -307,4 +311,3 @@ void Sphere::draw()
 	glDisable(GL_TEXTURE_2D);
 	gluQuadricTexture(glQ2, GL_FALSE);
 }
-

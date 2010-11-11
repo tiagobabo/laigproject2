@@ -196,7 +196,7 @@ public:
 	float far;
 	float axisscale;
 
-	//matriix de transformacao inicial
+	//matrix de transformacao inicial
 	float m[4][4];
 
 	//lights

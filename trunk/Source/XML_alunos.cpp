@@ -116,35 +116,31 @@ void display(void)
 	glMultMatrixf(&cena.m[0][0]);
 	// aplica efeito do botao de rotacao
 	glMultMatrixf( view_rotate );
-
-	// Actualizacao da posicao da fonte de luz
-	light0_position[0] = light0x;	// por razoes de eficiencia, os restantes 
-	light0_position[1] = light0y;	// parametros _invariaveis_ da LIGHT0 estao
-	light0_position[2] = light0z;	// definidos na rotina inicializacao
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-	// esfera que simboliza a LIGHT0
-	glColor3f(1.0,1.0,0.0);		// cor amarela
-	gluQuadricOrientation( glQ, GLU_INSIDE);
-	glPushMatrix();
-	glTranslated(light0x,light0y,light0z);
-	gluSphere(glQ, symb_light0_radius, symb_light0_slices, symb_light0_stacks);
-    glPopMatrix();
-
-	gluQuadricOrientation(glQ, GLU_OUTSIDE);
-
-
-//  aumentar e diminuir a atenuação
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  light0_kc);
-    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,    light0_kl);
-    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, light0_kq);
-
-	// esfera representativa da origem das coordenadas
-	// falta declarar a cor
-	// desenhar o objecto
-
 	glPopMatrix();
 
+	//propriedades das luzes
+	glEnable(GL_COLOR_MATERIAL);
+	for(int i = 0; i < cena.lights.size(); i++)
+	{
+		// Actualizacao da posicao da fonte de luz
+		light0_position[0] = cena.lights.at(i)->position[0];	// por razoes de eficiencia, os restantes 
+		light0_position[1] = cena.lights.at(i)->position[1];	// parametros _invariaveis_ da LIGHT0 estao
+		light0_position[2] = cena.lights.at(i)->position[2];	// definidos na rotina inicializacao
+		glLightfv(GL_LIGHT0+i, GL_POSITION, light0_position);
+		// esfera que simboliza a luz
+		glColor3f(1.0,1.0,0.0);		// cor amarela
+		gluQuadricOrientation( glQ, GLU_INSIDE);
+		glPushMatrix();
+		glTranslated(light0_position[0],light0_position[1],light0_position[2]);
+		gluSphere(glQ, symb_light0_radius, symb_light0_slices, symb_light0_stacks);
+		glPopMatrix();
+	}
+	glDisable(GL_COLOR_MATERIAL);
+	gluQuadricOrientation(glQ, GLU_OUTSIDE);
+
+	//desenha a cena
 	raiz->draw();
+
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
    
@@ -289,16 +285,15 @@ void inicializacao()
 	glCullFace(GL_BACK);		/* Cull only back faces. */
 
 	// por defeito a cor e de fundo e o preto
-	//glClearColor(1.0,1.0,1.0,1.0);    // cor de fundo a branco
+	glClearColor(cena.background[0],cena.background[1],cena.background[2], cena.background[3]);    // cor de fundo a branco
 
+	if(!cena.doublesided)
+		glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+	else
+		glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
-	glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);  // define luz ambiente
-	
-	// parametros de iluminacao
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+	//luz ambient
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cena.ambient);  // define luz ambiente
 
 	// a direccao e a posicao estao na rotina display()
 	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90.0);
@@ -306,7 +301,14 @@ void inicializacao()
 	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	for(int i = 0; i < cena.lights.size(); i++)
+	{
+		glLightfv(GL_LIGHT0+i, GL_AMBIENT, cena.lights.at(i)->ambient);
+		glLightfv(GL_LIGHT0+i, GL_DIFFUSE, cena.lights.at(i)->diffuse);
+		glLightfv(GL_LIGHT0+i, GL_SPECULAR, cena.lights.at(i)->specular);
+		if(cena.lights.at(i)->enabled)
+			glEnable(GL_LIGHT0+i);
+	}
 
 	glShadeModel(GL_SMOOTH);				// GL_FLAT / GL_SMOOTH
 

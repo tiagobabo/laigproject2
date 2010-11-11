@@ -99,7 +99,7 @@
     <ClCompile Include="Source\XML_alunos.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RGBpixmap.h" />
+    <ClInclude Include="Source\RGBpixmap.h" />
     <ClInclude Include="Source\SceneLoader.h" />
   </ItemGroup>
   <ItemGroup>
