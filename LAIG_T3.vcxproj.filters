@@ -32,7 +32,7 @@
     <ClInclude Include="Source\SceneLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RGBpixmap.h">
+    <ClInclude Include="Source\RGBpixmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

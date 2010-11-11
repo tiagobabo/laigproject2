@@ -1,5 +1,5 @@
 <sgx>
-	<globals maxlights="3" maxobjects="54" maxtextures="12" maxmaterials="6" root="cena"/>
+	<globals maxlights="3" maxobjects="20" maxtextures="12" maxmaterials="6" root="cena"/>
 
 	<view near="0.1" far="500.0" axisscale="0.04">
 		<translation x="0.0" z="-52.5" y="-20.0"/>
@@ -11,10 +11,16 @@
 		<background r="0.0" g="0.0" b="0.0" a="1.0" />
 		<lights>
 			<light id="luzprincipal" enabled="1" >
-				<position x="0.0" y="100.0" z="100.0" w="1.0" />
+				<position x="0.0" y="40.0" z="0.0" w="1.0" />
 				<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
-				<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-				<specular r="20.0" g="20.0" b="20.0" a="1.0" />
+				<diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+				<specular r="0.7" g="0.7" b="0.7" a="1.0" />
+			</light>
+			<light id="luzauxiliarazul" enabled="1" >
+				<position x="-20.0" y="40.0" z="0.0" w="1.0" />
+				<ambient r="0.0" g="0.0" b="0.5" a="1.0" />
+				<diffuse r="0.0" g="0.0" b="0.7" a="1.0" />
+				<specular r="0.0" g="0.0" b="2.0" a="1.0" />
 			</light>
 		</lights>
 	</illumination>
