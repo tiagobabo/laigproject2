@@ -226,11 +226,20 @@ void Rectangle::draw()
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
 	glBegin(GL_POLYGON);
-	glNormal3d(0.0,0.0,1.0);
+	if( (this->y2 < this->y1) && (this->x2 < this->x1)){
+		glNormal3d(0.0,0.0,-1.0);
+		glTexCoord2f(0.0,0.0); glVertex3d(this->x2, this->y2, 0.0);
+		glTexCoord2f(s/(this->x2-this->x1),0.0); glVertex3d(this->x1, this->y2, 0.0);
+		glTexCoord2f(s/(this->x2-this->x1),t/(this->y2-this->y1)); glVertex3d(this->x1, this->y1, 0.0);
+		glTexCoord2f(0.0,t/(this->y2-this->y1)); glVertex3d(this->x2, this->y1, 0.0);
+	}
+	else{
+		glNormal3d(0.0,0.0,1.0);
 		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, 0.0);
 		glTexCoord2f(s/(this->x2-this->x1),0.0); glVertex3d(this->x2, this->y1, 0.0);
 		glTexCoord2f(s/(this->x2-this->x1),t/(this->y2-this->y1)); glVertex3d(this->x2, this->y2, 0.0);
 		glTexCoord2f(0.0,t/(this->y2-this->y1)); glVertex3d(this->x1, this->y2, 0.0);
+	}
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
