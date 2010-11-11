@@ -82,6 +82,7 @@ private:
 	string textureid;
 public:
 	vector<Node*> nodes;
+	vector<string> ids;
 	Texture* texture;
 	Material* material;
 	float transformations[4][4];
@@ -163,7 +164,6 @@ class CompoundObject : public Node
 private:
 	
 public:
-	vector<string> ids;
 	CompoundObject(string id, string type);
 	void addId(string id);
 	void addNode(Node* node);

@@ -1,0 +1,466 @@
+﻿<!-- Os comentarios devem ter espacos no inicio e no fim, para -->
+<!-- separar dos hifens -->
+<!-- Nao devem ser usados caracteres especiais (p.ex. acentos) -->
+<!-- Todas as tags e atributos sao obrigatorios, excepto onde for -->
+<!-- referido o contrario -->
+
+<sgx>
+  <!-- tem de existir, pelo menos, uma luz, uma textura, um material -->
+  <!-- e um objecto -->
+  <globals maxlights="5" maxtextures="5" maxmaterials="5"
+           maxobjects="50" root="cena"/>
+
+
+  <view near="5" far="1500" axisscale="1">
+    <translation x="0" y="0" z="-70" />
+    <rotation axis="x" angle="0" />
+    <rotation axis="y" angle="0" />
+    <rotation axis="z" angle="0" />
+    <scale x="1" y="1" z="1" />
+  </view>
+
+
+  <illumination doublesided="1" local="1" >
+
+    <ambient r="0.3" g="0.3" b="0.3" a="1" />
+    <background r="0" g="0" b="0" a="1" />
+
+    <lights>
+      <!-- Deve existir um ou mais blocos "light" -->
+      <!-- (até ao máximo declarado em "globals") -->
+      <!-- Os identificadores "id" nao podem ser repetidos -->
+      <light id="light1" enabled="1" >
+        <position x="0" y="20" z="0" w="1" />
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <diffuse r="2.6" g="2.6" b="2.6" a="1" />
+        <specular r="2.6" g="2.6" b="2.6" a="1" />
+      </light>
+    </lights>
+  </illumination>
+
+
+  <textures>
+    <!-- Deve existir um ou mais blocos "texture" -->
+    <!-- (até ao máximo declarado em "globals") -->
+    <!-- Os identificadores "id" nao podem ser repetidos -->
+    <!-- s e t: factores de escala (ver notas finais) -->
+    <texture id="metalTex" file="metal.bmp" length_s="8" length_t="8" />
+  </textures>
+
+
+  <materials>
+    <!-- Deve existir um ou mais blocos "material" -->
+    <!-- (até ao máximo declarado em "globals") -->
+    <!-- Os identificadores "id" nao podem ser repetidos -->
+    <material id="metal">
+      <emission r="0.3" g="0.3" b="0.3" a="1" />
+      <ambient r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+      <shininess value="128" />
+    </material>
+
+    <material id="metalVermelho">
+      <emission r="0.5" g="0" b="0" a="1" />
+      <ambient r="0.2" g="0" b="0" a="1" />
+      <diffuse r="0.5" g="0" b="0" a="1" />
+      <specular r="0.5" g="0" b="0" a="1" />
+      <shininess value="128" />
+    </material>
+
+    <material id="juncao">
+      <emission r="0" g="0" b="0.3" a="1" />
+      <ambient r="0" g="0" b="0.1" a="1" />
+      <diffuse r="0" g="0" b="0.3" a="1" />
+      <specular r="0" g="0" b="0.3" a="1" />
+      <shininess value="128" />
+    </material>
+  </materials>
+
+
+  <objects>
+    <!-- Objectos simples de tronco -->
+    <object id="troncoF" type="simple">
+      <transformations>
+        <translation x="0.0" y="0.0" z="4.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="metalTex" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+    <object id="troncoB" type="simple">
+      <transformations>
+        <translation x="0.0" y="0.0" z="-4.0" />
+        <rotation axis="y" angle="180" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="null" />
+      <texture id="null" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+    <object id="troncoL" type="simple">
+      <transformations>
+        <translation x="-4.0" y="0.0" z="0.0" />
+        <rotation axis="y" angle="-90" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="null" />
+      <texture id="null" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+    <object id="troncoR" type="simple">
+      <transformations>
+        <translation x="4.0" y="0.0" z="0.0" />
+        <rotation axis="y" angle="90" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="null" />
+      <texture id="null" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+    <object id="troncoT" type="simple">
+      <transformations>
+        <translation x="0.0" y="4.0" z="0.0" />
+        <rotation axis="x" angle="-90" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="null" />
+      <texture id="null" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+    <object id="troncoBT" type="simple">
+      <transformations>
+        <translation x="0.0" y="-4.0" z="0.0" />
+        <rotation axis="x" angle="90" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="null" />
+      <texture id="null" />
+      <geometry type="rectangle" x1="-4" y1="-4" x2="4" y2="4" />
+    </object>
+
+
+    <object id="tronco" type="compound">
+      <transformations>
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="troncoF" />
+        <objectref id="troncoB" />
+        <objectref id="troncoR" />
+        <objectref id="troncoL" />
+        <objectref id="troncoT" />
+        <objectref id="troncoBT" />
+      </children>
+    </object>
+
+
+
+    <!-- Objectos simples de cabeca -->
+    <object id="head" type="simple">
+      <transformations>
+      </transformations>
+      <!-- recebe material do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="sphere" radius="3.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="neck" type="simple">
+      <transformations>
+        <translation x="0.0" y="-4.0" z="0.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="juncao" />
+      <texture id="null" />
+      <geometry type="sphere" radius="2.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="cabeca" type="compound">
+      <transformations>
+        <translation x="0.0" y="9.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="head" />
+        <objectref id="neck" />
+      </children>
+    </object>
+
+
+
+    <!-- Objectos Bracos -->
+
+    <object id="bracoP1" type="simple">
+      <transformations>
+        <translation x="-1.0" y="0.0" z="0.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="juncao" />
+      <texture id="null" />
+      <geometry type="sphere" radius="2.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="bracoP2" type="simple">
+      <transformations>
+        <translation x="-4" y="0" z="0" />
+        <rotation axis="y" angle="90" />       
+        <translation x="0.0" y="0.0" z="-2.0" />
+        
+
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                              slices="10" stacks="10" />
+    </object>
+
+    <object id="bracoP3" type="simple">
+      <transformations>
+        <translation x="-7.0" y="0.0" z="0.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="juncao" />
+      <texture id="null" />
+      <geometry type="sphere" radius="2.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="bracoP4" type="simple">
+      <transformations>
+        <translation x="-9.0" y="2.0" z="0.0" />
+        <rotation axis="z" angle="-45" />
+        <rotation axis="y" angle="90" />
+        <translation x="0.0" y="0.0" z="-2.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                              slices="10" stacks="10" />
+    </object>
+
+    <object id="braco" type="compound">
+      <transformations>
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="bracoP1" />
+        <objectref id="bracoP2" />
+        <objectref id="bracoP3" />
+        <objectref id="bracoP4" />
+      </children>
+    </object>
+
+    <object id="bracoDireito" type="compound">
+      <transformations>
+        <translation x="-4.0" y="0.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="braco" />
+      </children>
+    </object>
+
+    <object id="bracoEsquerdo" type="compound">
+      <transformations>
+        <translation x="4.0" y="0.0" z="0.0" />
+        <rotation axis="y" angle="180" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="braco" />
+      </children>
+    </object>
+
+    <object id="bracos" type="compound">
+      <transformations>
+        <translation x="0.0" y="3.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="bracoDireito" />
+        <objectref id="bracoEsquerdo" />
+      </children>
+    </object>
+
+
+    <!-- Objectos Pernas -->
+
+    <object id="pernaP1" type="simple">
+      <transformations>
+        <rotation axis="y" angle="90" />
+        <translation x="0.0" y="0.0" z="-2.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                              slices="10" stacks="10" />
+    </object>
+
+    <object id="pernaP2" type="simple">
+      <transformations>
+        <translation x="0.0" y="-3.0" z="0.0" />
+        <rotation axis="x" angle="90" />
+        <translation x="0.0" y="0.0" z="-2.0" />  
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                              slices="10" stacks="10" />
+    </object>
+
+    <object id="pernaP3" type="simple">
+      <transformations>
+        <translation x="0.0" y="-6.0" z="0.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="juncao" />
+      <texture id="null" />
+      <geometry type="sphere" radius="2.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="pernaP4" type="simple">
+      <transformations>
+        <translation x="0.0" y="-9.0" z="0.0" />
+        <rotation axis="x" angle="90" />
+        <translation x="0.0" y="0.0" z="-2.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                              slices="10" stacks="10" />
+    </object>
+
+
+
+    <!-- Objectos Pe -->
+
+    <object id="peP1" type="simple">
+      <transformations>
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="juncao" />
+      <texture id="null" />
+      <geometry type="sphere" radius="2.0" slices="10" stacks="10" />
+    </object>
+
+    <object id="peP2" type="simple">
+      <transformations>
+        <translation x="0.0" y="0.0" z="1.0" />
+      </transformations>
+      <!-- recebe material e textura do pai -->
+      <material id="metalVermelho" />
+      <texture id="null" />
+      <geometry type="cylinder" base="2.0" top="2.0" height="4.0"
+                            slices="10" stacks="10" />
+    </object>
+
+
+    <object id="pe" type="compound">
+      <transformations>
+        <translation x="0.0" y="-12.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="peP1" />
+        <objectref id="peP2" />
+      </children>
+    </object>
+
+
+
+
+    <object id="perna" type="compound">
+      <transformations>
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="pernaP1" />
+        <objectref id="pernaP2" />
+        <objectref id="pernaP3" />
+        <objectref id="pernaP4" />
+        <objectref id="pe" />
+      </children>
+    </object>
+
+
+    <object id="pernaDireita" type="compound">
+      <transformations>
+        <translation x="-2.0" y="0.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="perna" />
+      </children>
+    </object>
+
+    <object id="pernaEsquerda" type="compound">
+      <transformations>
+        <translation x="2.0" y="0.0" z="0.0" />
+        <!-- <rotation axis="y" angle="180" /> -->
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="perna" />
+      </children>
+    </object>
+
+    <object id="pernas" type="compound">
+      <transformations>
+        <translation x="0.0" y="-4.0" z="0.0" />
+      </transformations>
+      <material id ="metal" />
+      <texture id ="clear" />
+
+      <children>
+        <objectref id="pernaDireita" />
+        <objectref id="pernaEsquerda" />
+      </children>
+    </object>
+
+    <object id="cena" type="compound">
+      <transformations>
+      </transformations>
+      <material id="metal" />
+      <texture id="clear" />
+
+      <children>
+        <objectref id="tronco" />
+        <objectref id="cabeca" />
+        <objectref id="pernas" />
+        <objectref id="bracos" />
+      </children>
+    </object>
+
+  </objects>
+</sgx>
