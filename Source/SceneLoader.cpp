@@ -11,6 +11,13 @@ Node* root;
 vector<Object*> objects;
 vector<CompoundObject*> compoundobjects;
 
+void endError(char* message)
+{
+	cout << message << endl;
+	system("pause");
+	exit(-1);
+}
+
 TiXmlElement *findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val)
 // Função de pesquisa de um nó filho por comparação de um atributo (normalmente um id) com um valor de referência
 // numa versão mais alto nível seria utilizada uma expressão XPath
@@ -108,10 +115,10 @@ void processGlobals(void)
 				!scene.root.empty())
 				cout << "root: " << scene.root << endl <<"maxlights: "<< scene.maxlights << endl <<"maxmaterials: "<< scene.maxmaterials << endl <<"maxobjects: " << scene.maxobjects << endl <<"maxtextures: " << scene.maxtextures  <<endl;
 			else
-				printf("Error parsing globals\n");
+				endError("Error parsing globals.");
 		}
 		else
-			printf("globals not found\n");
+			endError("Error globals not found.");
 }
 
 void process_translation(TiXmlElement* translateElement)
@@ -128,10 +135,10 @@ void process_translation(TiXmlElement* translateElement)
 					cout << "ValX: " << x  << " |ValY: " << y << " |ValZ: " << z << endl;
 			}
 			else
-				cout << "Error parsing translation" << endl;
+				endError("Error parsing translation.");
 		}
 		else
-			cout << "translate not found" << endl;	
+			endError("Error translate not found.");	
 }
 
 void process_rotation(TiXmlElement* rotateElement)
@@ -161,16 +168,16 @@ void process_rotation(TiXmlElement* rotateElement)
 						cout << "RotAxis: " << axis  << " |Ang: " << angle << endl;
 					}
 					else
-						cout << "Error parsing rotation" << endl;
+						endError("Error parsing rotation.");
 				}
 				else
-					cout << "Error parsing rotation axis" << endl;
+					endError("Error parsing rotation axis.");
 			}
 			else
-				cout << "Error parsing rotation axis" << endl;
+				endError("Error parsing rotation axis.");
 		}
 		else
-			printf("rotation not found\n");	
+			endError("Error rotation not found.");	
 }
 
 void process_scale(TiXmlElement* scaleElement)
@@ -186,10 +193,10 @@ void process_scale(TiXmlElement* scaleElement)
 				cout << "ScaleX: " << x  << " |ScaleY: " << y << " |ScaleZ: " << z << endl;
 			}
 			else
-				cout << "Error parsing scale" << endl;
+				endError("Error parsing scale.");
 		}
 		else
-			cout << "scale not found" << endl;	
+			endError("Error scale not found.");	
 }
 
 void processView(void)
@@ -203,10 +210,10 @@ void processView(void)
 				viewElement->QueryFloatAttribute("axisscale",&scene.axisscale)==TIXML_SUCCESS)
 				cout << "view atributes: " << scene.axisscale << endl;
 			else
-				printf("Error parsing view\n");
+				endError("Error parsing view.");
 		}
 		else
-			printf("view not found\n");
+			endError("Error view not found.");
 		TiXmlElement* child = viewElement->FirstChildElement();
 
 		glMatrixMode(GL_MODELVIEW);
@@ -221,7 +228,7 @@ void processView(void)
 			else if(strcmp(child->Value(), "scale")==0)
 				process_scale(child);
 			else
-				cout << "Error parsing view: invalid child" << endl;
+				endError("Error parsing view: invalid child.");
 			child=child->NextSiblingElement();
 		}
 
@@ -245,7 +252,7 @@ void processIllumination_ambient(TiXmlElement* ambient)
 		cout << "ambient: " << r << " " << g << " " << b << " " << a << endl;
 	}
 	else
-		cout << "Error parsing illumination: ambient not found or invalid" << endl;
+		endError("Error parsing illumination: ambient not found or invalid.");
 }
 
 void processIllumination_background(TiXmlElement* background)
@@ -263,7 +270,7 @@ void processIllumination_background(TiXmlElement* background)
 		cout << "background: " << r << " " << g << " " << b << " " << a << endl;
 	}
 	else
-		cout << "Error parsing illumination: background not found or invalid" << endl;
+		endError("Error parsing illumination: background not found or invalid.");
 }
 
 void processLight_position(TiXmlElement* position)
@@ -281,7 +288,7 @@ void processLight_position(TiXmlElement* position)
 		cout << "position: " << x << " " << y << " " << z << " " << w << endl;
 	}
 	else
-		cout << "Error parsing Light: position not found or invalid" << endl;
+		endError("Error parsing Light: position not found or invalid.");
 }
 
 void processLight_type(TiXmlElement* type, int ntype)
@@ -325,7 +332,7 @@ void processLight_type(TiXmlElement* type, int ntype)
 		}
 	}
 	else
-		cout << "Error parsing Light: argument not found or invalid" << endl;
+		endError("Error parsing Light: argument not found or invalid.");
 }
 
 void processLights_light(TiXmlElement* light)
@@ -341,8 +348,9 @@ void processLights_light(TiXmlElement* light)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
-				cout << "Error parsing lights: id "<< id2 <<" already exists" << endl;
-				return;
+				char temp[255];
+				sprintf(temp, "Error parsing lights: id %s already exists.", id2.c_str());
+				endError(temp);
 			}
 		}
 		cout << "Parsing light id = " << id << endl;
@@ -372,13 +380,13 @@ void processLights_light(TiXmlElement* light)
 			else if(strcmp(child->Value(), "specular")==0)
 				processLight_type(child,2);
 			else
-				cout << "Error parsing light: invalid child" << endl;
+				endError("Error parsing light: invalid child.");
 			child = child->NextSiblingElement();
 		}
 
 	}
 	else
-		cout << "Error parsing light: id or enabled not found or invalid" << endl;
+		endError("Error parsing light: id or enabled not found or invalid.");
 }
 
 void processIllumination_lights(TiXmlElement* lights)
@@ -387,16 +395,14 @@ void processIllumination_lights(TiXmlElement* lights)
 	TiXmlElement* child = lights->FirstChildElement();
 	while(child)
 	{
-		if(nChilds == scene.maxlights){
-			cout << "Exceeded number of lights permitted." << endl;
-			break;
-		}
+		if(nChilds == scene.maxlights)
+			endError("Exceeded number of lights permitted.");
 		else{
 			if(strcmp(child->Value(), "light")==0){
 				processLights_light(child);
 			}
 			else
-				cout << "Error parsing lights: invalid child";
+				endError("Error parsing lights: invalid child.");
 			
 			child = child->NextSiblingElement();
 			nChilds++;
@@ -437,16 +443,16 @@ void processIllumination(void)
 					else if(strcmp(child->Value(), "lights")==0)
 						processIllumination_lights(child);
 					else
-						cout << "Error parsing illumination: invalid child" << endl;
+						endError("Error parsing illumination: invalid child.");
 					child=child->NextSiblingElement();
 				}
 
 			}
 			else
-				cout << "Error parsing illumination: doublesided or local not found or invalid" << endl;
+				endError("Error parsing illumination: doublesided or local not found or invalid.");
 		}
 		else
-			cout << "illumination not found\n" << endl;
+			endError("Error illumination not found.");
 }
 
 
@@ -464,8 +470,9 @@ void processTextures_texture(TiXmlElement* texture)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
-				cout << "Error parsing textures: id "<< id2 <<" already exists" << endl;
-				return;
+				char temp[255];
+				sprintf(temp, "Error parsing textures: id %s already exists", id2.c_str());
+				endError(temp);
 			}
 		}
 		Texture* t1 = new Texture(id,file, s,t);
@@ -473,7 +480,7 @@ void processTextures_texture(TiXmlElement* texture)
 		cout << "Texture id: "<< scene.textures.back()->id << " | file: " << scene.textures.back()->file << " | length_s: " << scene.textures.back()->length_s << " | length_t: " << scene.textures.back()->length_t << endl;
 	}
 	else
-		cout << "Error parsing texture: argument not found or invalid" << endl;
+		endError("Error parsing texture: argument not found or invalid.");
 }
 
 
@@ -487,10 +494,8 @@ void processTexture(void)
 			TiXmlElement* child = texturesElement->FirstChildElement();
 			while(child)
 			{
-				if(nChilds == scene.maxtextures){
-					cout << "Exceeded number of textures permitted." << endl;
-					break;
-				}
+				if(nChilds == scene.maxtextures)
+					endError("Exceeded number of textures permitted.");
 				else{
 					processTextures_texture(child);
 					child=child->NextSiblingElement();
@@ -499,7 +504,7 @@ void processTexture(void)
 			}
 		}
 		else
-			cout << "textures not found\n" << endl;
+			endError("Error textures not found.");
 }
 
 void processMaterial_type(TiXmlElement* type, int ntype)
@@ -550,7 +555,7 @@ void processMaterial_type(TiXmlElement* type, int ntype)
 		}
 	}
 	else
-		cout << "Error parsing Material: argument not found or invalid" << endl;
+		endError("Error parsing Material: argument not found or invalid.");
 }
 
 void processMaterial_shininess(TiXmlElement* texture)
@@ -562,7 +567,7 @@ void processMaterial_shininess(TiXmlElement* texture)
 		cout << "Material shininess: "<< scene.materials.back()->shininess << endl;
 	}
 	else
-		cout << "Error parsing Material: shininess not found or invalid" << endl;
+		endError("Error parsing Material: shininess not found or invalid.");
 }
 
 void processMaterials_material(TiXmlElement* material)
@@ -576,8 +581,9 @@ void processMaterials_material(TiXmlElement* material)
 		{
 			if((*it)->id.compare(id2) == 0)
 			{
-				cout << "Error parsing materials: id "<< id2 <<" already exists" << endl;
-				return;
+				char temp[255];
+				sprintf(temp, "Error parsing materials: id %s already exists", id2);
+				endError(temp);
 			}
 		}
 		cout << "Parsing Material id = " << id << endl;
@@ -598,12 +604,12 @@ void processMaterials_material(TiXmlElement* material)
 			else if(strcmp(child->Value(), "shininess")==0)
 				processMaterial_shininess(child);
 			else
-				cout << "Error parsing Material: invalid child" << endl;
+				endError("Error parsing Material: invalid child.");
 			child=child->NextSiblingElement();
 		}
 	}
 	else
-		cout << "Error parsing Material: id not found or invalid" << endl;
+		endError("Error parsing Material: id not found or invalid.");
 }
 
 void processMaterial(void)
@@ -616,10 +622,8 @@ void processMaterial(void)
 			TiXmlElement* child = materialsElement->FirstChildElement();
 			while(child)
 			{	
-				if(nChilds == scene.maxmaterials){
-					cout << "Exceeded number of materials permitted." << endl;
-					break;
-				}
+				if(nChilds == scene.maxmaterials)
+					endError("Exceeded number of materials permitted.");
 				else
 				{
 					processMaterials_material(child);
@@ -629,7 +633,7 @@ void processMaterial(void)
 			}
 		}
 		else
-			cout << "Materials not found\n" << endl;
+			endError("Error materials not found.");
 }
 
 void processObject_transformations(TiXmlElement* transformations, string type)
@@ -646,7 +650,7 @@ void processObject_transformations(TiXmlElement* transformations, string type)
 		else if(strcmp(child->Value(),"scale")==0)
 			process_scale(child);
 		else
-			cout << "Error parsing Object Transformation: invalid child" << endl;
+			endError("Error parsing Object Transformation: invalid child");
 
 		child=child->NextSiblingElement();
 	}
@@ -682,7 +686,7 @@ void processObject_type(TiXmlElement* type, int ntype, string typeObject)
 		}
 	}
 	else
-		cout << "Error parsing id on argument of Object." << endl;
+		endError("Error parsing id on argument of Object.");
 }
 
 void processObject_rectangle(TiXmlElement* rectangle, string typeObject, string id)
@@ -698,7 +702,7 @@ void processObject_rectangle(TiXmlElement* rectangle, string typeObject, string 
 		cout << "Rectangle:"  << endl << "x1: "<< x1 << " x2: "<< x2 << " y1: " << y1 << " y2: "<< y2<< endl;
 	}
 	else
-		cout << "Error parsing Object Rectangle: argument not found or invalid" << endl;
+		endError("Error parsing Object Rectangle: argument not found or invalid.");
 }
 
 void processObject_triangle(TiXmlElement* triangle, string typeObject, string id)
@@ -719,7 +723,7 @@ void processObject_triangle(TiXmlElement* triangle, string typeObject, string id
 		cout << "Triangle: " << endl <<"x1: "<< x1 << " y1: "<< y1 << " z1: " << z1<< endl << "x2: "<< x2<< " y2: "<< y2 << " z2: " << z2<< endl << "x3: "<< x3<< " y3: "<< y3 << " z3: " << z3<< endl;
 	}
 	else
-		cout << "Error parsing Object Triangle: argument not found or invalid" << endl;
+		endError("Error parsing Object Triangle: argument not found or invalid.");
 }
 
 void processObject_cylinder(TiXmlElement* cylinder, string typeObject, string id)
@@ -737,7 +741,7 @@ void processObject_cylinder(TiXmlElement* cylinder, string typeObject, string id
 		cout << "Cylinder: " << endl <<"base: "<< base << " top: "<< top << " height: " << height<< endl << "slices: "<< slices<< " stacks: "<< stacks << endl;
 	}
 	else
-		cout << "Error parsing Object Cylinder: argument not found or invalid" << endl;
+		endError("Error parsing Object Cylinder: argument not found or invalid.");
 }
 
 void processObject_sphere(TiXmlElement* sphere, string typeObject, string id)
@@ -753,7 +757,7 @@ void processObject_sphere(TiXmlElement* sphere, string typeObject, string id)
 		cout << "Sphere: " << endl <<"radius: "<< radius << " slices: "<< slices<< " stacks: "<< stacks << endl;
 	}
 	else
-		cout << "Error parsing Object Sphere: argument not found or invalid" << endl;
+		endError("Error parsing Object Sphere: argument not found or invalid.");
 }
 
 void processObject_disk(TiXmlElement* disk, string typeObject, string id)
@@ -770,7 +774,7 @@ void processObject_disk(TiXmlElement* disk, string typeObject, string id)
 		cout << "Disk: " << endl <<"inner: "<< inner << " outer: "<< outer<< " slices: "<< slices << " loops: "<< loops << endl;
 	}
 	else
-		cout << "Error parsing Object Disk: argument not found or invalid" << endl;
+		endError("Error parsing Object Disk: argument not found or invalid.");
 }
 
 void processObject_geometry(TiXmlElement* object, string typeObject, string id)
@@ -789,10 +793,10 @@ void processObject_geometry(TiXmlElement* object, string typeObject, string id)
 		else if(strcmp(type,"disk")==0)
 			processObject_disk(object, typeObject, id);
 		else
-			cout << "Error parsing Object: invalid type" << endl;
+			endError("Error parsing Object: invalid type.");
 	}
 	else
-		cout << "Error parsing Object type." << endl;
+		endError("Error parsing Object type.");
 }
 
 void processChildren_objRef(TiXmlElement* children)
@@ -838,6 +842,30 @@ void processObject_compound(TiXmlElement* object, string type)
 		processObject_children(object);
 }
 
+void checkIdObject(vector<Object*> vector1, vector<CompoundObject*> vector2, string id)
+{
+	vector<Object*>::iterator it;
+	for(it=vector1.begin() ; it < vector1.end(); it++)
+	{
+		if((*it)->getID().compare(id) == 0)
+		{
+			char temp[255];
+			sprintf(temp,"Error parsing Object: id %s already exists", id.c_str());
+			endError(temp);
+		}
+	}
+	vector<CompoundObject*>::iterator it2;
+	for(it2=vector2.begin() ; it2 < vector2.end(); it2++)
+	{
+		if((*it2)->getID().compare(id) == 0)
+		{
+			char temp[255];
+			sprintf(temp,"Error parsing Object: id %s already exists", id.c_str());
+			endError(temp);
+		}
+	}
+}
+
 void processObjects_object(TiXmlElement* object)
 {
 	const char* id = object->Attribute("id");
@@ -845,19 +873,10 @@ void processObjects_object(TiXmlElement* object)
 	if(id != NULL && ((strcmp(type, "compound") == 0) || (strcmp(type, "simple") == 0)))
 	{
 		string id2 = object->Attribute("id");
-		/*vector<Object>::iterator it;
-		for(it=scene.objects.begin() ; it < scene.object.end(); it++)
-		{
-			if(it->id.compare(id2) == 0)
-			{
-				cout << "Error parsing materials: id "<< id2 <<" already exists" << endl;
-				return;
-			}
-		}*/
+		
 		cout << "Parsing Object id = " << id << endl;
 		cout << "Parsing Object type = " << type << endl;
-		//Object m(id);
-		//scene.objects.push_back(m);
+		checkIdObject(objects, compoundobjects, id);
 
 		// Process simple object [first geometry, then rest]
 		TiXmlElement* child = object->FirstChildElement();
@@ -872,10 +891,7 @@ void processObjects_object(TiXmlElement* object)
 					geo = 1;
 				}
 				else if(strcmp(child->Value(),"geometry") == 0 && geo)
-				{
-					cout << "Error parsing object: object has more than one geometry" << endl;
-					return;
-				}
+					endError("Error parsing object: object has more than one geometry");
 				child=child->NextSiblingElement();
 			}
 			
@@ -905,7 +921,7 @@ void processObjects_object(TiXmlElement* object)
 		}
 	}
 	else
-		cout << "Error parsing Object: id not found or invalid" << endl;
+		endError("Error parsing Object: id not found or invalid.");
 }
 
 void processObjects(void)
@@ -919,10 +935,8 @@ void processObjects(void)
 			TiXmlElement* child = objectsElement->FirstChildElement();
 			while(child)
 			{
-				if(nChilds == scene.maxobjects){
-					cout << "Exceeded number of objects permitted." << endl;
-					break;
-				}
+				if(nChilds == scene.maxobjects)
+					endError("Exceeded number of objects permitted.");
 				else{
 					processObjects_object(child);
 					child=child->NextSiblingElement();
@@ -931,7 +945,7 @@ void processObjects(void)
 			}
 		}
 		else
-			cout << "objects not found\n" << endl;
+			endError("Error objects not found.");
 }
 
 void createTree(Node* node, int i)
@@ -969,6 +983,13 @@ void mapTextures(Node* node)
 			for(itM = scene.textures.begin(); itM < scene.textures.end(); itM++)
 				if((*itM)->id == (*it)->getTextureId())
 					(*it)->texture = *itM;
+
+			if((*it)->texture == NULL)
+				if((*it)->getTextureId() != "clear"){
+					char temp[255];
+					sprintf(temp,"Error parsing texture: id %s don't exist", (*it)->getTextureId().c_str());
+					endError(temp);
+				}	
 		}
 		else
 			(*it)->texture = node->texture;
@@ -1052,8 +1073,9 @@ Node* loadScene(Scene* s)
 
 	if ( !loadOkay )
 	{
-		printf( "Could not load test file 'demotest.xml'. Error='%s'. Exiting.\n", doc.ErrorDesc() );
-		exit( 1 );
+		char temp[255];
+		sprintf(temp, "Could not load test file 'demotest.xml'. Error='%s'. Exiting.\n", doc.ErrorDesc() );
+		endError(temp);
 	}
 
 	scene.sgxElement = doc.FirstChildElement( "sgx" ); 
