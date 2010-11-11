@@ -94,13 +94,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Node.cpp" />
+    <ClCompile Include="Source\RGBpixmap.cpp" />
     <ClCompile Include="Source\SceneLoader.cpp" />
     <ClCompile Include="Source\XML_alunos.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RGBpixmap.h" />
     <ClInclude Include="Source\SceneLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bridge.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="demograph.xml" />
     <None Include="exemplo.xml">
       <SubType>Designer</SubType>

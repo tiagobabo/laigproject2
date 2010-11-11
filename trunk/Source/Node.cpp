@@ -1,5 +1,49 @@
 #include "SceneLoader.h"
 
+RGBpixmap pixmap;
+
+
+void ReduceToUnit(float vector[3])					// Reduces A Normal Vector (3 Coordinates)
+{									// To A Unit Normal Vector With A Length Of One.
+	float length;							// Holds Unit Length
+	// Calculates The Length Of The Vector
+	length = (float)sqrt((vector[0]*vector[0]) + (vector[1]*vector[1]) + (vector[2]*vector[2]));
+
+	if(length == 0.0f)						// Prevents Divide By 0 Error By Providing
+		length = 1.0f;						// An Acceptable Value For Vectors To Close To 0.
+
+	vector[0] /= length;						// Dividing Each Element By
+	vector[1] /= length;						// The Length Results In A
+	vector[2] /= length;						// Unit Normal Vector.
+}
+
+
+void calcNormal(float v[3][3], float out[3])				// Calculates Normal For A Quad Using 3 Points
+{
+	float v1[3],v2[3];						// Vector 1 (x,y,z) & Vector 2 (x,y,z)
+	static const int x = 0;						// Define X Coord
+	static const int y = 1;						// Define Y Coord
+	static const int z = 2;						// Define Z Coord
+
+	// Finds The Vector Between 2 Points By Subtracting
+	// The x,y,z Coordinates From One Point To Another.
+
+	// Calculate The Vector From Point 1 To Point 0
+	v1[x] = v[0][x] - v[1][x];					// Vector 1.x=Vertex[0].x-Vertex[1].x
+	v1[y] = v[0][y] - v[1][y];					// Vector 1.y=Vertex[0].y-Vertex[1].y
+	v1[z] = v[0][z] - v[1][z];					// Vector 1.z=Vertex[0].y-Vertex[1].z
+	// Calculate The Vector From Point 2 To Point 1
+	v2[x] = v[1][x] - v[2][x];					// Vector 2.x=Vertex[0].x-Vertex[1].x
+	v2[y] = v[1][y] - v[2][y];					// Vector 2.y=Vertex[0].y-Vertex[1].y
+	v2[z] = v[1][z] - v[2][z];					// Vector 2.z=Vertex[0].z-Vertex[1].z
+	// Compute The Cross Product To Give Us A Surface Normal
+	out[x] = v1[y]*v2[z] - v1[z]*v2[y];				// Cross Product For Y - Z
+	out[y] = v1[z]*v2[x] - v1[x]*v2[z];				// Cross Product For X - Z
+	out[z] = v1[x]*v2[y] - v1[y]*v2[x];				// Cross Product For X - Y
+
+	ReduceToUnit(out);						// Normalize The Vectors
+}
+
 void loadMaterial(Material* m)
 {
 	// define caracteristicas de cor do material do plano e da caixa
@@ -126,17 +170,48 @@ void CompoundObject::draw()
 
 void Triangle::draw()
 {
+	float s=1;
+	float t=1;
+	if(this->texture !=  NULL){
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		pixmap.readBMPFile(FileExt);
+		pixmap.setTexture(1);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		s=this->texture->length_s;
+		t=this->texture->length_t;
+	}
 	if(this->material != NULL)
 		loadMaterial(this->material);
+	float pontos[3][3] = {{this->x1,this->y1,this->z1},{this->x2,this->y2,this->z2},{this->x3,this->y3,this->z3}};
+	float normal[3];
+	calcNormal(pontos, normal);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
-	cout << "DESENHO TRIANGLE" << endl;
+	glBegin(GL_POLYGON);
+	glNormal3d(normal[0],normal[1],normal[2]);
+		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, this->z1);
+		glTexCoord2f(s,0.0); glVertex3d(this->x2, this->y2, this->z2);
+		glTexCoord2f(s/2,t); glVertex3d(this->x3, this->y3, this->z3);
+	glEnd();
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void Rectangle::draw()
 {
+	float s=1;
+	float t=1;
+	if(this->texture !=  NULL){
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		pixmap.readBMPFile(FileExt);
+		pixmap.setTexture(1);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		s=this->texture->length_s;
+		t=this->texture->length_t;
+	}
 	if(this->material != NULL)
 		loadMaterial(this->material);
 	glMatrixMode(GL_MODELVIEW);
@@ -144,48 +219,92 @@ void Rectangle::draw()
 	glMultMatrixf(&this->transformations[0][0]);
 	glBegin(GL_POLYGON);
 	glNormal3d(0.0,0.0,1.0);
-		glVertex3d(this->x1, this->y1, 0.0);
-		glVertex3d(this->x2, this->y1, 0.0);
-		glVertex3d(this->x2, this->y2, 0.0);
-		glVertex3d(this->x1, this->y2, 0.0);
+		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, 0.0);
+		glTexCoord2f(s,0.0); glVertex3d(this->x2, this->y1, 0.0);
+		glTexCoord2f(s,t); glVertex3d(this->x2, this->y2, 0.0);
+		glTexCoord2f(0.0,t); glVertex3d(this->x1, this->y2, 0.0);
 	glEnd();
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
 }
 void Cylinder::draw()
 {
+	float s=1;
+	float t=1;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	if(this->texture !=  NULL){
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		pixmap.readBMPFile(FileExt);
+		pixmap.setTexture(1);
+		gluQuadricTexture(glQ2, GL_TRUE);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		s=this->texture->length_s;
+		t=this->texture->length_t;
+	}
 	if(this->material != NULL)
 		loadMaterial(this->material);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
-	GLUquadric* glQ2;
-	glQ2 = gluNewQuadric();
 	gluCylinder(glQ2, this->base, this->top, this->height, this->slices, this->stacks);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	gluQuadricTexture(glQ2, GL_FALSE);
 }
 
 void Disk::draw()
 {
+	float s=1;
+	float t=1;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	if(this->texture !=  NULL){
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		pixmap.readBMPFile(FileExt);
+		pixmap.setTexture(1);
+		gluQuadricTexture(glQ2, GL_TRUE);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		s=this->texture->length_s;
+		t=this->texture->length_t;
+	}
 	if(this->material != NULL)
 		loadMaterial(this->material);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
-	GLUquadric* glQ2;
-	glQ2 = gluNewQuadric();
 	gluDisk(glQ2, this->inner, this->outer, this->slices, this->loops);
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	gluQuadricTexture(glQ2, GL_FALSE);
 }
 void Sphere::draw()
 {
+	float s=1;
+	float t=1;
+	GLUquadric* glQ2;
+	glQ2 = gluNewQuadric();
+	if(this->texture !=  NULL){
+		char *FileExt = const_cast<char*> ( this->texture->file.c_str());
+		pixmap.readBMPFile(FileExt);
+		pixmap.setTexture(1);
+		gluQuadricTexture(glQ2, GL_TRUE);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		s=this->texture->length_s;
+		t=this->texture->length_t;
+	}
 	if(this->material != NULL)
 		loadMaterial(this->material);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
-	GLUquadric* glQ2;
-	glQ2 = gluNewQuadric();
 	gluSphere(glQ2, this->radius, this->slices, this->stacks);
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	gluQuadricTexture(glQ2, GL_FALSE);
 }
 

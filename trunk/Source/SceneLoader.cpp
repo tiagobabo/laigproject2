@@ -1047,7 +1047,7 @@ void mapCompoundObjects(Node* node)
 Node* loadScene(Scene* s)
 {
 	// Read string from file
-	TiXmlDocument doc( "robot.xml" );
+	TiXmlDocument doc( "bridge.xml" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
@@ -1077,7 +1077,11 @@ Node* loadScene(Scene* s)
 		processTexture();
 		processMaterial();
 		processObjects();
-
+		if(root == NULL){
+			cout << "Root not found."<< endl;
+			system("pause");
+			exit(-1);
+		}
 		mapCompoundObjects(root);
 		createTree(root, 0);
 
