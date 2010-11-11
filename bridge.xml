@@ -19,7 +19,12 @@
 		</lights>
 	</illumination>
 	<textures>
-	<!-- ainda nao foi implementada as texturas no desenho dos objectos -->	
+	<!-- ainda nao foi implementada as texturas no desenho dos objectos -->
+      <!-- Deve existir um ou mais blocos "texture" -->
+      <!-- (até ao máximo declarado em "globals") -->
+      <!-- Os identificadores "id" nao podem ser repetidos -->
+      <!-- s e t: factores de escala (ver notas finais) -->
+      <texture id="gravel" file="gravel.bmp" length_s="1.0" length_t="5.0" />
 	</textures>
 	<materials>
 		<material id="rio">
@@ -62,6 +67,7 @@
 			<children>
 				<objectref id="rio"/>
 				<objectref id="ponte"/>
+        <objectref id="vela"/>
 			</children>
 		</object>
 <!-- SCENE -->	
@@ -81,7 +87,22 @@
 				<objectref id="torre4"/>
 			</children>
 		</object>
-		
+
+    <object id="torre" type="compound">
+      <transformations>
+      </transformations>
+      <material id="metal"/>
+      <texture id="clear"/>
+      <children>
+        <objectref id="torre_parede1"/>
+        <objectref id="torre_parede2"/>
+        <objectref id="torre_parede3"/>
+        <objectref id="torre_parede4"/>
+        <objectref id="torre_parede5"/>
+        <objectref id="cabo"/>
+      </children>
+    </object>
+    
 		<object id="torre1" type="compound">
 			<transformations>
 			<translation x="-20.0" z="-15.0" y="0.0"/>
@@ -89,43 +110,30 @@
 			<material id="metal"/>
 			<texture id="clear"/>
 			<children>
-				<objectref id="torre_parede1"/>
-				<objectref id="torre_parede2"/>
-				<objectref id="torre_parede3"/>
-				<objectref id="torre_parede4"/>
-				<objectref id="torre_parede5"/>
-				<objectref id="cabo"/>
+				<objectref id="torre"/>
 			</children>
 		</object>
 		
 		<object id="torre2" type="compound">
 			<transformations>
-			<translation x="20.0" z="-15.0" y="0.0"/>
+			<translation x="20.0" z="-17.0" y="0.0"/>
+      <rotation axis="y" angle="180" />
 			</transformations>
 			<material id="metal"/>
 			<texture id="clear"/>
 			<children>
-				<objectref id="torre_parede1"/>
-				<objectref id="torre_parede2"/>
-				<objectref id="torre_parede3"/>
-				<objectref id="torre_parede4"/>
-				<objectref id="torre_parede5"/>
-				<objectref id="cabo2"/>
+				<objectref id="torre"/>
 			</children>
 		</object>
 		<object id="torre3" type="compound">
 			<transformations>
-			<translation x="20.0" z="-28.0" y="0.0"/>
+			  <translation x="20.0" z="-30.0" y="0.0"/>
+        <rotation axis="y" angle="180" />
 			</transformations>
 			<material id="metal"/>
 			<texture id="clear"/>
 			<children>
-				<objectref id="torre_parede1"/>
-				<objectref id="torre_parede2"/>
-				<objectref id="torre_parede3"/>
-				<objectref id="torre_parede4"/>
-				<objectref id="torre_parede5"/>
-				<objectref id="cabo3"/>
+        <objectref id="torre"/>
 			</children>
 		</object>
 		<object id="torre4" type="compound">
@@ -135,12 +143,7 @@
 			<material id="metal"/>
 			<texture id="clear"/>
 			<children>
-				<objectref id="torre_parede1"/>
-				<objectref id="torre_parede2"/>
-				<objectref id="torre_parede3"/>
-				<objectref id="torre_parede4"/>
-				<objectref id="torre_parede5"/>
-				<objectref id="cabo4"/>
+				<objectref id="torre"/>
 			</children>
 		</object>
 		
@@ -151,7 +154,7 @@
 			<rotation axis="x" angle="-90" />
 			</transformations>
 			<material id="metal"/>
-			<texture id="clear"/>
+			<texture id="gravel"/>
 			<children>
 				<objectref id="cabelagem"/>
 				<objectref id="suporteCentral"/>
@@ -160,58 +163,10 @@
 			</children>
 		</object>
 		
-		<object id="cabo2" type="compound">
-			<transformations>
-			<translation x="-15.0" z="-1.0" y="11.0"/>
-			<rotation axis="y" angle="-180" />
-			<rotation axis="z" angle="45" />
-			<rotation axis="x" angle="-90" />
-			</transformations>
-			<material id="metal"/>
-			<texture id="clear"/>
-			<children>
-				<objectref id="cabelagem"/>
-				<objectref id="suporteCentral"/>
-				<objectref id="disco1"/>
-				<objectref id="disco2"/>
-			</children>
-		</object>	
-
-		<object id="cabo3" type="compound">
-			<transformations>
-			<translation x="-15.0" z="-1.0" y="11.0"/>
-			<rotation axis="y" angle="-180" />
-			<rotation axis="z" angle="45" />
-			<rotation axis="x" angle="-90" />
-			</transformations>
-			<material id="metal"/>
-			<texture id="clear"/>
-			<children>
-				<objectref id="cabelagem"/>
-				<objectref id="suporteCentral"/>
-				<objectref id="disco1"/>
-				<objectref id="disco2"/>
-			</children>
-		</object>		
-		<object id="cabo4" type="compound">
-			<transformations>
-			<translation x="15.0" z="-1.0" y="11.0"/>
-			<rotation axis="z" angle="45" />
-			<rotation axis="x" angle="-90" />
-			</transformations>
-			<material id="metal"/>
-			<texture id="clear"/>
-			<children>
-				<objectref id="cabelagem"/>
-				<objectref id="suporteCentral"/>
-				<objectref id="disco1"/>
-				<objectref id="disco2"/>
-			</children>
-		</object>		
 <!-- RIO -->	
 		<object id="rio" type="simple">
 			<material id="rio"/>	
-			<texture id="clear"/>
+			<texture id="gravel"/>
 			<transformations>
 			<rotation axis="x" angle="-90" />
 			</transformations>
@@ -262,7 +217,7 @@
 		
 <!-- torre_parede1 -->	
 		<object id="torre_parede1" type="simple">
-			<material id="white"/>	
+			<material id="null"/>	
 			<texture id="clear"/>
 			<transformations>
 			</transformations>
@@ -270,7 +225,7 @@
 		</object>		
 <!-- torre_parede2 -->	
 		<object id="torre_parede2" type="simple">
-			<material id="white"/>	
+			<material id="null"/>	
 			<texture id="clear"/>
 			<transformations>
 			<translation x="0.0" z="-2.0" y="0.0"/>
@@ -280,7 +235,7 @@
 		</object>		
 <!-- torre_parede3 -->	
 		<object id="torre_parede3" type="simple">
-			<material id="white"/>	
+			<material id="null"/>	
 			<texture id="clear"/>
 			<transformations>
 			<translation x="2.5" z="0.0" y="0.0"/>
@@ -290,7 +245,7 @@
 		</object>		
 <!-- torre_parede4 -->	
 		<object id="torre_parede4" type="simple">
-			<material id="white"/>	
+			<material id="null"/>	
 			<texture id="clear"/>
 			<transformations>
 			<translation x="-2.5" z="-2.0" y="0.0"/>
@@ -300,7 +255,7 @@
 		</object>			
 <!-- torre_parede5 -->	
 		<object id="torre_parede5" type="simple">
-			<material id="white"/>	
+			<material id="null"/>	
 			<texture id="clear"/>
 			<transformations>
 			<translation x="0.0" z="0.0" y="30.0"/>
@@ -311,11 +266,18 @@
 <!-- cabelagem -->
 	<object id="cabelagem" type="simple">
 			<material id="green"/>	
-			<texture id="clear"/>
+			<texture id="null"/>
 			<transformations>
 			</transformations>
 			 <geometry type="cylinder" base="0.3" top="0.3" height="20" slices="20" stacks="20" />
-		</object>			
-		
-	</objects>
+		</object>
+   <object id="vela" type="simple">
+      <material id="green"/>
+      <texture id="gravel"/>
+      <transformations>
+        <translation x="0.0" z="-15.0" y="0.0"/>
+      </transformations>
+      <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="0" x3="0" y3="5" z3="0" />
+   </object>
+  </objects>
 </sgx>

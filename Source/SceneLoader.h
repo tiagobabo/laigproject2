@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include "RGBpixmap.h"
 #include "..\tinyxml.h"
 
 using namespace std;
