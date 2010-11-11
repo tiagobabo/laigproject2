@@ -186,7 +186,7 @@ void Triangle::draw()
 {
 	float s=1;
 	float t=1;
-	if(this->texture !=  NULL){
+	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
 		s=this->texture->length_s;
@@ -214,7 +214,7 @@ void Rectangle::draw()
 {
 	float s=1;
 	float t=1;
-	if(this->texture !=  NULL){
+	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
 		s=this->texture->length_s;
@@ -250,7 +250,7 @@ void Cylinder::draw()
 	float t=1;
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
-	if(this->texture !=  NULL){
+	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		gluQuadricTexture(glQ2, GL_TRUE);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
@@ -275,7 +275,7 @@ void Disk::draw()
 	float t=1;
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
-	if(this->texture !=  NULL){
+	if(this->texture !=  NULL && this->texture->id != "clear"){
 		gluQuadricTexture(glQ2, GL_TRUE);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
@@ -298,7 +298,7 @@ void Sphere::draw()
 	float t=1;
 	GLUquadric* glQ2;
 	glQ2 = gluNewQuadric();
-	if(this->texture !=  NULL){
+	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		gluQuadricTexture(glQ2, GL_TRUE);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));

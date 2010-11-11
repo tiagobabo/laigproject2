@@ -119,7 +119,6 @@ void display(void)
 	glPopMatrix();
 
 	//propriedades das luzes
-	glEnable(GL_COLOR_MATERIAL);
 	for(int i = 0; i < cena.lights.size(); i++)
 	{
 		// Actualizacao da posicao da fonte de luz
@@ -127,15 +126,8 @@ void display(void)
 		light0_position[1] = cena.lights.at(i)->position[1];	// parametros _invariaveis_ da LIGHT0 estao
 		light0_position[2] = cena.lights.at(i)->position[2];	// definidos na rotina inicializacao
 		glLightfv(GL_LIGHT0+i, GL_POSITION, light0_position);
-		// esfera que simboliza a luz
-		glColor3f(1.0,1.0,0.0);		// cor amarela
-		gluQuadricOrientation( glQ, GLU_INSIDE);
-		glPushMatrix();
-		glTranslated(light0_position[0],light0_position[1],light0_position[2]);
-		gluSphere(glQ, symb_light0_radius, symb_light0_slices, symb_light0_stacks);
-		glPopMatrix();
 	}
-	glDisable(GL_COLOR_MATERIAL);
+
 	gluQuadricOrientation(glQ, GLU_OUTSIDE);
 
 	//desenha a cena
@@ -283,6 +275,7 @@ void inicializacao()
 	glEnable(GL_DEPTH_TEST);	/* Use a depth (z) buffer to draw only visible objects. */
 	glEnable(GL_CULL_FACE);		/* Use face culling to improve speed. */
 	glCullFace(GL_BACK);		/* Cull only back faces. */
+
 
 	// por defeito a cor e de fundo e o preto
 	glClearColor(cena.background[0],cena.background[1],cena.background[2], cena.background[3]);    // cor de fundo a branco

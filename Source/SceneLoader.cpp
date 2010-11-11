@@ -1010,6 +1010,8 @@ void mapMaterialRoot(Node* node)
 				node->material = *itM;
 		}
 	}
+	else
+		endError("Error parsing root: material not defined");
 }
 
 void mapTextureRoot(Node* node)
@@ -1023,6 +1025,8 @@ void mapTextureRoot(Node* node)
 				node->texture = *itT;
 		}
 	}
+	else
+		endError("Error parsing root: texture not defined or not clear");
 }
 
 void mapMaterials(Node* node)
@@ -1133,9 +1137,9 @@ Node* loadScene(Scene* s)
 			exit(-1);
 		}
 		mapCompoundObjects(root);
-		createTree(root, 0);
 		mapMaterialRoot(root);
 		mapTextureRoot(root);
+		createTree(root, 0);
 		mapMaterials(root);
 		mapTextures(root);
 		mapTransformations(root, 1);
