@@ -339,8 +339,7 @@ void processLights_light(TiXmlElement* light)
 {
 	const char* id = light->Attribute("id");
 	const char* enabled = light->Attribute("enabled");
-
-	if(id != NULL && enabled != NULL && (strcmp(enabled, "1") == 0 || strcmp(enabled, "0")))
+	if(id != NULL && enabled != NULL && (strcmp(enabled, "1") == 0 || strcmp(enabled, "0") == 0))
 	{
 		string id2 = light->Attribute("id");
 		vector<Light*>::iterator it;
@@ -1068,7 +1067,7 @@ void mapCompoundObjects(Node* node)
 Node* loadScene(Scene* s)
 {
 	// Read string from file
-	TiXmlDocument doc( "bridge.xml" );
+	TiXmlDocument doc( "GhostTrain.sgx" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
