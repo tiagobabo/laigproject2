@@ -1094,14 +1094,15 @@ void mapCompoundObjects(Node* node)
 
 Node* loadScene(Scene* s)
 {
+	const char* filename = "bridge.xml";
 	// Read string from file
-	TiXmlDocument doc( "robot.xml" );
+	TiXmlDocument doc(filename);
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
 	{
 		char temp[255];
-		sprintf(temp, "Could not load test file 'demotest.xml'. Error='%s'. Exiting.\n", doc.ErrorDesc() );
+		sprintf(temp, "Could not load test file '%s'. Error='%s'. Exiting.\n",filename ,doc.ErrorDesc() );
 		endError(temp);
 	}
 

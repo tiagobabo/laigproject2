@@ -669,7 +669,7 @@
 			<geometry type="rectangle" x1="-75.0" x2="75" y1="-25.0" y2="25.0" />
 		</object>
 
-		<object id="stationroofFront" type="simple">
+		<!--<object id="stationroofFront" type="simple">
 				<material id="null"/>	
 				<texture id="telha"/>
 				<transformations>
@@ -677,9 +677,9 @@
 					<rotation axis="x" angle="-65.0"/>
 				</transformations>
 				<geometry type="trapezoid" base="160.0" top="220.0" height="60.0" />
-		</object>
+		</object>-->
 		
-		<object id="stationroofBack" type="simple">
+		<!--<object id="stationroofBack" type="simple">
 				<material id="null"/>	
 				<texture id="telha"/>
 				<transformations>
@@ -688,7 +688,7 @@
 					<rotation axis="y" angle="180.0"/>
 				</transformations>
 				<geometry type="trapezoid" base="160.0" top="220.0" height="60.0" />
-		</object>
+		</object>-->
 
 		<object id="door" type="simple">
 			<material id="null"/>	
