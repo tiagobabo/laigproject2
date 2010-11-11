@@ -969,15 +969,6 @@ void mapTextures(Node* node)
 	}
 }
 
-void mapTransformations(Node* parent, Node* child)
-{
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMultMatrixf(&parent->transformations[0][0]);
-	glMultMatrixf(&child->transformations[0][0]);
-	glGetFloatv(GL_MODELVIEW_MATRIX, &child->transformations[0][0]);
-}
-
 void mapMaterials(Node* node)
 {
 	vector<Node*>::iterator it;
@@ -999,30 +990,47 @@ void mapMaterials(Node* node)
 	}
 }
 
+void mapTransformations(Node* node, int root)
+{
+	glMatrixMode(GL_MODELVIEW);
+	vector<Node*>::iterator it;
+	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
+	{
+		if(root == 1)
+			glLoadIdentity();
+		glPushMatrix();
+			glMultMatrixf(&node->transformations[0][0]);
+			glMultMatrixf(&(*it)->transformations[0][0]);
+			glGetFloatv(GL_MODELVIEW_MATRIX, &(*it)->transformations[0][0]);
+		glPopMatrix();
+		mapTransformations(*it, 0);
+	}
+	if(node->getType() == "simple")
+	{
+		glPushMatrix();
+			glMultMatrixf(&node->transformations[0][0]);
+			glGetFloatv(GL_MODELVIEW_MATRIX, &node->transformations[0][0]);
+		glPopMatrix();
+	}
+}
+
 void mapCompoundObjects()
 {
-	vector<CompoundObject*>::iterator it3;
-	for(it3=compoundobjects.begin() ; it3 < compoundobjects.end(); it3++)
+	for(int i = 0; i < compoundobjects.size() ; i++)
 	{
-		vector<string> s = (*it3)->ids;
+		vector<string> s = compoundobjects.at(i)->ids;
 		while(!s.empty())
 		{
 			string id = s.back();
-			vector<CompoundObject*>::iterator it2;
-			for(it2=compoundobjects.begin() ; it2 < compoundobjects.end(); it2++)
-				if((*it2)->getID() == id)
-				{
-					mapTransformations((*it3), (*it2));
-					(*it3)->nodes.push_back((*it2));
-				}
-
+			for(int j = 0; j < compoundobjects.size(); j++)
+				if(compoundobjects.at(j)->getID() == id)
+					compoundobjects.at(i)->nodes.push_back(compoundobjects.at(j));
 			vector<Object*>::iterator it;
 			for(it=objects.begin() ; it < objects.end(); it++)
 				if((*it)->getID() == id)
 				{
 					Node* temp = (*it)->clone();
-					mapTransformations((*it3), temp);
-					(*it3)->nodes.push_back(temp);
+					compoundobjects.at(i)->nodes.push_back(temp);
 				}
 			s.pop_back();
 		}
@@ -1031,10 +1039,8 @@ void mapCompoundObjects()
 
 Node* loadScene(Scene* s)
 {
-
 	// Read string from file
-
-	TiXmlDocument doc( "GhostTrain.sgx" );
+	TiXmlDocument doc( "robot.xml" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
@@ -1069,6 +1075,8 @@ Node* loadScene(Scene* s)
 		createTree(root);
 		mapMaterials(root);
 		mapTextures(root);
+
+		mapTransformations(root, 1);
 	}
 	*s = scene;
 	return root;

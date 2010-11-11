@@ -4,711 +4,73 @@
 
 	<view near="2.0" far="2000.0" axisscale="0.5">
 		<translation x="0.0" z="-300.0" y="0.0"/>
-		<rotation axis="x" angle="25.0"/>
-		<rotation axis="y" angle="45.0"/>
 	</view>
 
 	<illumination doublesided="1" local="1" >
-		<ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+		<ambient r="0.4" g="0.4" b="0.4" a="1.0" />
 		<background r="0.0" g="0.0" b="0.0" a="1.0" />
-
 		<lights>
-			<light id="SOL" enabled="1" >
+			<light id="luzprincipal" enabled="1" >
 				<position x="0.0" y="100.0" z="100.0" w="1.0" />
-				<ambient r="0.5" g="0.5" b="0.1" a="1.0" />
-				<diffuse r="1.0" g="1.0" b="0.5" a="1.0" />
-				<specular r="20.0" g="20.0" b="20.0" a="1.0" />
-			</light>
-
-			<light id="LUA" enabled="0" >
-				<position x="50.0" y="100.0" z="100.0" w="1.0" />
-				<ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+				<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
 				<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 				<specular r="20.0" g="20.0" b="20.0" a="1.0" />
 			</light>
-			
 		</lights>
 	</illumination>
 	<textures>
-		<texture id="door" file="door.bmp" length_s="20.0" length_t="40.0"/>
-		<texture id="wall" file="wall.bmp" length_s="5.0" length_t="5.0"/>
-		<texture id="dirt" file="dirt.bmp" length_s="25.0" length_t="25.0"/>
-		<texture id="rocks" file="stoneTile.bmp" length_s="25.0" length_t="25.0"/>
-		<texture id="telha" file="telha.bmp" length_s="10.0" length_t="10.0"/>
-		<texture id="bark" file="bark.bmp" length_s="1.0" length_t="1.0"/>
-		<texture id="sign" file="sign.bmp" length_s="20.0" length_t="20.0"/>
-		<texture id="metal" file="metal.bmp" length_s="20.0" length_t="20.0"/>
-		<texture id="tracks" file="tracks.bmp" length_s="50.0" length_t="50.0"/>
-		<texture id="trackrocks" file="trackrocks.bmp" length_s="20.0" length_t="20.0"/>
-		<texture id="leaves" file="Leaves.bmp" length_s="5.0" length_t="5.0"/>
+	<-- ainda nao foi implementada as texturas no desenho dos objectos -->	
 	</textures>
 	<materials>
-		<material id="white">
+		<material id="rio">
 			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
-			<ambient  r="1.0" g="1.0" b="1.0" a="1.0"/>
-			<diffuse r="1.0" g="1.0" b="1.0" a="1.0"/>
-			<specular r="0.1" g="0.1" b="0.1" a="1.0"/>
-			<shininess value="10" />
+			<ambient  r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<diffuse r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<specular r="0.0" g="0.0" b="1.0" a="1.0"/>
+			<shininess value="128" />
 		</material> 
-		<material id="metalMat">
+		<material id="metal">
 			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
 			<ambient  r="0.5" g="0.5" b="0.5" a="1.0"/>
 			<diffuse r="0.5" g="0.5" b="0.5" a="1.0"/>
 			<specular r="1.0" g="1.0" b="1.0" a="1.0"/>
 			<shininess value="128" />
 		</material> 
-		<material id="ghost">
-			<emission r="0.0" g="0.0" b="0.0" a="0.5"/>
-			<ambient  r="0.5" g="0.5" b="0.5" a="0.5"/>
-			<diffuse r="0.5" g="0.5" b="0.5" a="0.5"/>
-			<specular r="1.0" g="1.0" b="1.0" a="0.5"/>
-			<shininess value="128" />
-		</material> 
-		<material id="lightMat">
-			<emission r="0.8" g="0.8" b="0.6" a="1.0"/>
-			<ambient r="1.0" g="1.0" b="1.0" a="1.0"/>
-			<diffuse r="1.0" g="1.0" b="1.0" a="1.0"/>
-			<specular r="1.0" g="1.0" b="1.0" a="1.0"/>
-			<shininess value="128" />
-		</material> 
-		<material id="blackMat">
+		<material id="preto">
 			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
-			<ambient r="0.1" g="0.1" b="0.1" a="1.0"/>
-			<diffuse r="0.1" g="0.1" b="0.1" a="1.0"/>
-			<specular r="0.1" g="0.1" b="0.1" a="1.0"/>
+			<ambient  r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<diffuse r="0.0" g="0.0" b="0.0" a="1.0"/>
+			<specular r="0.0" g="0.0" b="0.0" a="1.0"/>
 			<shininess value="128" />
-		</material>
+		</material> 
 		<material id="green">
 			<emission r="0.0" g="0.0" b="0.0" a="1.0"/>
 			<ambient r="0.1" g="0.8" b="0.1" a="1.0"/>
 			<diffuse r="0.1" g="0.8" b="0.1" a="1.0"/>
 			<specular r="0.1" g="0.1" b="0.1" a="1.0"/>
-			<shininess value="10" />
+			<shininess value="128" />
 		</material> 
 	</materials>
 
 <!-- SCENE -->	
 	<objects>
-		<object id="trainstation" type="compound">
+		<object id="cena" type="compound">
 			<transformations>
 			</transformations>
-			<material id="white"/>
-			<texture id="null"/>
+			<material id="preto"/>
+			<texture id="clear"/>
 			<children>
-				<objectref id="floor"/>
-				<objectref id="trainTracks"/>
-				<objectref id="stationFloor"/>
-				<objectref id="stationPost"/>
-				<objectref id="station"/>
-				<objectref id="garbageCan"/>
-				<objectref id="train"/>
-				<objectref id="bushes"/>
+				<objectref id="rio"/>
 			</children>
 		</object>
 		
-<!-- SIMPLE TRAIN -->	
-		<object id="train" type="compound">
-				<transformations>
-					<translation x="0.0" y="23.0" z="50.0" />
-					<rotation axis="y" angle="90.0"/>
-				</transformations>
-				<material id="ghost"/>
-				<texture id="clear"/> 
-				<children>
-					<objectref id="wheelSet"/>
-					<objectref id="case"/>
-					<objectref id="chimney"/>
-				</children>
-		</object>
-		
-		<!-- CHIMNEY TRAIN -->
-		<object id="chimney" type="compound">
-				<transformations>
-					<translation x="0.0" y="40.0" z="15.0" />
-					<rotation axis="x" angle="-90.0"/>
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="chimneyCyl"/>
-					<objectref id="chim1"/>
-					<objectref id="chim2"/>
-				</children>
-		</object>
-		
-		<object id="chimneyCyl" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-			</transformations>
-			<geometry type="cylinder" base="2.0" top="3.0" height="12.0" slices="20" stacks="20" />
-		</object>
-		
-		<object id="chim1" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="12.0" />
-			</transformations>
-			<geometry type="cylinder" base="3.0" top="8.0" height="4.0" slices="20" stacks="20" />
-		</object>
-		
-		<object id="chim2" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="16.0" />
-			</transformations>
-			<geometry type="cylinder" base="8.0" top="3.0" height="4.0" slices="20" stacks="20" />
-		</object>
-		
-		<!-- end CHIMNEY TRAIN -->
-		
-		<!-- CASE TRAIN -->
-		<object id="case" type="compound">
-				<transformations>
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="caseBase"/>
-					<objectref id="caseCylinder"/>
-					<objectref id="nose"/>
-				</children>
-		</object>
-		
-		<object id="nose" type="compound">
-				<transformations>
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="tri1"/>
-					<objectref id="tri2"/>
-				</children>
-		</object>
-		
-		<object id="tri1" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="00.0" z="-40.0" />
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<geometry type="triangle" x1="0.0" y1="0.0" z1="0.0"
-                                      x2="-20.0" y2="-40.0" z2="0.0"
-                                      x3="20.0" y3="-40.0" z3="0.0" /> 
-		</object>
-		
-		<object id="tri2" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="-40.0" />
-				<rotation axis="x" angle="-135.0"/>
-			</transformations>
-			<geometry type="triangle" x1="0.0" y1="0.0" z1="0.0"
-                                      x2="-20.0" y2="-60.0" z2="0.0"
-                                      x3="20.0" y3="-60.0" z3="0.0" /> 
-		</object>
-		
-		<object id="caseBase" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="40.0" />
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-20.0" x2="20.0" y1="-60.0" y2="40.0" />
-		</object>
-		
-		<object id="caseCylinder" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="20.0" z="0.0" />
-			</transformations>
-			<geometry type="cylinder" base="20.0" top="20.0" height="80.0" slices="20" stacks="20" />
-		</object>
-		<!-- end CASE TRAIN -->	
-		
-		<!-- WHEELS TRAIN -->				
-		<object id="wheelSet" type="compound">
-				<transformations>
-					<translation x="0.0" y="0.0" z="0.0" />
-				</transformations>
-				<material id="blackMat"/>
-				<texture id="metal"/>
-				<children>
-					<objectref id="wheel1"/>
-					<objectref id="wheel2"/>
-					<objectref id="wheel3"/>
-					<objectref id="wheel4"/>
-				</children>
-		</object>
-			
-		<object id="wheel1" type="compound">
-				<transformations>
-					<translation x="20.0" y="0.0" z="0.0" />
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="basicwheel"/>
-				</children>
-		</object>
-		
-		<object id="wheel2" type="compound">
-				<transformations>
-					<translation x="-20.0" y="0.0" z="0.0" />
-					<rotation axis="y" angle="180.0"/>
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="basicwheel"/>
-				</children>
-		</object>
-		
-		<object id="wheel3" type="compound">
-				<transformations>
-					<translation x="20.0" y="0.0" z="80.0" />
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="basicwheel"/>
-				</children>
-		</object>
-		
-		<object id="wheel4" type="compound">
-				<transformations>
-					<translation x="-20.0" y="0.0" z="80.0" />
-					<rotation axis="y" angle="180.0"/>
-				</transformations>
-				<material id="null"/>
-				<texture id="null"/>
-				<children>
-					<objectref id="basicwheel"/>
-				</children>
-		</object>
-		
-		<object id="basicwheel" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<rotation axis="y" angle="90.0"/>
-			</transformations>
-			<geometry type="cylinder" base="12.0" top="8.0" height="2.0" slices="20" stacks="20" />
-		</object>
-		<!-- end WHEELS TRAIN -->	
-<!-- end SIMPLE TRAIN -->	
-		
-<!-- MISC ITEMS -->	
-		<object id="bushes" type="compound">
-			<transformations>
-				<translation x="-120.0" y="0.0" z="120.0" />
-			</transformations>
-			<material id="green"/>	
-			<texture id="leaves"/>
-			<children>
-				<objectref id="bush1"/>
-				<objectref id="bush2"/>
-				<objectref id="bush3"/>
-				<objectref id="bush4"/>
-			</children>
-		</object>
-		
-		<object id="bush1" type="compound">
-			<transformations>
-				<translation x="0.0" y="10.0" z="0.0" />
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="Simplebush"/>
-			</children>
-		</object>
-		
-		<object id="bush2" type="compound">
-			<transformations>
-				<translation x="-10.0" y="7.0" z="-10.0" />
-				<scale x="0.7" y="0.7" z="0.7" />
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="Simplebush"/>
-			</children>
-		</object>
-		
-		<object id="bush3" type="compound">
-			<transformations>
-				<translation x="12.0" y="4.0" z="5.0" />
-				<scale x="0.4" y="0.4" z="0.4" />
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="Simplebush"/>
-			</children>
-		</object>
-		
-		<object id="bush4" type="compound">
-			<transformations>
-				<translation x="-3.0" y="8.0" z="7.0" />
-				<scale x="0.8" y="0.8" z="0.8" />
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="Simplebush"/>
-			</children>
-		</object>
-		
-		<object id="Simplebush" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-			</transformations>
-			<geometry type="sphere" radius="12.0" slices="7" stacks="7" />
-		</object>
-		
-		<object id="garbageCan" type="compound">
-			<transformations>
-				<translation x="-90.0" y="30.0" z="0.0" />
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<material id="metalMat"/>	
-			<texture id="metal"/>
-			<children>
-				<objectref id="can"/>
-				<objectref id="ring"/>
-				<objectref id="bottom"/>
-			</children>
-		</object>
-		
-		<object id="can" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-			</transformations>
-			<geometry type="cylinder" base="4.0" top="4.0" height="10.0" slices="20" stacks="20" />
-		</object>
-		
-		<object id="ring" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="10.0" />
-			</transformations>
-			<geometry type="disk" inner="3.0" outer="4.0" slices="20" loops="5" />
-		</object>
-		
-		<object id="bottom" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="0.1" />
-			</transformations>
-			<geometry type="disk" inner="0.0" outer="4.0" slices="20" loops="5" />
-		</object>
-<!-- end MISC ITEMS -->
-
-<!-- TRAINTRACKS -->
-	<object id="trainTracks" type="compound">
-			<transformations>
-				<translation x="-150.0" y="10.0" z="50.0" />
-				<rotation axis="y" angle="90.0"/>
-			</transformations>
-			<material id="metalMat"/>	
-			<texture id="metal"/>
-			<children>
-				<objectref id="rightTrack"/>
-				<objectref id="leftTrack"/>
-				<objectref id="dirtHill"/>
-			</children>
-		</object>
-		
-	<!-- TRAINTRACKS DIRT-->	
-	<object id="dirtHill" type="compound">
-			<transformations>
-				<translation x="0.0" y="-1.0" z="150.0" />
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<material id="white"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="rightDirt"/>
-				<objectref id="leftDirt"/>
-				<objectref id="dirtTop"/>
-			</children>
-		</object>
-		
-		<object id="rightDirt" type="simple">
-			<material id="null"/>	
-			<texture id="trackrocks"/>
-			<transformations>
-				<translation x="-25.0" y="0.0" z="0.0" />
-				<rotation axis="y" angle="-35.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-16.0" x2="0.0" y1="-150.0" y2="150.0" />
-		</object>
-		
-		<object id="leftDirt" type="simple">
-			<material id="null"/>	
-			<texture id="trackrocks"/>
-			<transformations>
-				<translation x="25.0" y="0.0" z="0.0" />
-				<rotation axis="y" angle="35.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="16.0" x2="0.0" y1="-150.0" y2="150.0" />
-		</object>
-		
-		<object id="dirtTop" type="simple">
-			<material id="null"/>	
-			<texture id="tracks"/>
-			<transformations>
-			</transformations>
-			<geometry type="rectangle" x1="-25.0" x2="25.0" y1="-150.0" y2="150.0" />
-		</object>
-	<!-- end TRAINTRACKS DIRT-->	
-	
-		<object id="rightTrack" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="20.0" y="0.0" z="0.0" />
-				<rotation axis="z" angle="45.0"/>
-			</transformations>
-			<geometry type="cylinder" base="1.0" top="1.0" height="300.0" slices="4" stacks="10" />
-		</object>
-		
-		<object id="leftTrack" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="-20.0" y="0.0" z="0.0" />
-				<rotation axis="z" angle="45.0"/>
-			</transformations>
-			<geometry type="cylinder" base="1.0" top="1.0" height="300.0" slices="4" stacks="10" />
-		</object>
-<!-- end TRAINTRACKS -->
-		
-<!-- TRAINSTATION POST -->
-		<object id="stationPost" type="compound">
-			<transformations>
-				<translation x="-120.0" y="0.0" z="-20.0" />	
-				<rotation axis="y" angle="30.0"/>
-				<translation x="-0.0" y="90.0" z="2.0" />
-			</transformations>
-			<material id="white"/>	
-			<texture id="bark"/>
-			<children>
-				<objectref id="postPost"/>
-				<objectref id="postSign"/>
-				<objectref id="lightBulb"/>
-				<objectref id="lightBulbLamp"/>
-			</children>
-		</object>
-		
-		<object id="postPost" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="-90.0" z="0.0" />
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<geometry type="cylinder" base="1.0" top="1.0" height="80.0" slices="10" stacks="10" />
-		</object>
-		
-		<object id="postSign" type="simple">
-			<material id="null"/>	
-			<texture id="sign"/>
-			<transformations>
-			</transformations>
-			<geometry type="rectangle" x1="-10.0" x2="10.0" y1="-10.0" y2="10.0" />
-		</object>
-		
-		<object id="lightBulb" type="simple">
-			<material id="lightMat"/>	
+<!-- RIO -->	
+		<object id="rio" type="simple">
+			<material id="rio"/>	
 			<texture id="clear"/>
 			<transformations>
-				<translation x="0.0" y="15.0" z="0.0" />
-				<rotation axis="x" angle="30.0"/>	
-				<translation x="0.0" y="0.0" z="4.0" />
 			</transformations>
-			<geometry type="sphere" radius="1.0" slices="5" stacks="5" />
+			<geometry type="rectangle" x1="-20" y1="0" x2="20" y2="100" />
 		</object>
-		
-		<object id="lightBulbLamp" type="simple">
-			<material id="blackMat"/>	
-			<texture id="metal"/>
-			<transformations>
-				<translation x="0.0" y="15.0" z="0.0" />
-				<rotation axis="x" angle="30.0"/>	
-			</transformations>
-			<geometry type="cylinder" base="3.0" top="5.0" height="5.0" slices="10" stacks="10" />
-		</object>
-<!-- end TRAINSTATION POST -->		
-
-<!-- TRAINSTATION FLOOR -->
-		<object id="stationFloor" type="compound">
-			<transformations>
-				<translation x="0.0" y="0.0" z="-40.0" />	
-			</transformations>
-			<material id="white"/>	
-			<texture id="rocks"/>
-			<children>
-				<objectref id="sFloor"/>
-				<objectref id="sFloorFront"/>
-				<objectref id="sFloorLeft"/>
-				<objectref id="sFloorRight"/>
-			</children>
-		</object>
-
-		<object id="sFloor" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="30.0" z="0.0" />	
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-100.0" x2="100.0" y1="-50.0" y2="50.0" />
-		</object>
-
-		<object id="sFloorLeft" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="-100.0" y="15.0" z="0.0" />	
-				<rotation axis="y" angle="-90.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-50.0" x2="50.0" y1="-15.0" y2="15.0" />
-		</object>
-
-		<object id="sFloorRight" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="100.0" y="15.0" z="0.0" />	
-				<rotation axis="y" angle="90.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-50.0" x2="50.0" y1="-15.0" y2="15.0" />
-		</object>
-
-		<object id="sFloorFront" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>	
-				<translation x="0.0" y="15.0" z="50.0" />	
-			</transformations>
-			<geometry type="rectangle" x1="-100.0" x2="100.0" y1="-15.0" y2="15.0" />
-		</object>
-<!-- end TRAINSTATION FLOOR -->
-
-<!-- TRAINSTATION HOUSE -->
-	<object id="station" type="compound">
-			<transformations>
-				<translation x="0.0" y="55.0" z="-60.0" />	
-			</transformations>
-			<material id="white"/>	
-			<texture id="wall"/>
-			<children>
-				<objectref id="stationwall"/>
-				<objectref id="stationwallLeft"/>
-				<objectref id="stationwallRight"/>
-				<objectref id="stationroofFront"/>
-				<objectref id="stationroofBack"/>
-				<objectref id="door"/>			
-			</children>
-		</object>
-		
-	<!-- TRAINSTATION HOUSE side walls-->
-		
-		<object id="stationwallLeft" type="compound">
-			<transformations>
-				<translation x="75.0" y="0.0" z="0.0" />	
-				<rotation axis="y" angle="90.0"/>
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="stationSideWall"/>
-			</children>
-		</object>
-		
-		<object id="stationwallRight" type="compound">
-			<transformations>
-				<translation x="-75.0" y="0.0" z="0.0" />	
-				<rotation axis="y" angle="90.0"/>
-			</transformations>
-			<material id="null"/>	
-			<texture id="null"/>
-			<children>
-				<objectref id="stationSideWall"/>
-			</children>
-		</object>
-		
-		<object id="stationSideWall" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-			</transformations>
-			<geometry type="rectangle" x1="-30.0" x2="30.0" y1="-25.0" y2="25.0" />
-		</object>
-		
-	<!-- end TRAINSTATION HOUSE side walls-->
-
-		<object id="stationwall" type="simple">
-			<material id="null"/>	
-			<texture id="null"/>
-			<transformations>
-				<translation x="0.0" y="0.0" z="30.0" />	
-			</transformations>
-			<geometry type="rectangle" x1="-75.0" x2="75" y1="-25.0" y2="25.0" />
-		</object>
-
-		<object id="stationroofFront" type="simple">
-				<material id="null"/>	
-				<texture id="telha"/>
-				<transformations>
-					<translation x="0.0" y="30.0" z="20.0" />	
-					<rotation axis="x" angle="-65.0"/>
-				</transformations>
-				<geometry type="trapezoid" base="160.0" top="220.0" height="60.0" />
-		</object>
-		
-		<object id="stationroofBack" type="simple">
-				<material id="null"/>	
-				<texture id="telha"/>
-				<transformations>
-					<translation x="0.0" y="30.0" z="-20.0" />	
-					<rotation axis="x" angle="65.0"/>
-					<rotation axis="y" angle="180.0"/>
-				</transformations>
-				<geometry type="trapezoid" base="160.0" top="220.0" height="60.0" />
-		</object>
-
-		<object id="door" type="simple">
-			<material id="null"/>	
-			<texture id="door"/>
-			<transformations>
-				<translation x="-45.0" y="-5.0" z="30.5" />	
-			</transformations>
-			<geometry type="rectangle" x1="-10.0" x2="10.0" y1="-20.0" y2="20.0" />
-		</object>
-
-<!-- end TRAINSTATION HOUSE -->
-
-		<object id="floor" type="simple">
-			<material id="white"/>	
-			<texture id="dirt"/>
-			<transformations>
-				<rotation axis="x" angle="-90.0"/>
-			</transformations>
-			<geometry type="rectangle" x1="-150.0" x2="150.0" y1="-150.0" y2="150.0" />
-		</object>
-
 	</objects>
 </sgx>
