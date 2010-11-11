@@ -8,6 +8,7 @@ void loadMaterial(Material* m)
 	glMaterialfv(GL_FRONT, GL_SPECULAR,  m->specular);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE,   m->diffuse);
 	glMaterialfv(GL_FRONT, GL_AMBIENT,   m->ambient);
+	glMaterialfv(GL_FRONT, GL_EMISSION,   m->emission);
 }
 
 //constructores das classes

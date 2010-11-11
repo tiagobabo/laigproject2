@@ -111,9 +111,9 @@ void display(void)
 	//inicializacoes da matriz de transformacoes geometricas
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
-	glMultMatrixf(&cena.m[0][0]);
 	// ...decorrente da utilizacao do botao de afastamento
-	glTranslatef( obj_pos[0], obj_pos[1], -obj_pos[2] );    
+	glTranslatef( obj_pos[0], obj_pos[1], -obj_pos[2]);    
+	glMultMatrixf(&cena.m[0][0]);
 	// aplica efeito do botao de rotacao
 	glMultMatrixf( view_rotate );
 
@@ -133,10 +133,6 @@ void display(void)
 	gluQuadricOrientation(glQ, GLU_OUTSIDE);
 
 
-//	//desenhar a esfera no centro
-	glColor3f(1.0,1.0,1.0);		
-	gluSphere(glQ, orig_radius, orig_slices, orig_stacks);
-
 //  aumentar e diminuir a atenuação
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  light0_kc);
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,    light0_kl);
@@ -146,39 +142,7 @@ void display(void)
 	// falta declarar a cor
 	// desenhar o objecto
 
-	// cilindro representativo do eixo X
-	glColor3f(1.0,0.0,0.0);		// vermelho
-	glPushMatrix();
-	glRotated(90.0, 0.0,1.0,0.0 );
-	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
-		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
 	glPopMatrix();
-
-	// cilindro representativo do eixo Y
-	glColor3f(0.0,1.0,0.0);		// verde
-	glPushMatrix();
-	glRotated(-90.0, 1.0,0.0,0.0 );
-	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
-		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
-	glPopMatrix();
-	
-	// cilindro representativo do eixo Z
-	glColor3f(0.0,0.0,1.0);		// azul
-	glPushMatrix();
-	// nao necessita rotacao... glRotated(...);
-	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
-		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
-	glPopMatrix();
-
-	// inibicao de atribuicao directa de cores
-	glDisable(GL_COLOR_MATERIAL);
-
-
-	// define caracteristicas de cor do material do plano e da caixa
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat1_shininess);
-	glMaterialfv(GL_FRONT, GL_SPECULAR,  mat1_specular);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat1_diffuse);
-	glMaterialfv(GL_FRONT, GL_AMBIENT,   mat1_ambient);
 
 	raiz->draw();
 	// swapping the buffers causes the rendering above to be shown

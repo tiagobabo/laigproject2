@@ -169,6 +169,7 @@ public:
 	void addNode(Node* node);
 	void draw();
 	Node* clone() { return new CompoundObject(*this); }
+	CompoundObject* clone2() { return new CompoundObject(*this); }
 
 };
 
