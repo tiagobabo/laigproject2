@@ -934,19 +934,27 @@ void processObjects(void)
 			cout << "objects not found\n" << endl;
 }
 
-void createTree(Node* node)
+void createTree(Node* node, int i)
 {
-	cout << "entrei" << node->nodes.size() << endl;
 	vector<Node*>::iterator it;
 	for(it=node->nodes.begin() ; it < node->nodes.end(); it++)
 	{
 		if((*it)->getType() == "compound")
 		{
-			cout << (*it)->getID() << endl;
-			createTree((*it));
+			int w;
+			for(w =0; w < i; w++)
+				cout << " ";
+			w++;
+			cout << (*it)->getID() << " " << (*it) << endl;
+			createTree((*it),w);
 		}
 		else
-			cout << "  " << (*it)->getID() << endl;
+		{
+			int w;
+			for(w =0; w < i; w++)
+				cout << " ";
+			cout << "OS: " << (*it)->getID() << " " << (*it) << endl;
+		}
 	}
 }
 
@@ -1014,26 +1022,25 @@ void mapTransformations(Node* node, int root)
 	}
 }
 
-void mapCompoundObjects()
+void mapCompoundObjects(Node* node)
 {
-	for(int i = 0; i < compoundobjects.size() ; i++)
+	for(int i = 0; i < node->ids.size() ; i++)
 	{
-		vector<string> s = compoundobjects.at(i)->ids;
-		while(!s.empty())
-		{
-			string id = s.back();
-			for(int j = 0; j < compoundobjects.size(); j++)
-				if(compoundobjects.at(j)->getID() == id)
-					compoundobjects.at(i)->nodes.push_back(compoundobjects.at(j));
-			vector<Object*>::iterator it;
-			for(it=objects.begin() ; it < objects.end(); it++)
-				if((*it)->getID() == id)
-				{
-					Node* temp = (*it)->clone();
-					compoundobjects.at(i)->nodes.push_back(temp);
-				}
-			s.pop_back();
-		}
+		string id = node->ids.at(i);
+		for(int j = 0; j < compoundobjects.size(); j++)
+			if(compoundobjects.at(j)->getID() == id)
+			{
+				Node* n = compoundobjects.at(j)->clone();
+				node->nodes.push_back(n);
+				mapCompoundObjects(n);
+			}
+		vector<Object*>::iterator it;
+		for(it=objects.begin() ; it < objects.end(); it++)
+			if((*it)->getID() == id)
+			{
+				Node* temp = (*it)->clone();
+				node->nodes.push_back(temp);
+			}
 	}
 }
 
@@ -1071,11 +1078,11 @@ Node* loadScene(Scene* s)
 		processMaterial();
 		processObjects();
 
-		mapCompoundObjects();
-		createTree(root);
+		mapCompoundObjects(root);
+		createTree(root, 0);
+
 		mapMaterials(root);
 		mapTextures(root);
-
 		mapTransformations(root, 1);
 	}
 	*s = scene;
