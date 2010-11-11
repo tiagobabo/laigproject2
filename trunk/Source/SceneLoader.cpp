@@ -793,7 +793,7 @@ void processObject_geometry(TiXmlElement* object, string typeObject, string id)
 		else if(strcmp(type,"disk")==0)
 			processObject_disk(object, typeObject, id);
 		else
-			endError("Error parsing Object: invalid type.");
+			endError("Error parsing Object: invalid geometry type.");
 	}
 	else
 		endError("Error parsing Object type.");
@@ -1098,7 +1098,7 @@ void mapCompoundObjects(Node* node)
 
 Node* loadScene(Scene* s)
 {
-	const char* filename = "bridge.xml";
+	const char* filename = "office.sgx";
 	// Read string from file
 	TiXmlDocument doc(filename);
 	bool loadOkay = doc.LoadFile();

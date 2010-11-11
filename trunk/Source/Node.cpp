@@ -8,12 +8,12 @@ int exists(Texture* text)
 	for(int i = 0; i < textures.size(); i++)
 	{
 		if(textures.at(i)->file == text->file)
-			return i;
+			return i+1;
 	}
 	char *FileExt = const_cast<char*> ( text->file.c_str());
 	pixmap.readBMPFile(FileExt);
-	pixmap.setTexture(textures.size());
 	textures.push_back(text);
+	pixmap.setTexture(textures.size());
 	return textures.size();
 }
 
@@ -61,12 +61,15 @@ void calcNormal(float v[3][3], float out[3])				// Calculates Normal For A Quad 
 void loadMaterial(Material* m)
 {
 	// define caracteristicas de cor do material do plano e da caixa
-	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if(m->specular[3] < 1.0 || m->diffuse[3] < 1.0 || m->ambient[3] < 1.0 || m->emission[3] < 1.0)
+		glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glMaterialfv(GL_FRONT, GL_SHININESS, &m->shininess);
 	glMaterialfv(GL_FRONT, GL_SPECULAR,  m->specular);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE,   m->diffuse);
 	glMaterialfv(GL_FRONT, GL_AMBIENT,   m->ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION,   m->emission);
+	if(m->specular[3] < 1.0 || m->diffuse[3] < 1.0 || m->ambient[3] < 1.0 || m->emission[3] < 1.0)
+		glDisable(GL_BLEND);
 }
 
 //constructores das classes
@@ -214,7 +217,7 @@ void Rectangle::draw()
 {
 	float s=1;
 	float t=1;
-	if(this->texture !=  NULL&& this->texture->id != "clear"){
+	if(this->texture !=  NULL && this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
 		s=this->texture->length_s;
