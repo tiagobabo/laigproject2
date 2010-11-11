@@ -633,6 +633,7 @@ void processMaterial(void)
 		}
 		else
 			endError("Error materials not found.");
+
 }
 
 void processObject_transformations(TiXmlElement* transformations, string type)
@@ -980,9 +981,10 @@ void mapTextures(Node* node)
 		{
 			vector<Texture*>::iterator itM;
 			for(itM = scene.textures.begin(); itM < scene.textures.end(); itM++)
+			{
 				if((*itM)->id == (*it)->getTextureId())
 					(*it)->texture = *itM;
-
+			}
 			if((*it)->texture == NULL)
 				if((*it)->getTextureId() != "clear"){
 					char temp[255];
@@ -994,6 +996,32 @@ void mapTextures(Node* node)
 			(*it)->texture = node->texture;
 
 		if((*it)->getType() == "compound") mapTextures(*it);
+	}
+}
+
+void mapMaterialRoot(Node* node)
+{
+	if(node->getMaterialId() != "null")
+	{
+		vector<Material*>::iterator itM;
+		for(itM = scene.materials.begin(); itM < scene.materials.end(); itM++)
+		{
+			if((*itM)->id == node->getMaterialId())
+				node->material = *itM;
+		}
+	}
+}
+
+void mapTextureRoot(Node* node)
+{
+	if(node->getTextureId() != "null")
+	{
+		vector<Texture*>::iterator itT;
+		for(itT = scene.textures.begin(); itT < scene.textures.end(); itT++)
+		{
+			if((*itT)->id == node->getTextureId())
+				node->texture = *itT;
+		}
 	}
 }
 
@@ -1067,7 +1095,7 @@ void mapCompoundObjects(Node* node)
 Node* loadScene(Scene* s)
 {
 	// Read string from file
-	TiXmlDocument doc( "GhostTrain.sgx" );
+	TiXmlDocument doc( "robot.xml" );
 	bool loadOkay = doc.LoadFile();
 
 	if ( !loadOkay )
@@ -1105,11 +1133,13 @@ Node* loadScene(Scene* s)
 		}
 		mapCompoundObjects(root);
 		createTree(root, 0);
-
+		mapMaterialRoot(root);
+		mapTextureRoot(root);
 		mapMaterials(root);
 		mapTextures(root);
 		mapTransformations(root, 1);
 	}
+	system("pause");
 	*s = scene;
 	return root;
 }
