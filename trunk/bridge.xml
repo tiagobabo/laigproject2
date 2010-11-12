@@ -74,7 +74,7 @@
 		<object id="cena" type="compound">
 			<transformations>
 			</transformations>
-			<material id="preto"/>
+			<material id="white"/>
 			<texture id="clear"/>
 			<children>
 				<objectref id="rio"/>
