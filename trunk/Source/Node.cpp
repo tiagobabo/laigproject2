@@ -206,8 +206,8 @@ void Triangle::draw()
 	glBegin(GL_POLYGON);
 	glNormal3d(normal[0],normal[1],normal[2]);
 		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, this->z1);
-		glTexCoord2f(s/(this->x2-this->x1),0.0); glVertex3d(this->x2, this->y2, this->z2);
-		glTexCoord2f(s/(2*(this->x2-this->x1)),t/(this->y2-this->y1)); glVertex3d(this->x3, this->y3, this->z3);
+		glTexCoord2f((this->x2-this->x1)/s,0.0); glVertex3d(this->x2, this->y2, this->z2);
+		glTexCoord2f(((this->x2-this->x1)/s)/2,(this->y2-this->y1)/t); glVertex3d(this->x3, this->y3, this->z3);
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
