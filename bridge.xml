@@ -1,5 +1,5 @@
 <sgx>
-	<globals maxlights="3" maxobjects="25" maxtextures="12" maxmaterials="6" root="cena"/>
+	<globals maxlights="3" maxobjects="30" maxtextures="12" maxmaterials="6" root="cena"/>
 
 	<view near="0.1" far="500.0" axisscale="0.04">
 		<translation x="0.0" z="-52.5" y="-20.0"/>
@@ -35,6 +35,8 @@
       <texture id="asphalt" file="asphalt.bmp" length_s="7.5" length_t="15.0" />
       <texture id="wallPlat" file="wall.bmp" length_s="7.5.0" length_t="2.0" />
       <texture id="wallTorre1" file="wall.bmp" length_s="5.0" length_t="7.5" />
+      <texture id="android" file="android.bmp" length_s="10.0" length_t="5.0" />
+      <texture id="wood" file="wood.bmp" length_s="10.0" length_t="2.0" />
 	</textures>
 	<materials>
 		<material id="rio">
@@ -77,7 +79,7 @@
 			<children>
 				<objectref id="rio"/>
 				<objectref id="ponte"/>
-        <objectref id="vela"/>
+        <objectref id="barco"/>
 			</children>
 		</object>
 <!-- PONTE -->	
@@ -302,12 +304,101 @@
       </transformations>
       <geometry type="cylinder" base="0.1" top="0.1" height="24" slices="20" stacks="20" />
   </object>
-    
-   <object id="vela" type="simple">
-      <material id="green"/>
-      <texture id="gravel"/>
+
+    <object id="barco" type="compound">
       <transformations>
-        <translation x="0.0" z="-15.0" y="0.0"/>
+        <translation x="0.0" z="-10.0" y="0.0"/>
+        <rotation axis="y" angle="30" />
+      </transformations>
+      <material id="null"/>
+      <texture id="clear"/>
+      <children>
+        <objectref id="vela"/>
+        <objectref id="base"/>
+        <objectref id="mastro"/>
+      </children>
+    </object>
+
+    <object id="base" type="compound">
+      <transformations>
+      </transformations>
+      <material id="null"/>
+      <texture id="wood"/>
+      <children>
+        <objectref id="lateral1"/>
+        <objectref id="lateral2"/>
+        <objectref id="baseFrente"/>
+        <objectref id="baseTras"/>
+        <objectref id="tampo"/>
+      </children>
+    </object>
+
+    <object id="lateral1" type="simple">
+      <material id="white"/>
+      <texture id="null"/>
+      <transformations>
+        <rotation axis="x" angle="-30" />
+        <rotation axis="y" angle="180" />
+      </transformations>
+      <geometry type="rectangle" x1="-5.0" y1="0.0" x2="5.0" y2="2.0" />
+    </object>
+
+    <object id="lateral2" type="simple">
+      <material id="white"/>
+      <texture id="null"/>
+      <transformations>
+        <rotation axis="x" angle="30" />
+      </transformations>
+      <geometry type="rectangle" x1="-5.0" y1="0.0" x2="5.0" y2="2.0" />
+    </object>
+
+    <object id="tampo" type="simple">
+      <material id="white"/>
+      <texture id="null"/>
+      <transformations>
+        <translation x="0.0" z="0.0" y="1.7"/>
+        <rotation axis="x" angle="-90" />
+      </transformations>
+      <geometry type="rectangle" x1="-5.0" y1="-1.0" x2="5.0" y2="1.0" />
+    </object>
+
+    <object id="baseFrente" type="simple">
+      <material id="white"/>
+      <texture id="null"/>
+      <transformations>
+        <translation x="-5.0" z="0.0" y="1.8"/>
+        <rotation axis="y" angle="-90" />
+        <rotation axis="z" angle="180" />
+      </transformations>
+      <geometry type="triangle" x1="-1" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0" y3="2" z3="0" />
+    </object>
+
+    <object id="baseTras" type="simple">
+      <material id="white"/>
+      <texture id="null"/>
+      <transformations>
+        <translation x="5.0" z="0.0" y="1.8"/>
+        <rotation axis="y" angle="90" />
+        <rotation axis="z" angle="180" />
+      </transformations>
+      <geometry type="triangle" x1="-1" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0" y3="2" z3="0" />
+    </object>
+
+    <object id="mastro" type="simple">
+      <material id="white"/>
+      <texture id="clear"/>
+      <transformations>
+        <translation x="0.0" z="0.0" y="1.0"/>
+        <rotation axis="x" angle="-90" />
+      </transformations>
+      <geometry type="cylinder" base="0.1" top="0.1" height="7" slices="20" stacks="20" />
+    </object>
+
+    <object id="vela" type="simple">
+      <material id="white"/>
+      <texture id="android"/>
+      <transformations>
+        <translation x="0.0" z="0.0" y="3.0"/>
       </transformations>
       <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="0" x3="0" y3="5" z3="0" />
    </object>
