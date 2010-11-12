@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
 
 #include "RGBpixmap.h"
 #include "..\tinyxml.h"

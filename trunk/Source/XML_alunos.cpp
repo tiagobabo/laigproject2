@@ -97,8 +97,6 @@ void display(void)
 
 	// ****** fim de todas as declaracoes da funcao display() ******
 
-
-
 	glQ = gluNewQuadric();
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -106,8 +104,8 @@ void display(void)
 	// inicializacoes da matriz de visualizacao
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	glFrustum( -xy_aspect*cena.axisscale, xy_aspect*cena.axisscale, -cena.axisscale, cena.axisscale, cena.near, cena.far);
-
+	glFrustum( -xy_aspect*0.04, xy_aspect*0.04, -0.04, 0.04, cena.near, cena.far);
+	glEnable(GL_NORMALIZE);
 	//inicializacoes da matriz de transformacoes geometricas
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
@@ -120,19 +118,40 @@ void display(void)
 
 	//propriedades das luzes
 	for(int i = 0; i < cena.lights.size(); i++)
-	{
-		// Actualizacao da posicao da fonte de luz
-		light0_position[0] = cena.lights.at(i)->position[0];	// por razoes de eficiencia, os restantes 
-		light0_position[1] = cena.lights.at(i)->position[1];	// parametros _invariaveis_ da LIGHT0 estao
-		light0_position[2] = cena.lights.at(i)->position[2];	// definidos na rotina inicializacao
-		light0_position[3] = cena.lights.at(i)->position[3];
-		glLightfv(GL_LIGHT0+i, GL_POSITION, light0_position);
-	}
+		glLightfv(GL_LIGHT0+i, GL_POSITION, cena.lights.at(i)->position);
 
-	gluQuadricOrientation(glQ, GLU_OUTSIDE);
+
+	glEnable(GL_COLOR_MATERIAL);
+	glPushMatrix();
+	glScalef(cena.axisscale,cena.axisscale,cena.axisscale);
+	// cilindro representativo do eixo X
+	glColor3f(1.0,0.0,0.0);		// vermelho
+	glPushMatrix();
+	glRotated(90.0, 0.0,1.0,0.0 );
+	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
+		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
+	glPopMatrix();
+
+	// cilindro representativo do eixo Y
+	glColor3f(0.0,1.0,0.0);		// verde
+	glPushMatrix();
+	glRotated(-90.0, 1.0,0.0,0.0 );
+	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
+		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
+	glPopMatrix();
+	
+	// cilindro representativo do eixo Z
+	glColor3f(0.0,0.0,1.0);		// azul
+	glPushMatrix();
+	// nao necessita rotacao... glRotated(...);
+	gluCylinder(glQ, axis_radius_begin, axis_radius_end,
+		             axis_lenght, axis_nslices, axis_nstacks);   // nao tem bases
+	glPopMatrix();
+	glPopMatrix();
+
+	glDisable(GL_COLOR_MATERIAL);
 
 	//desenha a cena
-	glEnable(GL_NORMALIZE);
 	raiz->draw();
 	glDisable(GL_NORMALIZE);
 
@@ -272,7 +291,6 @@ void myGlutIdle( void )
 
 void inicializacao()
 {
-
 	glFrontFace(GL_CCW);		/* Front faces defined using a counterclockwise rotation. */
 	glDepthFunc(GL_LEQUAL);		/* Por defeito e GL_LESS */
 	glEnable(GL_DEPTH_TEST);	/* Use a depth (z) buffer to draw only visible objects. */
@@ -283,10 +301,8 @@ void inicializacao()
 	// por defeito a cor e de fundo e o preto
 	glClearColor(cena.background[0],cena.background[1],cena.background[2], cena.background[3]);    // cor de fundo a branco
 
-	if(!cena.doublesided)
-		glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-	else
-		glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, cena.doublesided);
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, cena.local);
 
 	//luz ambient
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cena.ambient);  // define luz ambiente
@@ -302,7 +318,7 @@ void inicializacao()
 		glLightfv(GL_LIGHT0+i, GL_AMBIENT, cena.lights.at(i)->ambient);
 		glLightfv(GL_LIGHT0+i, GL_DIFFUSE, cena.lights.at(i)->diffuse);
 		glLightfv(GL_LIGHT0+i, GL_SPECULAR, cena.lights.at(i)->specular);
-		//glLightf(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, 1.0f);
+		glLightf(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, 1.0f);
 		if(cena.lights.at(i)->enabled)
 			glEnable(GL_LIGHT0+i);
 	}

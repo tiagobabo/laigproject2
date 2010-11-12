@@ -60,16 +60,12 @@ void calcNormal(float v[3][3], float out[3])				// Calculates Normal For A Quad 
 
 void loadMaterial(Material* m)
 {
-	// define caracteristicas de cor do material do plano e da caixa
-	if(m->specular[3] < 1.0 || m->diffuse[3] < 1.0 || m->ambient[3] < 1.0 || m->emission[3] < 1.0)
-		glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glMaterialfv(GL_FRONT, GL_SHININESS, &m->shininess);
 	glMaterialfv(GL_FRONT, GL_SPECULAR,  m->specular);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE,   m->diffuse);
 	glMaterialfv(GL_FRONT, GL_AMBIENT,   m->ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION,   m->emission);
-	if(m->specular[3] < 1.0 || m->diffuse[3] < 1.0 || m->ambient[3] < 1.0 || m->emission[3] < 1.0)
-		glDisable(GL_BLEND);
 }
 
 //constructores das classes
@@ -189,6 +185,10 @@ void Triangle::draw()
 {
 	float s=1;
 	float t=1;
+	float maxx = 1;
+	float minx = 1;
+	float maxy = 1;
+	float miny = 1;
 	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
@@ -203,11 +203,11 @@ void Triangle::draw()
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMultMatrixf(&this->transformations[0][0]);
-	glBegin(GL_POLYGON);
+	glBegin(GL_TRIANGLES);
 	glNormal3d(normal[0],normal[1],normal[2]);
 		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, this->z1);
 		glTexCoord2f((this->x2-this->x1)/s,0.0); glVertex3d(this->x2, this->y2, this->z2);
-		glTexCoord2f(((this->x2-this->x1)/s)/2,(this->y2-this->y1)/t); glVertex3d(this->x3, this->y3, this->z3);
+		glTexCoord2f(((this->x2-this->x1)-(this->x2 - this->x3))/s,(this->y3-this->y1)/t); glVertex3d(this->x3, this->y3, this->z3);
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
