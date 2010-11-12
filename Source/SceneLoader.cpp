@@ -1098,7 +1098,7 @@ void mapCompoundObjects(Node* node)
 
 Node* loadScene(Scene* s)
 {
-	const char* filename = "office.sgx";
+	const char* filename = "bridge.xml";
 	// Read string from file
 	TiXmlDocument doc(filename);
 	bool loadOkay = doc.LoadFile();
