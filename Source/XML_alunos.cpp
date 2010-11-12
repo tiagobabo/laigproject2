@@ -125,6 +125,7 @@ void display(void)
 		light0_position[0] = cena.lights.at(i)->position[0];	// por razoes de eficiencia, os restantes 
 		light0_position[1] = cena.lights.at(i)->position[1];	// parametros _invariaveis_ da LIGHT0 estao
 		light0_position[2] = cena.lights.at(i)->position[2];	// definidos na rotina inicializacao
+		light0_position[3] = cena.lights.at(i)->position[3];
 		glLightfv(GL_LIGHT0+i, GL_POSITION, light0_position);
 	}
 
