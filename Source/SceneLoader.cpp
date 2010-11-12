@@ -988,7 +988,7 @@ void mapTextures(Node* node)
 			if((*it)->texture == NULL)
 				if((*it)->getTextureId() != "clear"){
 					char temp[255];
-					sprintf(temp,"Error parsing texture: id %s don't exist", (*it)->getTextureId().c_str());
+					sprintf(temp,"Error parsing texture: id %s doesn't exist", (*it)->getTextureId().c_str());
 					endError(temp);
 				}	
 		}
@@ -1007,11 +1007,13 @@ void mapMaterialRoot(Node* node)
 		for(itM = scene.materials.begin(); itM < scene.materials.end(); itM++)
 		{
 			if((*itM)->id == node->getMaterialId())
+			{
 				node->material = *itM;
+			}
 		}
 	}
-	else
-		endError("Error parsing root: material not defined");
+	if(node->material == NULL)
+		endError("Error parsing root: material does not exits");
 }
 
 void mapTextureRoot(Node* node)
@@ -1022,12 +1024,15 @@ void mapTextureRoot(Node* node)
 		for(itT = scene.textures.begin(); itT < scene.textures.end(); itT++)
 		{
 			if((*itT)->id == node->getTextureId())
+			{
 				node->texture = *itT;
+			}
 		}
 	}
-	else
-		endError("Error parsing root: texture not defined or not clear");
+	if(node->texture == NULL && node->getTextureId() != "clear")
+		endError("Error parsing root: texture does not exists");
 }
+
 
 void mapMaterials(Node* node)
 {
