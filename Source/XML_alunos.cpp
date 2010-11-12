@@ -301,6 +301,7 @@ void inicializacao()
 		glLightfv(GL_LIGHT0+i, GL_AMBIENT, cena.lights.at(i)->ambient);
 		glLightfv(GL_LIGHT0+i, GL_DIFFUSE, cena.lights.at(i)->diffuse);
 		glLightfv(GL_LIGHT0+i, GL_SPECULAR, cena.lights.at(i)->specular);
+		//glLightf(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, 1.0f);
 		if(cena.lights.at(i)->enabled)
 			glEnable(GL_LIGHT0+i);
 	}
