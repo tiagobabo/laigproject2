@@ -31,11 +31,10 @@
       <!-- Os identificadores "id" nao podem ser repetidos -->
       <!-- s e t: factores de escala (ver notas finais) -->
       <texture id="gravel" file="gravel.bmp" length_s="1.0" length_t="5.0" />
-	    <texture id="water" file="water.bmp" length_s="300.0" length_t="20000.0" />
-      <texture id="asphalt" file="asphalt.bmp" length_s="600.0" length_t="45.0" />
-      <texture id="wallPlat" file="wall.bmp" length_s="600.0" length_t="2.0" />
-      <texture id="wallTorre1" file="wall.bmp" length_s="5.0" length_t="90.0" />
-      <texture id="wallTorre2" file="wall.bmp" length_s="600.0" length_t="1.0" />
+	    <texture id="water" file="water.bmp" length_s="3.0" length_t="5.0" />
+      <texture id="asphalt" file="asphalt.bmp" length_s="7.5" length_t="15.0" />
+      <texture id="wallPlat" file="wall.bmp" length_s="7.5.0" length_t="2.0" />
+      <texture id="wallTorre1" file="wall.bmp" length_s="5.0" length_t="7.5" />
 	</textures>
 	<materials>
 		<material id="rio">
