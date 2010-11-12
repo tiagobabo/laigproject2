@@ -1063,7 +1063,9 @@ void mapTransformations(Node* node, int root)
 			glMultMatrixf(&(*it)->transformations[0][0]);
 			glGetFloatv(GL_MODELVIEW_MATRIX, &(*it)->transformations[0][0]);
 		glPopMatrix();
-		mapTransformations(*it, 0);
+		glPushMatrix();
+			mapTransformations(*it, 0);
+		glPopMatrix();
 	}
 	if(node->getType() == "simple")
 	{
