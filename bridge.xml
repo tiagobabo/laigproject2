@@ -1,5 +1,5 @@
 <sgx>
-	<globals maxlights="3" maxobjects="30" maxtextures="12" maxmaterials="6" root="cena"/>
+	<globals maxlights="3" maxobjects="35" maxtextures="12" maxmaterials="6" root="cena"/>
 
 	<view near="0.1" far="500.0" axisscale="0.04">
 		<translation x="0.0" z="-52.5" y="-20.0"/>
@@ -313,7 +313,8 @@
       <material id="null"/>
       <texture id="clear"/>
       <children>
-        <objectref id="vela"/>
+        <objectref id="vela1"/>
+        <objectref id="vela2"/>
         <objectref id="base"/>
         <objectref id="mastro"/>
       </children>
@@ -394,7 +395,7 @@
       <geometry type="cylinder" base="0.1" top="0.1" height="7" slices="20" stacks="20" />
     </object>
 
-    <object id="vela" type="simple">
+    <object id="vela1" type="simple">
       <material id="white"/>
       <texture id="android"/>
       <transformations>
@@ -402,5 +403,15 @@
       </transformations>
       <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="0" x3="0" y3="5" z3="0" />
    </object>
+
+    <object id="vela2" type="simple">
+      <material id="white"/>
+      <texture id="android"/>
+      <transformations>
+        <translation x="0.0" z="0.0" y="3.0"/>
+        <rotation axis="y" angle="-180" />
+      </transformations>
+      <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="0" x3="0" y3="5" z3="0" />
+    </object>
   </objects>
 </sgx>
