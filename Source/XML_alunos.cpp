@@ -14,7 +14,6 @@ using namespace std;
 #define INITIALPOS_X 200
 #define INITIALPOS_Y 200
 
-
 float xy_aspect;
 Node* raiz;
 Scene cena;
@@ -329,6 +328,22 @@ void inicializacao()
 	//glPolygonMode(GL_FRONT, GL_LINE);	// desenha arestas dos poligonos
 }
 
+void control_cb( int control )
+{
+	for(int i = 0; i < cena.lights.size(); i++){
+	  if ( control == 200+i) {
+		  if ( !cena.lights.at(i)->enabled ) {
+			glEnable( GL_LIGHT0+i );
+			cena.lights.at(i)->enabled = true;
+		  }
+		else {
+			glDisable( GL_LIGHT0 +i); 
+			cena.lights.at(i)->enabled = false;
+		  }
+	}
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	
@@ -339,6 +354,7 @@ int main(int argc, char* argv[])
 	main_window = glutCreateWindow (argv[0]);
 	
 	raiz = loadScene(&cena);
+	
 
    glutDisplayFunc(display);
    GLUI_Master.set_glutReshapeFunc(reshape);
@@ -361,6 +377,14 @@ int main(int argc, char* argv[])
 	glui2->add_translation( "Zoom", GLUI_TRANSLATION_Z, &obj_pos[2] );
 	trans_z->set_speed( 2 );
 
+	/******** Add some controls for lights ********/
+	glui2->add_column( false );
+	for(int i = 0; i < cena.lights.size(); i++)
+	{
+		int ena = cena.lights.at(i)->enabled;
+		glui2->add_checkbox(const_cast<char*> (cena.lights.at(i)->id.c_str()), &ena,
+				200+i, control_cb );
+	}
 
 	/* We register the idle callback with GLUI, not with GLUT */
 	GLUI_Master.set_glutIdleFunc( myGlutIdle );
