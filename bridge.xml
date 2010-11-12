@@ -401,7 +401,7 @@
       <transformations>
         <translation x="0.0" z="0.0" y="3.0"/>
       </transformations>
-      <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="0" x3="0" y3="5" z3="0" />
+      <geometry type="triangle" x1="-5" y1="0" z1="0" x2="5" y2="0" z2="-4" x3="-2" y3="5" z3="-2" />
    </object>
 
     <object id="vela2" type="simple">
