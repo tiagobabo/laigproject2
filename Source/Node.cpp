@@ -185,10 +185,6 @@ void Triangle::draw()
 {
 	float s=1;
 	float t=1;
-	float maxx = 1;
-	float minx = 1;
-	float maxy = 1;
-	float miny = 1;
 	if(this->texture !=  NULL&& this->texture->id != "clear"){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, exists(this->texture));
@@ -206,8 +202,8 @@ void Triangle::draw()
 	glBegin(GL_TRIANGLES);
 	glNormal3d(normal[0],normal[1],normal[2]);
 		glTexCoord2f(0.0,0.0); glVertex3d(this->x1, this->y1, this->z1);
-		glTexCoord2f((this->x2-this->x1)/s,0.0); glVertex3d(this->x2, this->y2, this->z2);
-		glTexCoord2f(((this->x2-this->x1)-(this->x2 - this->x3))/s,(this->y3-this->y1)/t); glVertex3d(this->x3, this->y3, this->z3);
+		glTexCoord2f(abs((this->x2-this->x1)/s*normal[2]+(this->x2-this->x1)/s*normal[1]+(this->z2-this->z1)/s*normal[0]),0.0); glVertex3d(this->x2, this->y2, this->z2);
+		glTexCoord2f(abs((this->x3-this->x1)/s*normal[2]+(this->x3-this->x1)/s*normal[1]+(this->z3-this->z1)/s*normal[0]),abs((this->y3-this->y1)/t*normal[2]+(this->x3-this->x1)/t*normal[1]+(this->y3-this->y1)/t*normal[0])); glVertex3d(this->x3, this->y3, this->z3);
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);

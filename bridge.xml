@@ -169,10 +169,7 @@
 			<material id="metal"/>
 			<texture id="clear"/>
 			<children>
-				<objectref id="cabelagem"/>
-				<objectref id="suporteCentral"/>
-				<objectref id="disco1"/>
-				<objectref id="disco2"/>
+				<objectref id="cablagem"/>
 			</children>
 		</object>
 <!-- CABO2 -->
@@ -289,8 +286,8 @@
 			</transformations>
 			<geometry type="rectangle" x1="-2.5" y1="0" x2="2.5" y2="2.0" />
 		</object>	
-<!-- cabelagem -->
-	<object id="cabelagem" type="simple">
+<!-- cablagem -->
+	<object id="cablagem" type="simple">
 			<material id="red"/>	
 			<texture id="null"/>
 			<transformations>

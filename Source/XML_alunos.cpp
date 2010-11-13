@@ -205,62 +205,13 @@ void reshape(int w, int h)
 
 void keyboard(unsigned char key, int x, int y)
 {
-   switch (key) {
-	  case 'q':
-		light0y+= 0.1;
-		cout << "light0y: " << light0y << endl; 
-		break;
-	  case 'a':
-		light0y-= 0.1;
-		cout << "light0y: " << light0y << endl; 
-		break;
-	  case 'i':
-		light0_kc+=0.1;
-		cout << "light0_kc: " << light0_kc << endl; 
-		break;
-	  case 'o':
-		light0_kc-=0.1;
-		cout << "light0_kc: " << light0_kc << endl; 
-		break;
-	  case 'k':
-		light0_kl+=0.1;
-		cout << "light0_kl: " << light0_kl << endl; 
-		break;
-	  case 'l':
-		light0_kl-=0.1;
-		cout << "light0_kl: " << light0_kl << endl; 
-		break;
-	  case 'n':
-		light0_kq+=0.1;
-		cout << "light0_kq: " << light0_kq << endl; 
-		break;
-	  case 'm':
-		light0_kq-=0.1;
-		cout << "light0_kq: " << light0_kq << endl; 
-		break;
-	  case 'z':
-		divisoes_i+=3;
-		cout << "div_i: " << divisoes_i <<endl;
-		break;
-	  case 'x':
-		divisoes_i-=3;
-		cout << "div_i: " << divisoes_i <<endl;
-		break;
-	  case 'c':
-		divisoes_j+=5;
-		cout << "div_j: " << divisoes_j <<endl;
-		break;
-	  case 'v':
-		divisoes_j-=5;
-		cout << "div_j: " << divisoes_j <<endl;
-		break;
-
+	switch(key)
+	{
       case 27:		// tecla de escape termina o programa
          exit(0);
          break;
    }
 }
-
 
 void myGlutIdle( void )
 {
@@ -317,7 +268,7 @@ void inicializacao()
 		glLightfv(GL_LIGHT0+i, GL_AMBIENT, cena.lights.at(i)->ambient);
 		glLightfv(GL_LIGHT0+i, GL_DIFFUSE, cena.lights.at(i)->diffuse);
 		glLightfv(GL_LIGHT0+i, GL_SPECULAR, cena.lights.at(i)->specular);
-		glLightf(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, 1.0f);
+		glLightf(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, 1.0f);
 		if(cena.lights.at(i)->enabled)
 			glEnable(GL_LIGHT0+i);
 	}
