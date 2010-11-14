@@ -30,7 +30,7 @@ float obj_pos[] = { 0.0, 0.0, 0.0 };
 // declarações para os tres eixos (cilindros)
 double axis_radius_begin =  0.2;
 double axis_radius_end   =  0.0;
-double axis_lenght       = 16.0;
+double axis_lenght       = 1.0;
 int axis_nslices = 8;
 int axis_nstacks = 1;
 
@@ -118,11 +118,10 @@ void display(void)
 	//propriedades das luzes
 	for(int i = 0; i < cena.lights.size(); i++)
 		glLightfv(GL_LIGHT0+i, GL_POSITION, cena.lights.at(i)->position);
-
-
+	
+	axis_lenght =cena.axisscale;
 	glEnable(GL_COLOR_MATERIAL);
 	glPushMatrix();
-	glScalef(cena.axisscale,cena.axisscale,cena.axisscale);
 	// cilindro representativo do eixo X
 	glColor3f(1.0,0.0,0.0);		// vermelho
 	glPushMatrix();

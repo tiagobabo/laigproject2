@@ -191,7 +191,7 @@ void processView(void)
 		}
 
 		if(!(flag_translation && flag_rotation && flag_scale))
-			endError("Error parsing view: Don't have 1 translation, 3 rotations(x,y,z) and 1 scale.");
+			endError("Error parsing view: it must have 1 translation, 3 rotations(x,y,z) and 1 scale.");
 
 		glGetFloatv(GL_MODELVIEW_MATRIX, &scene.m[0][0]);
 }
