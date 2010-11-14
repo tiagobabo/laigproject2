@@ -5,6 +5,7 @@
 // idealmente tudo seria incluído numa classe
 
 //-------------------------------------------------------
+using namespace std;
 
 Scene scene;
 Node* root;
