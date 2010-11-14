@@ -2,8 +2,11 @@
 	<globals maxlights="3" maxobjects="35" maxtextures="12" maxmaterials="6" root="cena"/>
 
 	<view near="0.1" far="500.0" axisscale="0.04">
-		<translation x="0.0" z="-52.5" y="-20.0"/>
+    <translation x="0.0" z="-52.5" y="-20.0"/>
 		<rotation axis="x" angle="30" />
+    <rotation axis="y" angle="0" />
+    <rotation axis="z" angle="0" />
+    <scale x="1.0" z="1.0" y="1.0" />
 	</view>
 
 	<illumination doublesided="1" local="1" >

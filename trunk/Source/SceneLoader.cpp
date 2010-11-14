@@ -151,22 +151,49 @@ void processView(void)
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
+		int flag_translation = 0;
+		int flag_rotation = 0;
+		int flag_x = 0;
+		int flag_y = 0;
+		int flag_z = 0;
+		int flag_scale = 0;
 		while(child)
 		{
-			if(strcmp(child->Value(), "translation")==0)
+			if(strcmp(child->Value(), "translation")==0 && !flag_translation){
 				process_translation(child);
-			else if(strcmp(child->Value(), "rotation")==0)
-				process_rotation(child);
-			else if(strcmp(child->Value(), "scale")==0)
+				flag_translation = 1;
+			}
+			else if(strcmp(child->Value(), "rotation")==0 && !flag_rotation){
+				const char* evaluate = child->Attribute("axis");
+				if(strcmp(evaluate,"x")==0 && !flag_x){
+					process_rotation(child);
+					flag_x = 1;
+				}
+				else if(strcmp(evaluate,"y")==0 && !flag_y){
+					process_rotation(child);
+					flag_y = 1;
+				}
+				else if(strcmp(evaluate,"z")==0 && !flag_z){
+					process_rotation(child);
+					flag_z = 1;
+				}
+				if(flag_x && flag_y && flag_z)
+					flag_rotation = 1;
+			}
+			else if(strcmp(child->Value(), "scale")==0 && !flag_scale){
 				process_scale(child);
+				flag_scale = 1;
+			}
 			else
 				endError("Error parsing view: invalid child.");
+
 			child=child->NextSiblingElement();
 		}
 
+		if(!(flag_translation && flag_rotation && flag_scale))
+			endError("Error parsing view: Don't have 1 translation, 3 rotations(x,y,z) and 1 scale.");
+
 		glGetFloatv(GL_MODELVIEW_MATRIX, &scene.m[0][0]);
-		cout << "ola";
 }
 
 void processIllumination_ambient(TiXmlElement* ambient)
